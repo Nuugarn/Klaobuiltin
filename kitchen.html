@@ -1141,6 +1141,18 @@
     .stats { flex-wrap: wrap; row-gap: 20px; }
   }
 
+
+  @media (hover: none) {
+    .project-overlay { opacity: 1; }
+  }
+  .project-overlay .project-meta {
+    color: var(--white);
+    font-family: 'Kanit', 'Inter', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    text-transform: none;
+  }
+
 a.space-back { text-decoration: none; color: var(--teak); }
 .space-view { display: block; padding-top: var(--header-height); min-height: 60vh; background: #fff; }
 </style>
@@ -1287,17 +1299,13 @@ a.space-back { text-decoration: none; color: var(--teak); }
       <div class="project" data-cat="island">
         <img src="images/kitchen/island/island_01_thumb.jpg" data-full="images/kitchen/island/island_01_full.jpg" alt="เคาน์เตอร์เกาะกลาง — ตัวอย่าง 1">
         <div class="project-overlay">
-          <div class="project-num mono">K-I01</div>
-          <div class="project-name">เคาน์เตอร์เกาะกลาง — ตัวอย่าง 1</div>
-          <div class="project-meta">เคาน์เตอร์เกาะกลาง · ตัวอย่าง</div>
+          <div class="project-meta">เคาน์เตอร์เกาะกลาง</div>
         </div>
       </div>
       <div class="project" data-cat="island">
         <img src="images/kitchen/island/island_02_thumb.jpg" data-full="images/kitchen/island/island_02_full.jpg" alt="เคาน์เตอร์เกาะกลาง — ตัวอย่าง 2">
         <div class="project-overlay">
-          <div class="project-num mono">K-I02</div>
-          <div class="project-name">เคาน์เตอร์เกาะกลาง — ตัวอย่าง 2</div>
-          <div class="project-meta">เคาน์เตอร์เกาะกลาง · ตัวอย่าง</div>
+          <div class="project-meta">เคาน์เตอร์เกาะกลาง</div>
         </div>
       </div>
     </div>
@@ -1418,7 +1426,7 @@ a.space-back { text-decoration: none; color: var(--teak); }
       const p=items[index], img=p.querySelector('img');
       imgEl.src = img.getAttribute('data-full')||img.src;
       countEl.textContent = (index+1)+' / '+items.length;
-      nameEl.textContent = (p.querySelector('.project-name')?.textContent||'') + ' · ' + (p.querySelector('.project-meta')?.textContent||'');
+      nameEl.textContent = (p.querySelector('.project-meta')?.textContent||'').trim();
     }
     document.querySelector('.space-gallery').addEventListener('click', e => {
       const p=e.target.closest('.project'); if(!p) return;
