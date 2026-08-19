@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KLAO — งานออกแบบสถาปัตยกรรมและตกแต่งภายใน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Mitr:wght@500;600;700&family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<title>KLAO — ห้องครัว</title>
+<style>
+
+  :root {
+    --plaster: #EDE8E0;
+    --plaster-deep: #E2DCD1;
+    --ink: #1C1A17;
+    --teak: #8B7355;
+    --pine: #3A4A3F;
+    --line: #C9C2B5;
+    --white: #FAF8F5;
+    --gold: #C6A15B;
+    --gold-dim: #8A7040;
+    --header-height: 70px;
+    --drawer-width: min(320px, 82vw);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; background: var(--plaster); }
+
+  body {
+    background: var(--plaster);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: var(--pine); color: var(--white); }
+
+  :focus-visible {
+    outline: 2px solid var(--pine);
+    outline-offset: 3px;
+  }
+
+  .display {
+    font-family: 'Fraunces', serif;
+    font-optical-sizing: auto;
+  }
+
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.02em;
+  }
+
+  .wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px);
+  }
+
+  /* ---------- Header ----------
+     Fixed, 70px, solid white box (does not overlay the hero).
+     3-zone flexbox: hamburger + logo (left) | spacer (center) | contact (right) */
+  .site-header {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: var(--header-height);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--line);
+    transition: box-shadow 0.25s ease, background 0.25s ease;
+  }
+
+  body.sticky-header .site-header {
+    box-shadow: 0 2px 12px rgba(28, 26, 23, 0.08);
+  }
+
+  .header-zone--left {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .hamburger-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--ink);
+  }
+  .hamburger-btn svg { width: 24px; height: 24px; display: block; }
+
+  .header-zone--center {
+    flex: 1 1 auto;
+    position: relative;
+    height: 100%;
+  }
+
+  .site-logo {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .site-logo img {
+    height: 34px;
+    width: auto;
+    display: block;
+  }
+
+  .header-zone--right {
+    flex: 0 0 140px;
+    width: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 32px;
+    height: 100%;
+  }
+
+  .contact-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.25s ease;
+    white-space: nowrap;
+  }
+  .contact-btn:hover { opacity: 0.6; }
+
+  .contact-icon-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    background: none;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .contact-icon-btn svg { width: 16px; height: 16px; }
+
+  @media (max-width: 480px) {
+    .contact-btn { display: none; }
+    .contact-icon-btn { display: flex; }
+  }
+
+  /* ---------- Push drawer ----------
+     page-shell holds everything (incl. the fixed header) and slides right
+     when the drawer opens; a transformed ancestor re-anchors position:fixed
+     children, so the header moves in sync automatically. */
+  .page-shell {
+    position: relative;
+    background: var(--plaster);
+    min-height: 100vh;
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Dark translucent scrim over the pushed home content while the drawer
+     is open. Sits inside page-shell so it moves in sync (fixed re-anchors
+     to the transformed ancestor, same trick as the header). Tapping it
+     closes the drawer, same as the X button. */
+  .page-overlay {
+    position: fixed;
+    inset: 0;
+    height: 100vh;
+    -webkit-tap-highlight-color: transparent;
+    background: rgba(28, 26, 23, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    z-index: 200;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  body.menu-open .page-overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  body.menu-open .page-shell {
+    transform: translateX(var(--drawer-width));
+  }
+
+  /* Freeze the home page's own scroll while the drawer is open */
+  html.menu-open,
+  body.menu-open {
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--drawer-width);
+    height: 100vh;
+    background: #FFFFFF;
+    z-index: 300;
+    transform: translateX(-100%);
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 20px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body.menu-open .drawer {
+    transform: translateX(0);
+  }
+
+  /* External close button: sits outside the drawer, hugging the left edge
+     of the pushed home content. Both the white box and the icon fade in
+     together (opacity only) rather than sliding, and it stays fixed to
+     the viewport regardless of drawer state. */
+  .drawer-external-close {
+    position: fixed;
+    top: 15px;
+    left: calc(var(--drawer-width) + 24px);
+    -webkit-tap-highlight-color: transparent;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--white);
+    border: none;
+    border-radius: 4px;
+    color: var(--ink);
+    cursor: pointer;
+    padding: 0;
+    z-index: 310;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease 0.15s;
+  }
+
+  body.menu-open .drawer-external-close {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .drawer-external-close svg { width: 20px; height: 20px; display: block; }
+
+  /* Tab headers "เมนู" / "อื่นๆ" — each sits in its own full-bleed row
+     with a bottom divider; the active tab gets a pill (oval) background
+     hugging just the word itself. Both tabs sit side by side. */
+  .drawer-tab-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 -24px;
+    padding: 0 24px;
+  }
+
+  .drawer-tab {
+    font-family: 'Kanit', 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+    color: #1C1A17;
+    background: none;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    padding: 8px 16px;
+    margin: 4px 0;
+    transition: background 0.25s ease, color 0.25s ease;
+  }
+
+  .drawer-tab.active {
+    background: #F2F2F2; /* matches reference: light neutral gray pill */
+    color: var(--ink);
+  }
+
+  .drawer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    margin-top: 22px; /* gap under เมนู/อื่นๆ tabs */
+    border-top: 1px solid var(--line); /* line sits just above first item */
+  }
+
+  .drawer-links[hidden] {
+    display: none;
+  }
+
+  .drawer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 -24px;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .drawer-link {
+    font-family: 'Mitr', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: var(--ink);
+    padding: 11px 0;
+    display: inline-block;
+    transition: color 0.25s ease;
+  }
+
+  a.drawer-link:hover {
+    color: var(--teak);
+    cursor: pointer;
+  }
+
+  .drawer-plus {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--ink);
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .drawer-plus svg { width: 16px; height: 16px; display: block; }
+  /* vertical line of + collapses → becomes − */
+  .drawer-plus svg line:first-child {
+    transform-origin: center;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+  .drawer-item.is-open > .drawer-row .drawer-plus svg line:first-child,
+  .drawer-row.is-open .drawer-plus svg line:first-child {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    margin-top: var(--header-height);
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--ink);
+    overflow: hidden;
+  }
+
+  .hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 1;
+    animation: hero-in 1.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes hero-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ---------- Filter bar ---------- */
+  .section-bleed-white {
+    background: #FFFFFF;
+  }
+
+  .filter-section {
+    padding: clamp(48px, 7vw, 80px) 0 clamp(24px, 4vw, 40px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .filter-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .filter-title {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 400;
+  }
+
+  .filter-title .count {
+    color: var(--teak);
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    padding: 9px 18px;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--ink);
+  }
+
+  .filter-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--white);
+  }
+
+  /* ---------- Gallery ---------- */
+  .gallery {
+    padding: clamp(32px, 5vw, 56px) 0 clamp(64px, 8vw, 120px);
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: clamp(14px, 2vw, 24px);
+  }
+
+  .project {
+    position: relative;
+    overflow: hidden;
+    background: var(--plaster-deep);
+    cursor: pointer;
+    grid-column: span 3;
+    aspect-ratio: 4/3;
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .project.hidden {
+    display: none;
+  }
+
+  .project:nth-child(6n+1) { grid-column: span 4; aspect-ratio: 5/4; }
+  .project:nth-child(6n+2) { grid-column: span 2; aspect-ratio: 3/4; }
+  .project:nth-child(6n+3) { grid-column: span 2; aspect-ratio: 3/4; }
+  .project:nth-child(6n+4) { grid-column: span 4; aspect-ratio: 16/9; }
+  .project:nth-child(6n+5) { grid-column: span 3; aspect-ratio: 4/5; }
+  .project:nth-child(6n+6) { grid-column: span 3; aspect-ratio: 4/5; }
+
+  .project img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(15%);
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+  }
+
+  .project:hover img {
+    transform: scale(1.06);
+    filter: grayscale(0%);
+  }
+
+  .project-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(28,26,23,0.88) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 22px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .project:hover .project-overlay { opacity: 1; }
+
+  .project-num {
+    font-size: 0.75rem;
+    color: var(--line);
+    margin-bottom: 6px;
+  }
+
+  .project-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .project-meta {
+    font-size: 0.78rem;
+    color: var(--line);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ---------- About ---------- */
+  .about {
+    position: relative;
+    isolation: isolate;
+    background: #FFFFFF;
+    color: #4A4A48;
+    padding: clamp(88px, 13vw, 176px) 0;
+    overflow: hidden;
+  }
+
+  /* Foreground content */
+  .about-content {
+    position: relative;
+    z-index: 3;
+  }
+
+  .about-eyebrow {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    color: #000000;
+    margin-bottom: clamp(48px, 7vw, 88px);
+    text-align: center;
+    /* no scroll animation */
+    opacity: 1;
+    transform: none;
+  }
+  .about-eyebrow.reveal,
+  .about-eyebrow.reveal.in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .pillar {
+    padding: 0 clamp(24px, 3vw, 48px);
+    border-left: none;
+  }
+
+  .pillar:first-child {
+    padding-left: 0;
+  }
+
+  .pillar:last-child {
+    padding-right: 0;
+  }
+
+  .pillar-icon {
+    width: 100%;
+    max-width: 220px;
+    aspect-ratio: 4 / 3;
+    border-radius: 12px;
+    background: #F5F5F3;
+    border: 1px solid rgba(74, 74, 72, 0.1);
+    display: block;
+    overflow: hidden;
+    margin-bottom: 24px;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .pillar-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .pillar h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+    letter-spacing: 0.02em;
+    color: #4A4A48; /* charcoal — includes Built to Last */
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+
+  .pillar p {
+    color: #4A4A48;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    max-width: 34ch;
+  }
+
+  .pillar,
+  .pillar.reveal,
+  .pillar.reveal.in {
+    border: none !important;
+    border-left: none !important;
+    border-top: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+  }
+
+  @media (max-width: 860px) {
+    .about-bg-type span {
+      font-size: clamp(2.6rem, 14vw, 4.5rem);
+    }
+    .pillars {
+      grid-template-columns: 1fr;
+      row-gap: 48px;
+    }
+    .pillar {
+      border: none;
+      padding: 0;
+    }
+    .pillar:first-child {
+      padding-top: 0;
+    }
+    .pillar p {
+      max-width: 52ch;
+    }
+  }
+
+
+  /* ---------- Space portfolio cards (Home) ---------- */
+  .space-section {
+    padding: clamp(48px, 7vw, 80px) 0 clamp(56px, 8vw, 96px);
+  }
+  .space-section-title {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 400;
+    margin-bottom: clamp(28px, 4vw, 40px);
+  }
+  .space-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 720px) {
+    .space-grid { grid-template-columns: 1fr; }
+  }
+  .space-card {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--ink);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+  }
+  .space-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease;
+    opacity: 0.85;
+  }
+  .space-card:hover img {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+  .space-card-label {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 28px 24px 22px;
+    background: linear-gradient(180deg, transparent 0%, rgba(28,26,23,0.85) 100%);
+    font-family: 'Kanit', 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .space-view {
+    display: none;
+    padding-top: var(--header-height);
+    min-height: 60vh;
+    background: #fff;
+  }
+  .space-view.is-active { display: block; }
+  .space-view-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: clamp(24px, 4vw, 40px) clamp(20px, 5vw, 64px) clamp(48px, 8vw, 80px);
+  }
+  .space-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--teak);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: clamp(20px, 3vw, 32px);
+  }
+  .space-back:hover { color: var(--ink); }
+  .space-view-title {
+    font-family: 'Kanit', 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .space-view-desc {
+    font-size: clamp(0.95rem, 2vw, 1.05rem);
+    color: #4A4A48;
+    max-width: 42ch;
+    margin-bottom: clamp(28px, 4vw, 40px);
+    line-height: 1.6;
+  }
+  body.space-mode #home-view { display: none; }
+  .space-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* ---------- Project lightbox ---------- */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: rgba(10, 10, 9, 0.92);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    padding: 16px;
+  }
+  .lightbox.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: #fff;
+    color: var(--pine);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+  .lightbox-close svg { width: 20px; height: 20px; }
+  .lightbox-stage {
+    position: relative;
+    width: min(920px, 100%);
+    height: 70vh; /* fixed stage height so layout doesn't jump with image ratio */
+    max-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lightbox-img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 12px;
+    object-fit: contain;
+    display: block;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+  /* Nav fixed higher (align with image band) — does not move with aspect ratio */
+  .lightbox-nav {
+    position: fixed;
+    /* ~center of photo area, above true screen mid so it matches old visual */
+    top: clamp(148px, 41vh, 48vh);
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 510;
+  }
+  .lightbox-nav svg { width: 18px; height: 18px; }
+  .lightbox-prev { left: max(12px, calc(50% - min(460px, 50vw) - 8px)); }
+  .lightbox-next { right: max(12px, calc(50% - min(460px, 50vw) - 8px)); }
+  @media (max-width: 720px) {
+    .lightbox-prev { left: 10px; }
+    .lightbox-next { right: 10px; }
+    .lightbox-nav { top: clamp(156px, 39vh, 44vh); }
+  }
+  .lightbox-nav:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .lightbox-caption {
+    margin-top: 20px;
+    padding: 12px 22px;
+    border-radius: 100px;
+    background: var(--pine);
+    color: #fff;
+    text-align: center;
+    font-family: 'Kanit', 'Inter', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.35;
+    max-width: min(420px, 92vw);
+  }
+  .lightbox-caption .lb-count {
+    font-weight: 600;
+  }
+  .lightbox-caption .lb-name {
+    display: block;
+    font-weight: 500;
+    opacity: 0.95;
+  }
+  .project { cursor: pointer; }
+
+  /* ---------- Contact ---------- */
+  .contact {
+    background: #F3F3F1;
+    padding: clamp(48px, 8vw, 100px) 0;
+    color: #4A4A48;
+  }
+
+  .contact-inner {
+    max-width: 520px;
+    width: 100%;
+  }
+
+  .contact-brand {
+    display: flex;
+    align-items: center;
+    margin-bottom: clamp(32px, 5vw, 48px);
+  }
+
+  /* Half of previous Design Square block width (~226px → ~113px) */
+  .contact-brand-logo {
+    display: block;
+    width: 113px;
+    max-width: 50%;
+    height: auto;
+  }
+
+  .contact-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(24px, 4vw, 36px);
+    margin: 0;
+    padding: 0;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .contact-item-icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    margin-top: 3px;
+    color: #7A7A76;
+  }
+
+  .contact-item-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .contact-item-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .contact-line {
+    font-family: 'Kanit', 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: clamp(0.95rem, 3.2vw, 1.05rem);
+    line-height: 1.55;
+    color: #4A4A48;
+  }
+
+  .contact-line--sub {
+    font-size: clamp(0.8rem, 2.8vw, 0.88rem);
+    color: #7A7A76;
+  }
+
+  .contact-line-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 12px;
+  }
+
+  .line-add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px 7px 8px;
+    background: #06C755;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Kanit', 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    line-height: 1;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .line-add-btn:hover,
+  .line-add-btn:active {
+    opacity: 0.88;
+  }
+
+  .line-add-btn svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .contact-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .contact-link:hover {
+    color: #1C1A17;
+  }
+
+  @media (max-width: 480px) {
+    .contact {
+      padding: 40px 0 56px;
+    }
+    .contact-item {
+      gap: 12px;
+    }
+  }
+
+  footer {
+    background: #F5F5F5;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8rem;
+    color: var(--teak);
+  }
+
+  .footer-top {
+    padding: 16px clamp(20px, 5vw, 64px);
+    font-family: 'Kanit', 'Inter', sans-serif;
+    font-size: clamp(0.72rem, 2.5vw, 0.85rem);
+    font-weight: 500;
+    color: var(--teak);
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+
+  .footer-divider {
+    height: 1px;
+    background: var(--line);
+    width: 100%;
+    border: none;
+    margin: 0;
+  }
+
+  .footer-bottom {
+    padding: 16px clamp(20px, 5vw, 64px) 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .footer-social {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    color: #1C1A17;
+    box-shadow: 0 1px 3px rgba(28, 26, 23, 0.06);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .footer-social:hover {
+    opacity: 0.75;
+    transform: translateY(-1px);
+  }
+
+  .footer-social svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+  }
+
+  /* ---------- Drawer submenu + social icons ---------- */
+  .drawer-item {
+    position: relative;
+  }
+
+  .drawer-submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    margin: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.7s ease, opacity 0.7s ease;
+  }
+
+  .drawer-submenu.visible {
+    max-height: 480px;
+    opacity: 1;
+  }
+
+  /* SB-style: each sub item is a full-width row with divider */
+  .drawer-sublink {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 -24px;
+    padding: 12px 24px 12px 40px;
+    border-bottom: 1px solid var(--line);
+    font-family: 'Kanit', 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: clamp(0.88rem, 3vw, 0.95rem);
+    line-height: 1.45;
+    color: #4A4A48;
+    background: transparent;
+    transition: color 0.2s ease;
+  }
+
+  .drawer-sublink:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .drawer-sublink:hover {
+    color: #1C1A17;
+  }
+
+  .social-icons-row {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    justify-content: flex-start;
+  }
+
+  .social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    color: var(--ink);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .social-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .social-icon:hover {
+    opacity: 0.6;
+    transform: translateY(-2px);
+  }
+
+  .drawer-divider {
+    height: 0.5px;
+    background: var(--line);
+    margin: 12px 0;
+  }
+
+  /* ---------- Reveal on scroll ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 720px) {
+    .hero-foot { flex-direction: column; align-items: flex-start; }
+    .gallery { grid-template-columns: 1fr 1fr; }
+    .project, .project:nth-child(6n+1), .project:nth-child(6n+2),
+    .project:nth-child(6n+3), .project:nth-child(6n+4),
+    .project:nth-child(6n+5), .project:nth-child(6n+6) {
+      grid-column: span 1;
+      aspect-ratio: 4/5;
+    }
+    .stats { flex-wrap: wrap; row-gap: 20px; }
+  }
+
+a.space-back { text-decoration: none; color: var(--teak); }
+.space-view { display: block; padding-top: var(--header-height); min-height: 60vh; background: #fff; }
+</style>
+</head>
+<body>
+<nav class="drawer" id="drawer" aria-label="เมนูหลัก">
+
+  <div class="drawer-tab-row">
+    <button type="button" class="drawer-tab active" data-tab="menu">เมนู</button>
+    <button type="button" class="drawer-tab" data-tab="other">อื่นๆ</button>
+  </div>
+
+  <ul class="drawer-links" data-panel="menu">
+    <li class="drawer-item">
+      <div class="drawer-row">
+        <a href="index.html#work" class="drawer-link">ผลงาน</a>
+        <button class="drawer-plus" type="button" aria-label="ขยายเมนูย่อย ผลงาน">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="drawer-submenu hidden">
+        <a href="bedroom.html" class="drawer-sublink">Bedroom</a>
+        <a href="bathroom.html" class="drawer-sublink">Bathroom</a>
+        <a href="kitchen.html" class="drawer-sublink">Kitchen</a>
+        <a href="living.html" class="drawer-sublink">Living Room</a>
+      </div>
+    </li>
+    <li class="drawer-item">
+      <div class="drawer-row">
+        <a href="index.html#about" class="drawer-link">เกี่ยวกับเรา</a>
+        <button class="drawer-plus" type="button" aria-label="ขยายเมนูย่อย เกี่ยวกับเรา">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="drawer-submenu hidden">
+        <a href="#about" class="drawer-sublink">เกี่ยวกับสตูดิโอ</a>
+        <a href="#about" class="drawer-sublink">ทีมของเรา</a>
+      </div>
+    </li>
+    <li class="drawer-item">
+      <div class="drawer-row">
+        <a href="index.html#contact" class="drawer-link">ติดต่อ</a>
+        <button class="drawer-plus" type="button" aria-label="ขยายเมนูย่อย ติดต่อ">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="drawer-submenu hidden">
+        <a href="mailto:hello@klao.co.th" class="drawer-sublink">Email</a>
+        <a href="tel:+66-2-1234-5678" class="drawer-sublink">โทรศัพท์</a>
+      </div>
+    </li>
+  </ul>
+
+  <ul class="drawer-links" data-panel="other" hidden>
+    <li class="drawer-row">
+      <span class="drawer-link drawer-link--static">ภาษา</span>
+      <button class="drawer-plus" type="button" aria-label="ขยายเมนูย่อย ภาษา">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+      </button>
+    </li>
+    <li class="drawer-divider"></li>
+    <li class="drawer-row">
+      <span class="drawer-link drawer-link--static">ติดต่อเรา</span>
+    </li>
+    <li class="social-icons-row">
+      <a href="https://www.facebook.com/share/1EQR822dQ8/" target="_blank" rel="noopener" class="social-icon" aria-label="Facebook KLAO">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+      </a>
+      <a href="https://line.me/ti/p/klaobuiltincustom" target="_blank" rel="noopener" class="social-icon" aria-label="Line KLAO">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19.365 9.863c.349-1.752-1.409-3.452-4.309-3.836-2.899-.384-5.898.538-6.246 2.29-.348 1.751 1.409 3.452 4.308 3.835 2.9.384 5.899-.538 6.247-2.289m-11.634 9.181c-.672.672-2.119.612-3.234-.134-1.114-.747-1.594-2.145-.922-2.817.672-.672 2.119-.612 3.234.134 1.114.746 1.594 2.145.922 2.817M6.797 3.198C3.645 3.198 1 5.924 1 9.261c0 1.952.869 3.713 2.289 4.947-.348 1.39-1.286 3.15-3.227 4.556 1.286-.674 3.382-1.528 5.094-2.742 1.044.268 2.135.403 3.247.403 3.152 0 5.798-2.726 5.798-6.063 0-3.337-2.646-6.062-5.798-6.062"/>
+        </svg>
+      </a>
+      <a href="mailto:hello@klao.co.th" class="social-icon" aria-label="Email hello@klao.co.th">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+        </svg>
+      </a>
+    </li>
+  </ul>
+
+</nav>
+
+<!-- Sits outside the drawer, hugging the left edge of the pushed home
+     content. Fades in/out instead of sliding with the drawer. -->
+<button class="drawer-external-close" id="drawerExternalClose" type="button" aria-label="ปิดเมนู">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+    <line x1="4" y1="4" x2="20" y2="20"/>
+    <line x1="20" y1="4" x2="4" y2="20"/>
+  </svg>
+</button>
+
+
+<div class="page-shell">
+<header class="site-header">
+  <div class="header-zone--left">
+    <button class="hamburger-btn" type="button" aria-label="เปิดเมนู">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+    <a class="site-logo" href="index.html" aria-label="KLAO — หน้าแรก"><img src="data:image/png;base64,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" alt="KLAO BUILT-IN CUSTOM"></a>
+  </div>
+  <div class="header-zone--center"></div>
+  <div class="header-zone--right">
+    <button class="contact-btn" type="button">Contact Us</button>
+    <button class="contact-icon-btn" type="button" aria-label="ติดต่อเรา">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+<section class="space-view" id="view-kitchen">
+  <div class="space-view-inner">
+    <a class="space-back" href="index.html#work">← ทุกห้อง</a>
+    <h1 class="space-view-title">ห้องครัว</h1>
+    <p class="space-view-desc">งานบิลท์อินที่ออกแบบให้เข้ากับการใช้งานจริงในชีวิตประจำวัน</p>
+    <div class="filters space-filters" data-space-filters="kitchen">
+      <button type="button" class="filter-btn active" data-filter="all">ทั้งหมด</button>
+      <button type="button" class="filter-btn" data-filter="base">ตู้ล่าง</button>
+      <button type="button" class="filter-btn" data-filter="wall">ตู้ลอย</button>
+      <button type="button" class="filter-btn" data-filter="sink">ตู้ซิงค์</button>
+      <button type="button" class="filter-btn" data-filter="island">เคาน์เตอร์เกาะกลาง</button>
+    </div>
+    <div class="gallery space-gallery" style="margin-top:28px;">
+      <div class="project" data-cat="island">
+        <img src="images/kitchen/island/island_01_thumb.jpg" data-full="images/kitchen/island/island_01_full.jpg" alt="เคาน์เตอร์เกาะกลาง — ตัวอย่าง 1">
+        <div class="project-overlay">
+          <div class="project-num mono">K-I01</div>
+          <div class="project-name">เคาน์เตอร์เกาะกลาง — ตัวอย่าง 1</div>
+          <div class="project-meta">เคาน์เตอร์เกาะกลาง · ตัวอย่าง</div>
+        </div>
+      </div>
+      <div class="project" data-cat="island">
+        <img src="images/kitchen/island/island_02_thumb.jpg" data-full="images/kitchen/island/island_02_full.jpg" alt="เคาน์เตอร์เกาะกลาง — ตัวอย่าง 2">
+        <div class="project-overlay">
+          <div class="project-num mono">K-I02</div>
+          <div class="project-name">เคาน์เตอร์เกาะกลาง — ตัวอย่าง 2</div>
+          <div class="project-meta">เคาน์เตอร์เกาะกลาง · ตัวอย่าง</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="footer-top">© 2026 KLAO BUILT IN All RIGHT RESERVED</div>
+  <hr class="footer-divider">
+  <div class="footer-bottom">
+    <a class="footer-social" href="https://www.facebook.com/share/1EQR822dQ8/" target="_blank" rel="noopener" aria-label="Facebook">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">
+        <path d="M14 8h2.5V5.5H14c-1.9 0-3.5 1.6-3.5 3.5v2H8v3h2.5V20h3v-6h2.3l.5-3h-2.8V9c0-.6.4-1 1-1z"/>
+      </svg>
+    </a>
+    <a class="footer-social" href="https://line.me/ti/p/~0918768157" target="_blank" rel="noopener" aria-label="LINE">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">
+        <path d="M12 3.5c-4.7 0-8.5 3.15-8.5 7 0 2.2 1.2 4.15 3.1 5.45-.1.8-.5 2.15-1.75 3.25 1.7-.3 3.15-.95 4.25-1.7.85.2 1.75.3 2.9.3 4.7 0 8.5-3.15 8.5-7s-3.8-7-8.5-7z"/>
+        <text x="12" y="11.3" text-anchor="middle" dominant-baseline="middle" font-family="Arial,sans-serif" font-size="4.5" font-weight="700" fill="currentColor" stroke="none">LINE</text>
+      </svg>
+    </a>
+    <a class="footer-social" href="mailto:klaobuiltin.th@gmail.com" aria-label="Gmail">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">
+        <rect x="3" y="5" width="18" height="14" rx="2"/>
+        <path d="M3.5 7.5L12 13l8.5-5.5"/>
+      </svg>
+    </a>
+  </div>
+</footer>
+<div class="lightbox" id="lightbox" hidden aria-modal="true" role="dialog" aria-label="ดูรูปผลงาน">
+  <button type="button" class="lightbox-close" id="lightboxClose" aria-label="ปิด">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <div class="lightbox-stage">
+    <button type="button" class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="รูปก่อนหน้า">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    <button type="button" class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="รูปถัดไป">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+  <div class="lightbox-caption">
+    <span class="lb-count" id="lightboxCount">1 / 1</span>
+    <span class="lb-name" id="lightboxName"></span>
+  </div>
+</div>
+<button type="button" class="page-overlay" id="pageOverlay" aria-label="ปิดเมนู"></button>
+</div>
+<script>
+  const hamburgerBtn = document.querySelector('.hamburger-btn');
+  const drawerCloseBtn = document.querySelector('.drawer-external-close');
+  const pageOverlay = document.querySelector('.page-overlay');
+  const drawerTabs = document.querySelectorAll('.drawer-tab');
+  const drawerPanels = document.querySelectorAll('[data-panel]');
+  const openMenu = () => { document.body.classList.add('menu-open'); document.documentElement.classList.add('menu-open'); setActiveTab('menu'); };
+  const closeMenu = () => {
+    document.body.classList.remove('menu-open'); document.documentElement.classList.remove('menu-open');
+    document.querySelectorAll('.drawer-item.is-open').forEach(el => el.classList.remove('is-open'));
+    document.querySelectorAll('.drawer-submenu.visible').forEach(el => el.classList.remove('visible'));
+  };
+  function setActiveTab(tabName) {
+    drawerTabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
+    drawerPanels.forEach(p => { p.hidden = p.dataset.panel !== tabName; });
+  }
+  if (hamburgerBtn) hamburgerBtn.addEventListener('click', () => document.body.classList.contains('menu-open') ? closeMenu() : openMenu());
+  if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeMenu);
+  if (pageOverlay) pageOverlay.addEventListener('click', closeMenu);
+  drawerTabs.forEach(tab => tab.addEventListener('click', () => setActiveTab(tab.dataset.tab)));
+  document.querySelectorAll('a.drawer-link, a.drawer-sublink').forEach(a => a.addEventListener('click', closeMenu));
+  document.querySelectorAll('.drawer-plus').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      const item = btn.closest('.drawer-item'); if (!item) return;
+      const sub = item.querySelector('.drawer-submenu');
+      const open = !item.classList.contains('is-open');
+      item.parentElement.querySelectorAll('.drawer-item.is-open').forEach(sib => {
+        if (sib !== item) { sib.classList.remove('is-open'); const sm = sib.querySelector('.drawer-submenu'); if (sm) sm.classList.remove('visible'); }
+      });
+      item.classList.toggle('is-open', open); if (sub) sub.classList.toggle('visible', open);
+    });
+  });
+  const revealEls = document.querySelectorAll('.reveal');
+  if (revealEls.length) {
+    const io = new IntersectionObserver((entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+  }
+  window.addEventListener('scroll', () => document.body.classList.toggle('sticky-header', (window.scrollY||0)>8), {passive:true});
+
+  const view = document.getElementById('view-kitchen');
+  const group = document.querySelector('[data-space-filters]');
+  const projects = view.querySelectorAll('.project');
+  function updateCounts() {
+    const counts = { all: projects.length };
+    projects.forEach(p => { counts[p.dataset.cat] = (counts[p.dataset.cat]||0)+1; });
+    group.querySelectorAll('.filter-btn').forEach(btn => {
+      if (!btn.dataset.label) btn.dataset.label = btn.textContent.replace(/\s*\(\d+\)\s*$/,'').trim();
+      const n = counts[btn.dataset.filter] != null ? counts[btn.dataset.filter] : 0;
+      btn.textContent = btn.dataset.label + ' (' + n + ')';
+    });
+  }
+  updateCounts();
+  group.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      projects.forEach(p => p.classList.toggle('hidden', !(f==='all' || p.dataset.cat===f)));
+    });
+  });
+  (function(){
+    const lb = document.getElementById('lightbox');
+    const imgEl = document.getElementById('lightboxImg');
+    const countEl = document.getElementById('lightboxCount');
+    const nameEl = document.getElementById('lightboxName');
+    let items=[], index=0;
+    function vis(){ return [...document.querySelectorAll('.space-gallery .project')].filter(p=>!p.classList.contains('hidden')); }
+    function render(){
+      const p=items[index], img=p.querySelector('img');
+      imgEl.src = img.getAttribute('data-full')||img.src;
+      countEl.textContent = (index+1)+' / '+items.length;
+      nameEl.textContent = (p.querySelector('.project-name')?.textContent||'') + ' · ' + (p.querySelector('.project-meta')?.textContent||'');
+    }
+    document.querySelector('.space-gallery').addEventListener('click', e => {
+      const p=e.target.closest('.project'); if(!p) return;
+      items=vis(); index=items.indexOf(p); if(index<0)return;
+      render(); lb.hidden=false; requestAnimationFrame(()=>lb.classList.add('is-open')); document.body.style.overflow='hidden';
+    });
+    const close=()=>{ lb.classList.remove('is-open'); document.body.style.overflow=''; setTimeout(()=>{if(!lb.classList.contains('is-open'))lb.hidden=true;},300); };
+    document.getElementById('lightboxClose').onclick=close;
+    document.getElementById('lightboxPrev').onclick=()=>{ index=(index-1+items.length)%items.length; render(); };
+    document.getElementById('lightboxNext').onclick=()=>{ index=(index+1)%items.length; render(); };
+    lb.addEventListener('click', e => { if(e.target===lb) close(); });
+    document.addEventListener('keydown', e => {
+      if(!lb.classList.contains('is-open')) return;
+      if(e.key==='Escape') close();
+      if(e.key==='ArrowLeft'){ index=(index-1+items.length)%items.length; render(); }
+      if(e.key==='ArrowRight'){ index=(index+1)%items.length; render(); }
+    });
+  })();
+</script>
+</body>
+</html>
