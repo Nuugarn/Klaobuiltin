@@ -127,45 +127,174 @@
   }
 
   .header-zone--right {
-    flex: 0 0 140px;
-    width: 140px;
+    flex: 0 0 auto;
+    min-width: 120px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding-right: 32px;
+    padding-right: 12px;
     height: 100%;
   }
 
-  .contact-btn {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--ink);
-    background: none;
+  /* ---------- Language + Theme widget ---------- */
+  .ltw {
+    position: relative;
+    display: inline-block;
+    font-family: 'Inter', 'Kanit', system-ui, sans-serif;
+  }
+  .ltw-capsule {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 4px 14px rgba(28,26,23,0.08), inset 0 0 0 1px rgba(28,26,23,0.06);
+    transition: background 0.25s ease, box-shadow 0.25s ease;
+  }
+  html[data-theme="dark"] .ltw-capsule {
+    background: #161b2c;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.06);
+  }
+  .ltw-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
     border: none;
     cursor: pointer;
-    transition: opacity 0.25s ease;
-    white-space: nowrap;
-  }
-  .contact-btn:hover { opacity: 0.6; }
-
-  .contact-icon-btn {
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border: 1px solid var(--ink);
-    border-radius: 50%;
-    background: none;
-    color: var(--ink);
-    cursor: pointer;
+    background: rgba(28,26,23,0.05);
+    color: #1C1A17;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    padding: 0;
+    line-height: 1;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
   }
-  .contact-icon-btn svg { width: 16px; height: 16px; }
-
-  @media (max-width: 480px) {
-    .contact-btn { display: none; }
-    .contact-icon-btn { display: flex; }
+  .ltw-btn:focus,
+  .ltw-btn:focus-visible { outline: none; box-shadow: none; }
+  .ltw-btn:active { transform: scale(0.94); }
+  .ltw-btn.is-open,
+  .ltw-btn[aria-pressed="true"] {
+    background: rgba(28,26,23,0.1);
+  }
+  html[data-theme="dark"] .ltw-btn {
+    color: #e9edf7;
+    background: rgba(255,255,255,0.06);
+  }
+  html[data-theme="dark"] .ltw-btn.is-open,
+  html[data-theme="dark"] .ltw-btn[aria-pressed="true"] {
+    background: rgba(255,255,255,0.16);
+  }
+  .ltw-divider {
+    width: 1px;
+    height: 16px;
+    background: rgba(28,26,23,0.12);
+  }
+  html[data-theme="dark"] .ltw-divider {
+    background: rgba(255,255,255,0.14);
+  }
+  .ltw-theme[aria-pressed="true"] {
+    box-shadow: 0 2px 8px rgba(28,26,23,0.15);
+    transform: scale(1);
+  }
+  .ltw-theme[aria-pressed="false"] {
+    transform: scale(0.92);
+    background: transparent;
+  }
+  .ltw-drop {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 180px;
+    max-width: min(240px, 80vw);
+    border-radius: 16px;
+    padding: 8px;
+    background: #fff;
+    box-shadow: 0 14px 36px rgba(28,26,23,0.16), inset 0 0 0 1px rgba(28,26,23,0.05);
+    z-index: 400;
+    opacity: 0;
+    transform: scale(0.94) translateY(-6px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.22s cubic-bezier(.2,.9,.3,1.2);
+    transform-origin: top right;
+  }
+  .ltw-drop.is-open {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+  }
+  html[data-theme="dark"] .ltw-drop {
+    background: #161b2c;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.06);
+  }
+  .ltw-opt {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 500;
+    color: #232838;
+    background: transparent;
+    font-family: inherit;
+    transition: background 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
+  .ltw-opt:focus,
+  .ltw-opt:focus-visible { outline: none; box-shadow: none; }
+  .ltw-opt.is-active {
+    font-weight: 700;
+    color: #1C1A17;
+    background: rgba(28,26,23,0.08);
+  }
+  html[data-theme="dark"] .ltw-opt { color: #dfe4f2; }
+  html[data-theme="dark"] .ltw-opt.is-active {
+    color: #fff;
+    background: rgba(255,255,255,0.12);
+  }
+  .ltw-opt:hover:not(.is-active) {
+    background: rgba(28,26,23,0.05);
+  }
+  html[data-theme="dark"] .ltw-opt:hover:not(.is-active) {
+    background: rgba(255,255,255,0.06);
+  }
+  .ltw-flag { font-size: 18px; line-height: 1; }
+  .ltw *:focus { outline: none; }
+  .ltw *:focus-visible { outline: none; box-shadow: none; }
+  .ltw-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    transform: translateX(-50%) translateY(20px);
+    opacity: 0;
+    pointer-events: none;
+    background: #20243a;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 600;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(.2,.9,.3,1.2);
+    white-space: nowrap;
+    max-width: 90vw;
+  }
+  .ltw-toast.is-show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
   }
 
   /* ---------- Push drawer ----------
@@ -267,6 +396,17 @@
   }
 
   .drawer-external-close svg { width: 20px; height: 20px; display: block; }
+  .drawer a,
+  .drawer button {
+    -webkit-tap-highlight-color: transparent;
+  }
+  .drawer a:focus,
+  .drawer a:focus-visible,
+  .drawer button:focus,
+  .drawer button:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
 
   /* Tab headers "เมนู" / "อื่นๆ" — each sits in its own full-bleed row
      with a bottom divider; the active tab gets a pill (oval) background
@@ -1081,6 +1221,17 @@
     color: #4A4A48;
     background: transparent;
     transition: color 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
+  .drawer-sublink:focus,
+  .drawer-sublink:focus-visible {
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+  }
+  .drawer-sublink:active {
+    background: transparent;
   }
 
   .drawer-sublink:last-child {
@@ -1170,10 +1321,10 @@
         </button>
       </div>
       <div class="drawer-submenu hidden">
-        <a href="bedroom.html" class="drawer-sublink">Bedroom</a>
-        <a href="bathroom.html" class="drawer-sublink">Bathroom</a>
-        <a href="kitchen.html" class="drawer-sublink">Kitchen</a>
-        <a href="living.html" class="drawer-sublink">Living Room</a>
+        <a href="bedroom.html" class="drawer-sublink">ห้องนอน</a>
+        <a href="bathroom.html" class="drawer-sublink">ห้องน้ำ</a>
+        <a href="kitchen.html" class="drawer-sublink">ห้องครัว</a>
+        <a href="living.html" class="drawer-sublink">ห้องนั่งเล่น</a>
       </div>
     </li>
     <li class="drawer-item">
@@ -1187,8 +1338,7 @@
         </button>
       </div>
       <div class="drawer-submenu hidden">
-        <a href="#about" class="drawer-sublink">เกี่ยวกับสตูดิโอ</a>
-        <a href="#about" class="drawer-sublink">ทีมของเรา</a>
+        <span class="drawer-sublink" style="color:#7A7A76;cursor:default;">กำลังปรับปรุง</span>
       </div>
     </li>
     <li class="drawer-item">
@@ -1202,7 +1352,7 @@
         </button>
       </div>
       <div class="drawer-submenu hidden">
-        <a href="mailto:hello@klao.co.th" class="drawer-sublink">Email</a>
+        <a href="mailto:klaobuiltin.th@gmail.com" class="drawer-sublink">Email</a>
         <a href="tel:0918768157" class="drawer-sublink">โทรศัพท์</a>
       </div>
     </li>
@@ -1210,35 +1360,7 @@
 
   <ul class="drawer-links" data-panel="other" hidden>
     <li class="drawer-row">
-      <span class="drawer-link drawer-link--static">ภาษา</span>
-      <button class="drawer-plus" type="button" aria-label="ขยายเมนูย่อย ภาษา">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
-          <line x1="12" y1="5" x2="12" y2="19"/>
-          <line x1="5" y1="12" x2="19" y2="12"/>
-        </svg>
-      </button>
-    </li>
-    <li class="drawer-divider"></li>
-    <li class="drawer-row">
-      <span class="drawer-link drawer-link--static">ติดต่อเรา</span>
-    </li>
-    <li class="social-icons-row">
-      <a href="https://www.facebook.com/share/1EQR822dQ8/" target="_blank" rel="noopener" class="social-icon" aria-label="Facebook KLAO">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-        </svg>
-      </a>
-      <a href="https://line.me/ti/p/klaobuiltincustom" target="_blank" rel="noopener" class="social-icon" aria-label="Line KLAO">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19.365 9.863c.349-1.752-1.409-3.452-4.309-3.836-2.899-.384-5.898.538-6.246 2.29-.348 1.751 1.409 3.452 4.308 3.835 2.9.384 5.899-.538 6.247-2.289m-11.634 9.181c-.672.672-2.119.612-3.234-.134-1.114-.747-1.594-2.145-.922-2.817.672-.672 2.119-.612 3.234.134 1.114.746 1.594 2.145.922 2.817M6.797 3.198C3.645 3.198 1 5.924 1 9.261c0 1.952.869 3.713 2.289 4.947-.348 1.39-1.286 3.15-3.227 4.556 1.286-.674 3.382-1.528 5.094-2.742 1.044.268 2.135.403 3.247.403 3.152 0 5.798-2.726 5.798-6.063 0-3.337-2.646-6.062-5.798-6.062"/>
-        </svg>
-      </a>
-      <a href="mailto:hello@klao.co.th" class="social-icon" aria-label="Email hello@klao.co.th">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-        </svg>
-      </a>
+      <span class="drawer-link drawer-link--static" style="color:#7A7A76;">กำลังปรับปรุง</span>
     </li>
   </ul>
 
@@ -1268,13 +1390,21 @@
   </div>
   <div class="header-zone--center"></div>
   <div class="header-zone--right">
-    <button class="contact-btn" type="button">Contact Us</button>
-    <button class="contact-icon-btn" type="button" aria-label="ติดต่อเรา">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
-      </svg>
-    </button>
+    <div class="ltw" id="langThemeWidget">
+      <div class="ltw-capsule">
+        <button type="button" class="ltw-btn" id="ltwLangBtn" aria-haspopup="listbox" aria-expanded="false" title="สลับภาษา">TH</button>
+        <span class="ltw-divider" aria-hidden="true"></span>
+        <button type="button" class="ltw-btn ltw-theme" id="ltwLightBtn" aria-pressed="true" title="Light mode">☀️</button>
+        <button type="button" class="ltw-btn ltw-theme" id="ltwDarkBtn" aria-pressed="false" title="Dark mode">🌙</button>
+      </div>
+      <div class="ltw-drop" id="ltwDrop" role="listbox" hidden>
+        <button type="button" class="ltw-opt is-active" role="option" data-lang="TH" data-label="ไทย" aria-selected="true"><span class="ltw-flag">🇹🇭</span><span>ไทย</span></button>
+        <button type="button" class="ltw-opt" role="option" data-lang="EN" data-label="English" aria-selected="false"><span class="ltw-flag">🇬🇧</span><span>English</span></button>
+        <button type="button" class="ltw-opt" role="option" data-lang="LA" data-label="ລາວ" aria-selected="false"><span class="ltw-flag">🇱🇦</span><span>ລາວ</span></button>
+      </div>
+    </div>
   </div>
+  <div class="ltw-toast" id="ltwToast" role="status" aria-live="polite"></div>
 </header>
 
 
@@ -1319,11 +1449,11 @@
     <div class="space-grid">
       <a class="space-card" href="bedroom.html">
         <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=900&q=80" alt="Bedroom">
-        <span class="space-card-label">Bedroom</span>
+        <span class="space-card-label">ห้องนอน</span>
       </a>
       <a class="space-card" href="bathroom.html">
         <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=900&q=80" alt="Bathroom">
-        <span class="space-card-label">Bathroom</span>
+        <span class="space-card-label">ห้องน้ำ</span>
       </a>
       <a class="space-card" href="kitchen.html">
         <img src="https://images.unsplash.com/photo-1556912173-46c336c7fd55?w=900&q=80" alt="Kitchen">
@@ -1331,7 +1461,7 @@
       </a>
       <a class="space-card" href="living.html">
         <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=900&q=80" alt="Living Room">
-        <span class="space-card-label">Living Room</span>
+        <span class="space-card-label">ห้องนั่งเล่น</span>
       </a>
     </div>
   </section>
@@ -1357,7 +1487,7 @@
             </svg>
           </span>
           <div class="contact-item-body">
-            <span class="contact-line">วันทำการ จันทร์ - อาทิตย์</span>
+            <span class="contact-line">เวลาทำการ วันจันทร์ - อาทิตย์</span>
             <span class="contact-line">เวลา 8:00 - 17:00 น.</span>
             <span class="contact-line contact-line--sub">(เว้นวันหยุดนักขัตฤกษ์)</span>
           </div>
@@ -1475,6 +1605,100 @@
     revealEls.forEach(el => io.observe(el));
   }
   window.addEventListener('scroll', () => document.body.classList.toggle('sticky-header', (window.scrollY||0)>8), {passive:true});
+
+  /* Language + Theme widget (vanilla port of LanguageThemeWidget) */
+  (function(){
+    const LANGS = [
+      { code: 'TH', label: 'ไทย' },
+      { code: 'EN', label: 'English' },
+      { code: 'LA', label: 'ລາວ' }
+    ];
+    const wrap = document.getElementById('langThemeWidget');
+    const langBtn = document.getElementById('ltwLangBtn');
+    const drop = document.getElementById('ltwDrop');
+    const lightBtn = document.getElementById('ltwLightBtn');
+    const darkBtn = document.getElementById('ltwDarkBtn');
+    const toastEl = document.getElementById('ltwToast');
+    if (!wrap || !langBtn || !drop) return;
+
+    let activeLang = localStorage.getItem('klao-lang') || 'TH';
+    let theme = localStorage.getItem('klao-theme') || 'light';
+    let toastTimer = null;
+
+    function showToast(msg) {
+      if (!toastEl) return;
+      toastEl.textContent = '🛠️  ' + msg;
+      toastEl.classList.add('is-show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastEl.classList.remove('is-show'), 2400);
+    }
+
+    function setTheme(mode) {
+      theme = mode;
+      document.documentElement.setAttribute('data-theme', mode);
+      localStorage.setItem('klao-theme', mode);
+      if (lightBtn) lightBtn.setAttribute('aria-pressed', mode === 'light' ? 'true' : 'false');
+      if (darkBtn) darkBtn.setAttribute('aria-pressed', mode === 'dark' ? 'true' : 'false');
+      // TODO: apply full dark theme styles site-wide
+    }
+
+    function setLang(code, label) {
+      activeLang = code;
+      langBtn.textContent = code;
+      localStorage.setItem('klao-lang', code);
+      drop.querySelectorAll('.ltw-opt').forEach(opt => {
+        const on = opt.dataset.lang === code;
+        opt.classList.toggle('is-active', on);
+        opt.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      showToast('ภาษา ' + (label || code) + ' อยู่ระหว่างช่วงพัฒนา');
+      // TODO: connect real i18n
+    }
+
+    function openDrop(open) {
+      drop.hidden = !open;
+      drop.classList.toggle('is-open', open);
+      langBtn.classList.toggle('is-open', open);
+      langBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    // init
+    setTheme(theme);
+    langBtn.textContent = activeLang;
+    drop.querySelectorAll('.ltw-opt').forEach(opt => {
+      const on = opt.dataset.lang === activeLang;
+      opt.classList.toggle('is-active', on);
+      opt.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+
+    langBtn.addEventListener('click', () => {
+      const idx = LANGS.findIndex(l => l.code === activeLang);
+      const next = LANGS[(idx + 1) % LANGS.length];
+      setLang(next.code, next.label);
+      openDrop(true);
+    });
+
+    drop.querySelectorAll('.ltw-opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        setLang(opt.dataset.lang, opt.dataset.label);
+        openDrop(false);
+      });
+    });
+
+    if (lightBtn) lightBtn.addEventListener('click', () => setTheme('light'));
+    if (darkBtn) darkBtn.addEventListener('click', () => setTheme('dark'));
+
+    document.addEventListener('mousedown', (e) => {
+      if (!wrap.contains(e.target)) openDrop(false);
+    });
+    document.addEventListener('touchstart', (e) => {
+      if (!wrap.contains(e.target)) openDrop(false);
+    }, { passive: true });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') openDrop(false);
+    });
+  })();
+
 </script>
 </body>
 </html>
