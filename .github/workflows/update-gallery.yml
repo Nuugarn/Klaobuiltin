@@ -11,7 +11,6 @@ permissions:
 jobs:
   build-gallery:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,13 +18,11 @@ jobs:
       - name: Build gallery data and Kitchen gallery
         shell: python
         run: |
-          import html
-          import json
+          import html, json, re
           from pathlib import Path
 
-          root = Path("images")
+          root = Path('images')
           galleries = {}
-
           for room in root.iterdir():
               if not room.is_dir():
                   continue
@@ -34,56 +31,60 @@ jobs:
                   if not category.is_dir():
                       continue
                   items = []
-                  for full in sorted(category.glob("*_full.jpg")):
+                  for full in sorted(category.glob('*_full.jpg')):
                       prefix = full.name[:-9]
-                      thumb = category / f"{prefix}_thumb.jpg"
+                      thumb = category / f'{prefix}_thumb.jpg'
                       if thumb.exists():
-                          items.append({
-                              "name": prefix,
-                              "thumb": str(thumb).replace("\\", "/"),
-                              "full": str(full).replace("\\", "/")
-                          })
+                          items.append({'name': prefix, 'thumb': str(thumb).replace('\\','/'), 'full': str(full).replace('\\','/')})
                   galleries[room.name][category.name] = items
 
-          Path("gallery-data.json").write_text(json.dumps(galleries, ensure_ascii=False, indent=2), encoding="utf-8")
+          Path('gallery-data.json').write_text(json.dumps(galleries, ensure_ascii=False, indent=2), encoding='utf-8')
 
-          labels = {"base":"ตู้ล่าง", "wall":"ตู้ลอย", "sink":"ตู้ซิงค์", "island":"เคาน์เตอร์เกาะกลาง"}
+          labels = {'base':'ตู้ล่าง', 'wall':'ตู้ลอย', 'sink':'ตู้ซิงค์', 'island':'เคาน์เตอร์เกาะกลาง'}
           cards = []
-          for category in ["base", "wall", "sink", "island"]:
-              for item in galleries.get("kitchen", {}).get(category, []):
+          for category in ['base','wall','sink','island']:
+              for item in galleries.get('kitchen', {}).get(category, []):
                   label = labels.get(category, category)
-                  name = html.escape(item["name"])
-                  thumb = html.escape(item["thumb"], quote=True)
-                  full = html.escape(item["full"], quote=True)
-                  cards.append(f'''      <div class="project" data-cat="{category}">
-        <img src="{thumb}" data-full="{full}" alt="{label} — {name}">
-        <div class="project-overlay">
-          <div class="project-meta">{label}</div>
-        </div>
-      </div>''')
+                  cards.append(f'''      <div class="project" data-cat="{category}">\n        <img src="{html.escape(item['thumb'], quote=True)}" data-full="{html.escape(item['full'], quote=True)}" alt="{label} — {html.escape(item['name'])}">\n        <div class="project-overlay">\n          <div class="project-meta">{label}</div>\n        </div>\n      </div>''')
 
-          kitchen = Path("kitchen.html")
-          text = kitchen.read_text(encoding="utf-8")
-          start_marker = "<!-- GALLERY_AUTO_START -->"
-          end_marker = "<!-- GALLERY_AUTO_END -->"
+          kitchen = Path('kitchen.html')
+          text = kitchen.read_text(encoding='utf-8')
+          start_marker = '<!-- GALLERY_AUTO_START -->'
+          end_marker = '<!-- GALLERY_AUTO_END -->'
 
+          # Bootstrap markers once by finding the matching closing div of .space-gallery.
           if start_marker not in text or end_marker not in text:
-              raise SystemExit("Kitchen gallery markers not found")
+              m = re.search(r'<div\b[^>]*class=["\'][^"\']*\bspace-gallery\b[^"\']*["\'][^>]*>', text, re.I)
+              if not m:
+                  raise SystemExit('Kitchen gallery container not found')
+              token = re.compile(r'<div\b[^>]*>|</div\s*>', re.I)
+              depth = 1
+              end_pos = None
+              for t in token.finditer(text, m.end()):
+                  if t.group(0).lower().startswith('</div'):
+                      depth -= 1
+                      if depth == 0:
+                          end_pos = t.start()
+                          break
+                  else:
+                      depth += 1
+              if end_pos is None:
+                  raise SystemExit('Kitchen gallery closing div not found')
+              text = text[:m.end()] + '\n    ' + start_marker + '\n' + text[m.end():end_pos] + '\n    ' + end_marker + '\n' + text[end_pos:]
 
-          start = text.index(start_marker) + len(start_marker)
-          end = text.index(end_marker, start)
-          replacement = "\n" + "\n".join(cards) + "\n"
-          text = text[:start] + replacement + text[end:]
-          kitchen.write_text(text, encoding="utf-8")
+          a = text.index(start_marker) + len(start_marker)
+          b = text.index(end_marker, a)
+          text = text[:a] + '\n' + '\n'.join(cards) + '\n    ' + text[b:]
+          kitchen.write_text(text, encoding='utf-8')
 
       - name: Commit gallery data and Kitchen
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add gallery-data.json kitchen.html
           if git diff --cached --quiet; then
-            echo "No gallery or Kitchen changes"
+            echo 'No gallery or Kitchen changes'
           else
-            git commit -m "Build Kitchen gallery from image folders"
+            git commit -m 'Build Kitchen gallery from image folders'
             git push
           fi
