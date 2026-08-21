@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build gallery data and wire Kitchen gallery
+      - name: Build gallery data and repair Kitchen loader
         shell: python
         run: |
           import json
@@ -28,27 +28,20 @@ jobs:
           for room in root.iterdir():
               if not room.is_dir():
                   continue
-
               galleries[room.name] = {}
-
               for category in room.iterdir():
                   if not category.is_dir():
                       continue
-
-                  full_files = sorted(category.glob("*_full.jpg"))
                   items = []
-
-                  for full in full_files:
+                  for full in sorted(category.glob("*_full.jpg")):
                       prefix = full.name[:-9]
                       thumb = category / f"{prefix}_thumb.jpg"
-
                       if thumb.exists():
                           items.append({
                               "name": prefix,
                               "thumb": str(thumb).replace("\\", "/"),
                               "full": str(full).replace("\\", "/")
                           })
-
                   galleries[room.name][category.name] = items
 
           Path("gallery-data.json").write_text(
@@ -58,107 +51,20 @@ jobs:
 
           kitchen = Path("kitchen.html")
           html = kitchen.read_text(encoding="utf-8")
-
-          old_gallery = '''    <div class="gallery space-gallery" style="margin-top:28px;">
-      <div class="project" data-cat="island">
-        <img src="images/kitchen/island/island_01_thumb.jpg" data-full="images/kitchen/island/island_01_full.jpg" alt="เคาน์เตอร์เกาะกลาง — ตัวอย่าง 1">
-        <div class="project-overlay">
-          <div class="project-meta">เคาน์เตอร์เกาะกลาง</div>
-        </div>
-      </div>
-      <div class="project" data-cat="island">
-        <img src="images/kitchen/island/island_02_thumb.jpg" data-full="images/kitchen/island/island_02_full.jpg" alt="เคาน์เตอร์เกาะกลาง — ตัวอย่าง 2">
-        <div class="project-overlay">
-          <div class="project-meta">เคาน์เตอร์เกาะกลาง</div>
-        </div>
-      </div>
-    </div>'''
-
-          new_gallery = '''    <div class="gallery space-gallery" style="margin-top:28px;"></div>'''
-          if old_gallery in html:
-              html = html.replace(old_gallery, new_gallery, 1)
-
-          marker = '<script id="gallery-auto-loader">'
-          if marker not in html:
-              loader = r'''<script id="gallery-auto-loader">
-  (async function () {
-    const gallery = document.querySelector('.space-gallery');
-    const group = document.querySelector('.gallery-filter');
-    if (!gallery || !group) return;
-
-    const labels = {
-      wall: 'ตู้ลอย',
-      sink: 'ตู้ซิงค์',
-      island: 'เคาน์เตอร์เกาะกลาง'
-    };
-
-    try {
-      const response = await fetch('./gallery-data.json', { cache: 'no-store' });
-      if (!response.ok) throw new Error('gallery-data.json: HTTP ' + response.status);
-      const data = await response.json();
-      const room = data.kitchen || {};
-
-      gallery.innerHTML = '';
-
-      Object.entries(room).forEach(([category, items]) => {
-        if (!Array.isArray(items)) return;
-        items.forEach((item, index) => {
-          const card = document.createElement('div');
-          card.className = 'project';
-          card.dataset.cat = category;
-
-          const img = document.createElement('img');
-          img.src = item.thumb;
-          img.dataset.full = item.full;
-          img.alt = (labels[category] || category) + ' — ตัวอย่าง ' + (index + 1);
-
-          const overlay = document.createElement('div');
-          overlay.className = 'project-overlay';
-
-          const meta = document.createElement('div');
-          meta.className = 'project-meta';
-          meta.textContent = labels[category] || category;
-
-          overlay.appendChild(meta);
-          card.appendChild(img);
-          card.appendChild(overlay);
-          gallery.appendChild(card);
-        });
-      });
-
-      group.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          const filter = btn.dataset.filter;
-          gallery.querySelectorAll('.project').forEach(card => {
-            card.classList.toggle('hidden', !(filter === 'all' || card.dataset.cat === filter));
-          });
-        });
-      });
-
-      const active = group.querySelector('.filter-btn.active') || group.querySelector('.filter-btn[data-filter="all"]');
-      if (active) active.click();
-    } catch (error) {
-      console.error('Gallery auto-loader failed:', error);
-    }
-  })();
-</script>
-'''
-              html = html.replace('</body>', loader + '</body>', 1)
-
+          html = html.replace(
+              "document.querySelector('.gallery-filter')",
+              "document.querySelector('[data-space-filters=\"kitchen\"]')"
+          )
           kitchen.write_text(html, encoding="utf-8")
 
       - name: Commit gallery data and Kitchen
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           git add gallery-data.json kitchen.html
-
           if git diff --cached --quiet; then
             echo "No gallery or Kitchen changes"
           else
-            git commit -m "Update automatic Kitchen gallery"
+            git commit -m "Fix automatic Kitchen gallery loader"
             git push
           fi
