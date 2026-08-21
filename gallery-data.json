@@ -1,7 +1,6 @@
 {
   "kitchen": {
     "hero": [],
-    "wall": [],
     "island": [
       {
         "name": "island_01",
@@ -20,7 +19,8 @@
         "thumb": "images/kitchen/sink/sink_01_thumb.jpg",
         "full": "images/kitchen/sink/sink_01_full.jpg"
       }
-    ]
+    ],
+    "wall": []
   },
   "bathroom": {
     "hero": [],
