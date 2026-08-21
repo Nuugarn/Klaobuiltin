@@ -722,20 +722,61 @@
   }
   .space-back:hover { color: var(--ink); }
   .space-view-title {
-    font-family: 'Kanit', 'Fraunces', serif;
+    font-family: 'Inter', 'Kanit', system-ui, -apple-system, sans-serif;
     font-weight: 600;
     font-size: clamp(1.8rem, 4vw, 2.6rem);
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--ink);
-    margin-bottom: 10px;
+    color: #1C1A17;
+    margin-bottom: 14px;
+  }
+  .space-view-hero {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border-radius: 4px;
+    margin: 28px 0 12px; /* more space above (from title), less below (to subhead) */
+  }
+  @media (max-width: 720px) {
+    .space-view-hero {
+      width: 100vw;
+      max-width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+      border-radius: 0;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+  }
+  .space-view-subhead {
+    font-family: 'Inter', 'Kanit', system-ui, -apple-system, sans-serif;
+    font-size: clamp(1.45rem, 3.2vw, 1.7rem); /* slightly under 2x body */
+    font-weight: 400;
+    color: #1C1A17;
+    text-align: center;
+    line-height: 1.5;
+    max-width: 28ch;
+    margin: 0 auto clamp(18px, 3vw, 28px);
+  }
+  .space-view-subhead strong {
+    font-weight: 700;
+    color: #1C1A17;
   }
   .space-view-desc {
-    font-size: clamp(0.95rem, 2vw, 1.05rem);
+    font-family: 'Inter', 'Kanit', system-ui, -apple-system, sans-serif;
+    font-size: clamp(0.95rem, 2vw, 1.08rem);
+    font-weight: 400;
     color: #4A4A48;
-    max-width: 42ch;
-    margin-bottom: clamp(28px, 4vw, 40px);
-    line-height: 1.6;
+    max-width: 62ch;
+    margin: 0 auto clamp(28px, 4vw, 40px);
+    line-height: 1.85;
+    text-align: center;
+  }
+  .space-view-desc strong {
+    font-weight: 600;
+    color: #1C1A17;
   }
   body.space-mode #home-view { display: none; }
   .space-filters { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -979,7 +1020,7 @@
   }
 
   footer {
-    background: #F5F5F5;
+    background: transparent;
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -995,6 +1036,7 @@
     color: var(--teak);
     text-align: center;
     letter-spacing: 0.02em;
+    background: #F5F5F5;
   }
 
   .footer-divider {
@@ -1006,24 +1048,26 @@
   }
 
   .footer-bottom {
-    padding: 16px clamp(20px, 5vw, 64px) 22px;
+    padding: 4px clamp(20px, 5vw, 64px) 5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16px;
+    gap: 10px;
+    background: #FFFFFF;
   }
 
   .footer-social {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
-    background: #FFFFFF;
-    color: #1C1A17;
-    box-shadow: 0 1px 3px rgba(28, 26, 23, 0.06);
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    background: transparent;
+    border: 1.25px solid #4A4A48;
+    color: #4A4A48;
+    box-shadow: none;
+    transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
   }
 
   .footer-social:hover {
@@ -1032,8 +1076,8 @@
   }
 
   .footer-social svg {
-    width: 18px;
-    height: 18px;
+    width: 12px;
+    height: 12px;
     display: block;
   }
 
@@ -1217,7 +1261,7 @@ a.space-back { text-decoration: none; color: var(--teak); }
       </div>
       <div class="drawer-submenu hidden">
         <a href="mailto:hello@klao.co.th" class="drawer-sublink">Email</a>
-        <a href="tel:+66-2-1234-5678" class="drawer-sublink">โทรศัพท์</a>
+        <a href="tel:0918768157" class="drawer-sublink">โทรศัพท์</a>
       </div>
     </li>
   </ul>
@@ -1294,7 +1338,9 @@ a.space-back { text-decoration: none; color: var(--teak); }
   <div class="space-view-inner">
     <a class="space-back" href="index.html#work">← ทุกห้อง</a>
     <h1 class="space-view-title">ห้องครัว</h1>
-    <p class="space-view-desc">งานบิลท์อินที่ออกแบบให้เข้ากับการใช้งานจริงในชีวิตประจำวัน</p>
+    <img class="space-view-hero" src="kitchen-hero.jpg" alt="Living Kitchen — ตอบโจทย์ความต้องการ การใช้งานสะดวกสบาย" width="1080" height="720">
+    <p class="space-view-subhead">เปลี่ยนพื้นที่ทำอาหาร ให้เป็น “<strong>หัวใจหลักของบ้าน</strong>”</p>
+    <p class="space-view-desc">เปลี่ยนการทำอาหารให้เป็นช่วงเวลาที่คุณรักที่สุด ให้ <strong>Living Kitchen</strong> ช่วยคุณเนรมิตครัวในฝัน เพราะครัวที่ดีไม่ใช่แค่<strong>ห้องทำงานบ้าน</strong> แต่คือการลงทุนเพื่อคุณภาพชีวิตและความสุขในระยะยาว</p>
     <div class="filters space-filters" data-space-filters="kitchen">
       <button type="button" class="filter-btn active" data-filter="all">ทั้งหมด</button>
       <button type="button" class="filter-btn" data-filter="base">ตู้ล่าง</button>
@@ -1318,6 +1364,77 @@ a.space-back { text-decoration: none; color: var(--teak); }
     </div>
   </div>
 </section>
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="contact-inner">
+
+      <div class="contact-brand">
+        <img class="contact-brand-logo" src="data:image/png;base64,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" alt="KLAO Built-in Custom" width="113" height="43">
+      </div>
+
+      <ul class="contact-list">
+
+        <li class="contact-item">
+          <span class="contact-item-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 7v5l3 2"/>
+            </svg>
+          </span>
+          <div class="contact-item-body">
+            <span class="contact-line">วันทำการ จันทร์ - อาทิตย์</span>
+            <span class="contact-line">เวลา 8:00 - 17:00 น.</span>
+            <span class="contact-line contact-line--sub">(เว้นวันหยุดนักขัตฤกษ์)</span>
+          </div>
+        </li>
+
+        <li class="contact-item">
+          <span class="contact-item-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3.2c-5.1 0-9.2 3.45-9.2 7.7 0 2.45 1.35 4.62 3.45 6.05-.12.9-.55 2.35-1.95 3.55 1.85-.35 3.45-1.05 4.65-1.85.95.22 1.95.35 3.05.35 5.1 0 9.2-3.45 9.2-7.7S17.1 3.2 12 3.2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <text x="12" y="12.2" text-anchor="middle" dominant-baseline="middle" font-family="Arial, Helvetica, sans-serif" font-size="5.2" font-weight="700" fill="currentColor" letter-spacing="0.3">LINE</text>
+            </svg>
+          </span>
+          <div class="contact-item-body">
+            <div class="contact-line-row">
+              <span class="contact-line">ช่างเกล้า บิ้วอิน</span>
+              <a class="line-add-btn" href="https://line.me/ti/p/~0918768157" target="_blank" rel="noopener" aria-label="เพิ่มเพื่อน LINE">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2C6.48 2 2 5.82 2 10.5c0 4.2 3.73 7.72 8.75 8.4.34.07.8.22.92.5.1.26.07.66.03.92l-.15 1.02c-.05.3-.22 1.18 1.03.64C16.32 20.14 22 15.9 22 10.5 22 5.82 17.52 2 12 2z"/>
+                </svg>
+                Add friend
+              </a>
+            </div>
+          </div>
+        </li>
+
+        <li class="contact-item">
+          <span class="contact-item-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+          </span>
+          <div class="contact-item-body">
+            <a class="contact-line contact-link" href="tel:0918768157">0918768157</a>
+          </div>
+        </li>
+
+        <li class="contact-item">
+          <span class="contact-item-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </span>
+          <div class="contact-item-body">
+            <a class="contact-line contact-link" href="mailto:hello@klao.co.th">ติดต่อเรา</a>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="footer-top">© 2026 KLAO BUILT IN All RIGHT RESERVED</div>
   <hr class="footer-divider">
