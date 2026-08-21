@@ -54,9 +54,6 @@ jobs:
               encoding="utf-8"
           )
 
-          # Build Kitchen's gallery directly into kitchen.html.
-          # The browser's existing filter and lightbox code can then work
-          # without a manifest or a client-side GitHub API request.
           kitchen_data = galleries.get("kitchen", {})
           labels = {
               "base": "ตู้ล่าง",
@@ -92,9 +89,10 @@ jobs:
           if section_end == -1:
               raise SystemExit("Kitchen gallery section not found")
 
-          gallery_close = text.rfind('</div>', start, section_end)
+          gallery_end_marker = '\n    </div>\n  </div>\n</section>'
+          gallery_close = text.find(gallery_end_marker, start, section_end + len('</section>'))
           if gallery_close == -1:
-              raise SystemExit("Kitchen gallery closing tag not found")
+              raise SystemExit("Kitchen gallery closing boundary not found")
 
           open_end = text.find('>', start)
           if open_end == -1 or open_end > gallery_close:
@@ -106,7 +104,7 @@ jobs:
               + '\n    </div>'
           )
 
-          text = text[:start] + new_gallery + text[gallery_close + len('</div>'):]
+          text = text[:start] + new_gallery + text[gallery_close + len('\n    </div>'):]
           kitchen.write_text(text, encoding="utf-8")
 
       - name: Commit gallery data and Kitchen
