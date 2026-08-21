@@ -3,11 +3,15 @@ name: Update Gallery Data
 on:
   push:
     paths:
-      - 'images/**'
+      - 'images/**/*_full.jpg'
   workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: gallery-build
+  cancel-in-progress: true
 
 jobs:
   build-gallery:
@@ -29,7 +33,8 @@ jobs:
           root = Path('images')
           galleries = {}
 
-          # If a *_full.jpg has no matching *_thumb.jpg, create it automatically.
+          # One source image (_full.jpg) is enough.
+          # Create its _thumb.jpg automatically when missing.
           # Existing thumbnails are never overwritten.
           for full in root.rglob('*_full.jpg'):
               thumb = full.with_name(full.name[:-9] + '_thumb.jpg')
@@ -39,7 +44,8 @@ jobs:
                       im.thumbnail((1200, 900), Image.Resampling.LANCZOS)
                       im.save(thumb, 'JPEG', quality=82, optimize=True)
 
-          for room in root.iterdir():
+          # Read every room/category folder automatically.
+          for room in sorted(root.iterdir(), key=lambda p: p.name):
               if not room.is_dir():
                   continue
               galleries[room.name] = {}
@@ -63,6 +69,8 @@ jobs:
               encoding='utf-8'
           )
 
+          # Kitchen currently uses these existing filter keys.
+          # New image files can be added without editing the HTML cards manually.
           labels = {
               'base': 'ตู้ล่าง',
               'wall': 'ตู้ลอย',
@@ -96,7 +104,7 @@ jobs:
           text = text[:a] + '\n' + '\n'.join(cards) + '\n    ' + text[b:]
           kitchen.write_text(text, encoding='utf-8')
 
-      - name: Commit gallery data and Kitchen
+      - name: Commit gallery data, thumbnails and Kitchen
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
