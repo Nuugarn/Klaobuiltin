@@ -1,1 +1,71 @@
+name: Update Gallery Data
 
+on:
+  push:
+    paths:
+      - 'images/**'
+
+permissions:
+  contents: write
+
+jobs:
+  build-gallery:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build gallery data
+        shell: python
+        run: |
+          import json
+          from pathlib import Path
+
+          root = Path("images")
+          galleries = {}
+
+          for room in root.iterdir():
+              if not room.is_dir():
+                  continue
+
+              galleries[room.name] = {}
+
+              for category in room.iterdir():
+                  if not category.is_dir():
+                      continue
+
+                  full_files = sorted(category.glob("*_full.jpg"))
+                  items = []
+
+                  for full in full_files:
+                      prefix = full.name[:-9]
+                      thumb = category / f"{prefix}_thumb.jpg"
+
+                      if thumb.exists():
+                          items.append({
+                              "name": prefix,
+                              "thumb": str(thumb).replace("\\", "/"),
+                              "full": str(full).replace("\\", "/")
+                          })
+
+                  galleries[room.name][category.name] = items
+
+          Path("gallery-data.json").write_text(
+              json.dumps(galleries, ensure_ascii=False, indent=2),
+              encoding="utf-8"
+          )
+
+      - name: Commit gallery data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add gallery-data.json
+
+          if git diff --cached --quiet; then
+            echo "No gallery changes"
+          else
+            git commit -m "Update gallery data"
+            git push
+          fi
