@@ -1,0 +1,153 @@
+name: Update Gallery Data
+
+on:
+  push:
+    paths:
+      - 'images/**/*.jpg'
+      - 'images/**/*.jpeg'
+      - 'images/**/*.JPG'
+      - 'images/**/*.JPEG'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gallery-build
+  cancel-in-progress: true
+
+jobs:
+  build-gallery:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install image tool
+        run: python -m pip install --disable-pip-version-check pillow
+
+      - name: Build Full, Thumbnail and Gallery Data
+        shell: python
+        run: |
+          import json
+          from pathlib import Path
+          from PIL import Image, ImageOps
+
+          root = Path('images')
+
+          # Source workflow:
+          #   room/category/photo.jpg
+          # becomes:
+          #   photo_full.jpg
+          #   photo_thumb.jpg
+          # Existing _full/_thumb files are kept and never regenerated.
+          for source in root.rglob('*'):
+              if not source.is_file() or source.suffix.lower() not in {'.jpg', '.jpeg'}:
+                  continue
+              if source.stem.endswith('_full') or source.stem.endswith('_thumb'):
+                  continue
+
+              full = source.with_name(source.stem + '_full.jpg')
+              thumb = source.with_name(source.stem + '_thumb.jpg')
+
+              if not full.exists():
+                  with Image.open(source) as im:
+                      im = ImageOps.exif_transpose(im).convert('RGB')
+                      im.save(full, 'JPEG', quality=92, optimize=True)
+
+              if not thumb.exists():
+                  with Image.open(source) as im:
+                      im = ImageOps.exif_transpose(im).convert('RGB')
+                      im.thumbnail((1200, 900), Image.Resampling.LANCZOS)
+                      im.save(thumb, 'JPEG', quality=82, optimize=True)
+
+          # Build data for every room and every category automatically.
+          # Nothing here is tied to Kitchen only.
+          galleries = {}
+          for room in sorted(root.iterdir(), key=lambda p: p.name):
+              if not room.is_dir():
+                  continue
+              galleries[room.name] = {}
+              for category in sorted(room.iterdir(), key=lambda p: p.name):
+                  if not category.is_dir():
+                      continue
+                  items = []
+                  for full in sorted(category.glob('*_full.jpg')):
+                      prefix = full.name[:-9]
+                      thumb = category / f'{prefix}_thumb.jpg'
+                      if thumb.exists():
+                          items.append({
+                              'name': prefix,
+                              'thumb': str(thumb).replace('\\', '/'),
+                              'full': str(full).replace('\\', '/')
+                          })
+                  galleries[room.name][category.name] = items
+
+          Path('gallery-data.json').write_text(
+              json.dumps(galleries, ensure_ascii=False, indent=2),
+              encoding='utf-8'
+          )
+
+          # Inject gallery cards into every room page that has the
+          # GALLERY_AUTO_START / GALLERY_AUTO_END markers. Add new rooms
+          # here as new pages are created (folder name -> html file +
+          # category labels, in filter-button order).
+          pages = {
+              'kitchen.html': {
+                  'room': 'kitchen',
+                  'labels': {
+                      'base': 'ตู้ล่าง',
+                      'wall': 'ตู้ลอย',
+                      'sink': 'ตู้ซิงค์',
+                      'island': 'เคาน์เตอร์เกาะกลาง',
+                  },
+              },
+              'living.html': {
+                  'room': 'living-room',
+                  'labels': {
+                      'show': 'ตู้โชว์',
+                      'tv': 'ชุดวางทีวี',
+                  },
+              },
+          }
+
+          start_marker = '<!-- GALLERY_AUTO_START -->'
+          end_marker = '<!-- GALLERY_AUTO_END -->'
+          changed_pages = []
+
+          for filename, cfg in pages.items():
+              page = Path(filename)
+              if not page.exists():
+                  continue
+
+              cards = []
+              for category, label in cfg['labels'].items():
+                  for item in galleries.get(cfg['room'], {}).get(category, []):
+                      cards.append(
+                          f'''      <div class="project" data-cat="{category}">\n'''
+                          f'''        <img src="{item['thumb']}" data-full="{item['full']}" alt="{label} — {item['name']}">\n'''
+                          f'''        <div class="project-overlay">\n'''
+                          f'''          <div class="project-meta">{label}</div>\n'''
+                          f'''        </div>\n'''
+                          f'''      </div>'''
+                      )
+
+              text = page.read_text(encoding='utf-8')
+              if start_marker in text and end_marker in text:
+                  a = text.index(start_marker) + len(start_marker)
+                  b = text.index(end_marker, a)
+                  text = text[:a] + '\n' + '\n'.join(cards) + '\n    ' + text[b:]
+                  page.write_text(text, encoding='utf-8')
+                  changed_pages.append(filename)
+
+      - name: Commit generated assets and data
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add images gallery-data.json kitchen.html living.html
+          if git diff --cached --quiet; then
+            echo 'No generated changes'
+          else
+            git commit -m 'Build image assets and gallery data'
+            git push
+          fi
