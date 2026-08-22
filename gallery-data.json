@@ -9,6 +9,19 @@
       }
     ]
   },
+  "bedroom": {
+    "bed": [],
+    "headboardwall": [],
+    "hero": [
+      {
+        "name": "bedroom-hero_20260822_195851_0000",
+        "thumb": "images/bedroom/hero/bedroom-hero_20260822_195851_0000_thumb.jpg",
+        "full": "images/bedroom/hero/bedroom-hero_20260822_195851_0000_full.jpg"
+      }
+    ],
+    "vanitytable": [],
+    "wardrobe": []
+  },
   "kitchen": {
     "hero": [
       {
