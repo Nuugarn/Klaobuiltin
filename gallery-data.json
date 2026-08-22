@@ -1,10 +1,12 @@
 {
-  "bathroom": {
-    "hero": [],
-    "sink": []
-  },
   "kitchen": {
-    "hero": [],
+    "hero": [
+      {
+        "name": "kitchen-hero",
+        "thumb": "images/kitchen/hero/kitchen-hero_thumb.jpg",
+        "full": "images/kitchen/hero/kitchen-hero_full.jpg"
+      }
+    ],
     "island": [
       {
         "name": "island_01",
@@ -32,14 +34,14 @@
     "wall": []
   },
   "living-room": {
-    "hero": [],
-    "show": [],
-    "tv": [
+    "hero": [
       {
-        "name": "living_tv_01",
-        "thumb": "images/living-room/tv/living_tv_01.jpg",
-        "full": "images/living-room/tv/living_tv_01.jpg"
+        "name": "living-hero",
+        "thumb": "images/living-room/hero/living-hero_thumb.jpg",
+        "full": "images/living-room/hero/living-hero_full.jpg"
       }
-    ]
+    ],
+    "show": [],
+    "tv": []
   }
 }
