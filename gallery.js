@@ -178,6 +178,32 @@
     });
   }
 
+
+  function fillHero(room, roomData) {
+    const heroEls = document.querySelectorAll(
+      '[data-gallery-hero][data-room="' + room + '"], [data-gallery-hero]:not([data-room])'
+    );
+    if (!heroEls.length) return;
+
+    const items = (roomData && roomData.hero) || [];
+    const item = items[0];
+    heroEls.forEach(function (el) {
+      // Prefer matching data-room; skip orphan :not([data-room]) if another room is active on page
+      if (el.hasAttribute('data-room') && el.getAttribute('data-room') !== room) return;
+      if (!item) {
+        el.hidden = true;
+        el.innerHTML = '';
+        return;
+      }
+      el.hidden = false;
+      const alt = el.getAttribute('data-hero-alt') || (room + ' hero');
+      // Use full image for hero banner (sharper); fall back to thumb
+      const src = item.full || item.thumb;
+      el.innerHTML =
+        '<img class="space-view-hero" src="' + src + '" alt="' + alt.replace(/"/g, '&quot;') + '" width="1080" height="720" loading="eager">';
+    });
+  }
+
   function fillGallery(galleryRoot, roomData, filterRoot, skip) {
     const parts = [];
     const categories = Object.keys(roomData || {}).sort();
@@ -227,6 +253,7 @@
       })
       .then(function (data) {
         const roomData = data[room] || {};
+        fillHero(room, roomData);
         fillGallery(galleryRoot, roomData, filterRoot, skip);
         setupFilters(filterRoot, galleryRoot);
         setupLightbox(galleryRoot);
