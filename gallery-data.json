@@ -30,5 +30,16 @@
       }
     ],
     "wall": []
+  },
+  "living-room": {
+    "hero": [],
+    "show": [],
+    "tv": [
+      {
+        "name": "living_tv_01",
+        "thumb": "images/living-room/tv/living_tv_01.jpg",
+        "full": "images/living-room/tv/living_tv_01.jpg"
+      }
+    ]
   }
 }
