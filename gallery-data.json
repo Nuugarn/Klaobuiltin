@@ -1,7 +1,13 @@
 {
   "bathroom": {
     "hero": [],
-    "sink": []
+    "sink": [
+      {
+        "name": "sink1",
+        "thumb": "images/bathroom/sink/sink1_thumb.jpg",
+        "full": "images/bathroom/sink/sink1_full.jpg"
+      }
+    ]
   },
   "kitchen": {
     "hero": [
