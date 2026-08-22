@@ -117,13 +117,12 @@ jobs:
               #         'bed-frame': 'เตียง',
               #     },
               # },
-              # 'bathroom.html': {
-              #     'room': 'bathroom',
-              #     'labels': {
-              #         'vanity': 'ตู้อ่างล้างหน้า',
-              #         'storage': 'ตู้เก็บของ',
-              #     },
-              # },
+              'bathroom.html': {
+                  'room': 'bathroom',
+                  'labels': {
+                      'sink': 'อ่างซิงค์',
+                  },
+              },
           }
 
           start_marker = '<!-- GALLERY_AUTO_START -->'
