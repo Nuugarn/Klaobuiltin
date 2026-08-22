@@ -1,13 +1,7 @@
 {
   "bathroom": {
     "hero": [],
-    "sink": [
-      {
-        "name": "AGGIN_sink",
-        "thumb": "images/bathroom/sink/AGGIN_sink_thumb.jpg",
-        "full": "images/bathroom/sink/AGGIN_sink_full.jpg"
-      }
-    ]
+    "sink": []
   },
   "kitchen": {
     "hero": [
