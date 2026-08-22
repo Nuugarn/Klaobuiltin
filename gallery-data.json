@@ -42,6 +42,12 @@
       }
     ],
     "show": [],
-    "tv": []
+    "tv": [
+      {
+        "name": "tv_01",
+        "thumb": "images/living-room/tv/tv_01_thumb.jpg",
+        "full": "images/living-room/tv/tv_01_full.jpg"
+      }
+    ]
   }
 }
