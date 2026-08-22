@@ -3,7 +3,10 @@ name: Update Gallery Data
 on:
   push:
     paths:
-      - 'images/**/*_full.jpg'
+      - 'images/**/*.jpg'
+      - 'images/**/*.jpeg'
+      - 'images/**/*.JPG'
+      - 'images/**/*.JPEG'
   workflow_dispatch:
 
 permissions:
@@ -23,28 +26,44 @@ jobs:
       - name: Install image tool
         run: python -m pip install --disable-pip-version-check pillow
 
-      - name: Build thumbnails and gallery data
+      - name: Build Full, Thumbnail and Gallery Data
         shell: python
         run: |
-          import html, json
+          import json
           from pathlib import Path
           from PIL import Image, ImageOps
 
           root = Path('images')
-          galleries = {}
 
-          # One source image (_full.jpg) is enough.
-          # Create its _thumb.jpg automatically when missing.
-          # Existing thumbnails are never overwritten.
-          for full in root.rglob('*_full.jpg'):
-              thumb = full.with_name(full.name[:-9] + '_thumb.jpg')
+          # Source workflow:
+          #   room/category/photo.jpg
+          # becomes:
+          #   photo_full.jpg
+          #   photo_thumb.jpg
+          # Existing _full/_thumb files are kept and never regenerated.
+          for source in root.rglob('*'):
+              if not source.is_file() or source.suffix.lower() not in {'.jpg', '.jpeg'}:
+                  continue
+              if source.stem.endswith('_full') or source.stem.endswith('_thumb'):
+                  continue
+
+              full = source.with_name(source.stem + '_full.jpg')
+              thumb = source.with_name(source.stem + '_thumb.jpg')
+
+              if not full.exists():
+                  with Image.open(source) as im:
+                      im = ImageOps.exif_transpose(im).convert('RGB')
+                      im.save(full, 'JPEG', quality=92, optimize=True)
+
               if not thumb.exists():
-                  with Image.open(full) as im:
+                  with Image.open(source) as im:
                       im = ImageOps.exif_transpose(im).convert('RGB')
                       im.thumbnail((1200, 900), Image.Resampling.LANCZOS)
                       im.save(thumb, 'JPEG', quality=82, optimize=True)
 
-          # Read every room/category folder automatically.
+          # Build data for every room and every category automatically.
+          # Nothing here is tied to Kitchen only.
+          galleries = {}
           for room in sorted(root.iterdir(), key=lambda p: p.name):
               if not room.is_dir():
                   continue
@@ -69,8 +88,7 @@ jobs:
               encoding='utf-8'
           )
 
-          # Kitchen currently uses these existing filter keys.
-          # New image files can be added without editing the HTML cards manually.
+          # Keep the existing Kitchen page automation unchanged.
           labels = {
               'base': 'ตู้ล่าง',
               'wall': 'ตู้ลอย',
@@ -83,35 +101,33 @@ jobs:
               for item in galleries.get('kitchen', {}).get(category, []):
                   label = labels.get(category, category)
                   cards.append(
-                      f'''      <div class="project" data-cat="{html.escape(category, quote=True)}">\n'''
-                      f'''        <img src="{html.escape(item['thumb'], quote=True)}" data-full="{html.escape(item['full'], quote=True)}" alt="{html.escape(label + ' — ' + item['name'], quote=True)}">\n'''
+                      f'''      <div class="project" data-cat="{category}">\n'''
+                      f'''        <img src="{item['thumb']}" data-full="{item['full']}" alt="{label} — {item['name']}">\n'''
                       f'''        <div class="project-overlay">\n'''
-                      f'''          <div class="project-meta">{html.escape(label)}</div>\n'''
+                      f'''          <div class="project-meta">{label}</div>\n'''
                       f'''        </div>\n'''
                       f'''      </div>'''
                   )
 
           kitchen = Path('kitchen.html')
-          text = kitchen.read_text(encoding='utf-8')
-          start_marker = '<!-- GALLERY_AUTO_START -->'
-          end_marker = '<!-- GALLERY_AUTO_END -->'
+          if kitchen.exists():
+              text = kitchen.read_text(encoding='utf-8')
+              start_marker = '<!-- GALLERY_AUTO_START -->'
+              end_marker = '<!-- GALLERY_AUTO_END -->'
+              if start_marker in text and end_marker in text:
+                  a = text.index(start_marker) + len(start_marker)
+                  b = text.index(end_marker, a)
+                  text = text[:a] + '\n' + '\n'.join(cards) + '\n    ' + text[b:]
+                  kitchen.write_text(text, encoding='utf-8')
 
-          if start_marker not in text or end_marker not in text:
-              raise SystemExit('Kitchen gallery markers not found')
-
-          a = text.index(start_marker) + len(start_marker)
-          b = text.index(end_marker, a)
-          text = text[:a] + '\n' + '\n'.join(cards) + '\n    ' + text[b:]
-          kitchen.write_text(text, encoding='utf-8')
-
-      - name: Commit gallery data, thumbnails and Kitchen
+      - name: Commit generated assets and data
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add images gallery-data.json kitchen.html
           if git diff --cached --quiet; then
-            echo 'No gallery or Kitchen changes'
+            echo 'No generated changes'
           else
-            git commit -m 'Build Kitchen gallery from image folders'
+            git commit -m 'Build image assets and gallery data'
             git push
           fi
