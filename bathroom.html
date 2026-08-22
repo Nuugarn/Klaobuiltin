@@ -1094,6 +1094,7 @@
   }
 
   /* ---------- Lightbox ---------- */
+  /* ---------- Project lightbox ---------- */
   .lightbox {
     position: fixed;
     inset: 0;
@@ -1108,24 +1109,27 @@
     transition: opacity 0.3s ease;
     padding: 16px;
   }
-  .lightbox.is-open { opacity: 1; pointer-events: auto; }
+  .lightbox.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
   .lightbox-close {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-    background: none;
+    top: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
     border: none;
-    color: #fff;
+    background: #fff;
+    color: var(--pine);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    -webkit-tap-highlight-color: transparent;
-    outline: none;
+    z-index: 2;
   }
-  .lightbox-close svg { width: 24px; height: 24px; }
+  .lightbox-close svg { width: 20px; height: 20px; }
   .lightbox-stage {
     position: relative;
     width: min(920px, 100%);
@@ -1138,33 +1142,30 @@
   .lightbox-img {
     max-width: 100%;
     max-height: 100%;
-    border-radius: 4px;
+    border-radius: 12px;
     object-fit: contain;
     display: block;
     box-shadow: 0 12px 40px rgba(0,0,0,0.35);
   }
-  /* Nav fixed to viewport so arrows never overflow off-screen on narrow devices */
+  /* Nav fixed higher (align with image band) — does not move with aspect ratio */
   .lightbox-nav {
     position: fixed;
+    /* ~center of photo area, above true screen mid so it matches old visual */
     top: clamp(148px, 41vh, 48vh);
     transform: translateY(-50%);
     width: 44px;
     height: 44px;
-    background: rgba(255,255,255,0.1);
-    border: none;
     border-radius: 50%;
-    color: #fff;
+    border: none;
+    background: #fff;
+    color: var(--ink);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s ease;
     z-index: 510;
-    -webkit-tap-highlight-color: transparent;
-    outline: none;
   }
-  .lightbox-nav:hover { background: rgba(255,255,255,0.2); }
-  .lightbox-nav svg { width: 20px; height: 20px; }
+  .lightbox-nav svg { width: 18px; height: 18px; }
   .lightbox-prev { left: max(12px, calc(50% - min(460px, 50vw) - 8px)); }
   .lightbox-next { right: max(12px, calc(50% - min(460px, 50vw) - 8px)); }
   @media (max-width: 720px) {
@@ -1177,23 +1178,27 @@
     cursor: default;
   }
   .lightbox-caption {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 22px;
+    margin-top: 20px;
+    padding: 12px 22px;
     border-radius: 100px;
     background: var(--pine);
     color: #fff;
+    text-align: center;
     font-family: 'Kanit', 'Inter', sans-serif;
     font-size: 0.9rem;
-    white-space: nowrap;
+    line-height: 1.35;
+    max-width: min(420px, 92vw);
   }
-  .lb-count { font-weight: 600; }
-  .lb-name { color: #fff; font-weight: 500; }
+  .lightbox-caption .lb-count {
+    font-weight: 600;
+  }
+  .lightbox-caption .lb-name {
+    display: block;
+    font-weight: 500;
+    opacity: 0.95;
+  }
+  .project { cursor: pointer; }
+
 </style>
 </head>
 <body>
@@ -1316,17 +1321,13 @@
       <p class="space-view-desc">หน้าห้องน้ำกำลังอยู่ระหว่างการพัฒนา <strong>KLAO</strong> กำลังรวบรวมผลงานตู้อ่างล้างหน้าและซิงค์เพื่อนำมาแสดงในเร็วๆนี้</p>
 
       <!-- FILTERS -->
-      <div class="filters space-filters" data-space-filters="bathroom">
-        <button type="button" class="filter-btn active" data-filter="all">ทั้งหมด</button>
-        <button type="button" class="filter-btn" data-filter="sink">อ่างซิงค์</button>
+      <div class="filters space-filters" data-gallery-filters data-room="bathroom">
+        <button type="button" class="filter-btn active" data-filter="all" data-label="ทั้งหมด">ทั้งหมด</button>
+        <button type="button" class="filter-btn" data-filter="sink" data-label="อ่างซิงค์">อ่างซิงค์</button>
       </div>
 
-      <!-- GALLERY -->
-      <div class="gallery space-gallery" style="margin-top:28px;">
-    <!-- GALLERY_AUTO_START -->
-    <!-- GALLERY_AUTO_END -->
-
-      </div><!-- /gallery -->
+      <!-- GALLERY shelf — filled by gallery.js from gallery-data.json -->
+      <div class="gallery space-gallery" style="margin-top:28px;" data-gallery-root data-room="bathroom" data-skip-categories="hero"></div><!-- /gallery -->
     </div>
   </section>
 
@@ -1590,86 +1591,7 @@
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') openDrop(false); });
   })();
 
-  /* ----- Filter + count ----- */
-  const view = document.getElementById('view-bathroom');
-  const group = document.querySelector('[data-space-filters]');
-  const projects = view.querySelectorAll('.project');
-
-  function updateCounts() {
-    const counts = { all: projects.length };
-    projects.forEach(p => { counts[p.dataset.cat] = (counts[p.dataset.cat] || 0) + 1; });
-    group.querySelectorAll('.filter-btn').forEach(btn => {
-      if (!btn.dataset.label) btn.dataset.label = btn.textContent.replace(/\s*\(\d+\)\s*$/, '').trim();
-      const n = counts[btn.dataset.filter] != null ? counts[btn.dataset.filter] : 0;
-      btn.textContent = btn.dataset.label + ' (' + n + ')';
-    });
-  }
-  updateCounts();
-
-  group.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const f = btn.dataset.filter;
-      projects.forEach(p => p.classList.toggle('hidden', !(f === 'all' || p.dataset.cat === f)));
-    });
-  });
-
-  /* ----- Press effect on mobile ----- */
-  document.querySelectorAll('.space-gallery .project').forEach(card => {
-    const on = () => card.classList.add('is-pressed');
-    const off = () => card.classList.remove('is-pressed');
-    card.addEventListener('touchstart', on, { passive: true });
-    card.addEventListener('touchend', off);
-    card.addEventListener('touchcancel', off);
-    card.addEventListener('mousedown', on);
-    card.addEventListener('mouseup', off);
-    card.addEventListener('mouseleave', off);
-  });
-
-  /* ----- Lightbox ----- */
-  (function () {
-    const lb = document.getElementById('lightbox');
-    const imgEl = document.getElementById('lightboxImg');
-    const countEl = document.getElementById('lightboxCount');
-    const nameEl = document.getElementById('lightboxName');
-    let items = [], index = 0;
-
-    function vis() {
-      return [...document.querySelectorAll('.space-gallery .project')].filter(p => !p.classList.contains('hidden'));
-    }
-    function render() {
-      const p = items[index], img = p.querySelector('img');
-      imgEl.src = img.getAttribute('data-full') || img.src;
-      countEl.textContent = (index + 1) + ' / ' + items.length;
-      nameEl.textContent = (p.querySelector('.project-meta')?.textContent || '').trim();
-    }
-
-    document.querySelector('.space-gallery').addEventListener('click', e => {
-      const p = e.target.closest('.project'); if (!p) return;
-      items = vis(); index = items.indexOf(p); if (index < 0) return;
-      render(); lb.hidden = false; requestAnimationFrame(() => lb.classList.add('is-open'));
-      document.body.style.overflow = 'hidden';
-    });
-
-    const close = () => {
-      lb.classList.remove('is-open');
-      document.body.style.overflow = '';
-      setTimeout(() => { if (!lb.classList.contains('is-open')) lb.hidden = true; }, 300);
-    };
-
-    document.getElementById('lightboxClose').onclick = close;
-    document.getElementById('lightboxPrev').onclick = () => { index = (index - 1 + items.length) % items.length; render(); };
-    document.getElementById('lightboxNext').onclick = () => { index = (index + 1) % items.length; render(); };
-    lb.addEventListener('click', e => { if (e.target === lb) close(); });
-
-    document.addEventListener('keydown', e => {
-      if (!lb.classList.contains('is-open')) return;
-      if (e.key === 'Escape') close();
-      if (e.key === 'ArrowLeft') { index = (index - 1 + items.length) % items.length; render(); }
-      if (e.key === 'ArrowRight') { index = (index + 1) % items.length; render(); }
-    });
-  })();
 </script>
+<script src="gallery.js" defer></script>
 </body>
 </html>
