@@ -61,8 +61,8 @@ jobs:
                       im.thumbnail((1200, 900), Image.Resampling.LANCZOS)
                       im.save(thumb, 'JPEG', quality=82, optimize=True)
 
-          # Build data for every room and every category automatically.
-          # Nothing here is tied to Kitchen only.
+          # Build gallery-data.json for every room / category automatically.
+          # Room pages load this file via gallery.js (no HTML injection).
           galleries = {}
           for room in sorted(root.iterdir(), key=lambda p: p.name):
               if not room.is_dir():
@@ -73,94 +73,23 @@ jobs:
                       continue
                   items = []
                   for full in sorted(category.glob('*_full.jpg')):
-                      prefix = full.name[:-9]
-                      thumb = category / f'{prefix}_thumb.jpg'
-                      if thumb.exists():
-                          items.append({
-                              'name': prefix,
-                              'thumb': str(thumb).replace('\\', '/'),
-                              'full': str(full).replace('\\', '/')
-                          })
+                      prefix = full.name[:-9]  # strip _full.jpg
+                      thumb = category / (prefix + '_thumb.jpg')
+                      if not thumb.exists():
+                          continue
+                      items.append({
+                          'name': prefix,
+                          'thumb': str(thumb).replace('\\', '/'),
+                          'full': str(full).replace('\\', '/'),
+                      })
                   galleries[room.name][category.name] = items
 
           Path('gallery-data.json').write_text(
-              json.dumps(galleries, ensure_ascii=False, indent=2),
+              json.dumps(galleries, ensure_ascii=False, indent=2) + '\n',
               encoding='utf-8'
           )
-
-          # Inject gallery cards into every room page that has the
-          # GALLERY_AUTO_START / GALLERY_AUTO_END markers. Add new rooms
-          # here as new pages are created (folder name -> html file +
-          # category labels, in filter-button order).
-          pages = {
-              'kitchen.html': {
-                  'room': 'kitchen',
-                  'labels': {
-                      'base': 'ตู้ล่าง',
-                      'wall': 'ตู้ลอย',
-                      'sink': 'ตู้ซิงค์',
-                      'island': 'เคาน์เตอร์เกาะกลาง',
-                  },
-              },
-              'living.html': {
-                  'room': 'living-room',
-                  'labels': {
-                      'show': 'ตู้โชว์',
-                      'tv': 'ชุดวางทีวี',
-                  },
-              },
-              # Add new rooms here, e.g.:
-              # 'bedroom.html': {
-              #     'room': 'bedroom',
-              #     'labels': {
-              #         'wardrobe': 'ตู้เสื้อผ้า',
-              #         'bed-frame': 'เตียง',
-              #     },
-              # },
-              'bathroom.html': {
-                  'room': 'bathroom',
-                  'labels': {
-                      'sink': 'อ่างซิงค์',
-                  },
-              },
-          }
-
-          start_marker = '<!-- GALLERY_AUTO_START -->'
-          end_marker = '<!-- GALLERY_AUTO_END -->'
-          changed_pages = []
-
-          for filename, cfg in pages.items():
-              page = Path(filename)
-              if not page.exists():
-                  continue
-
-              cards = []
-              for category, label in cfg['labels'].items():
-                  for item in galleries.get(cfg['room'], {}).get(category, []):
-                      cards.append(
-                          f'''      <div class="project" data-cat="{category}">\n'''
-                          f'''        <img src="{item['thumb']}" data-full="{item['full']}" alt="{label} — {item['name']}">\n'''
-                          f'''        <div class="project-overlay">\n'''
-                          f'''          <div class="project-meta">{label}</div>\n'''
-                          f'''        </div>\n'''
-                          f'''      </div>'''
-                      )
-
-              text = page.read_text(encoding='utf-8')
-              if start_marker in text and end_marker in text:
-                  a = text.index(start_marker) + len(start_marker)
-                  b = text.index(end_marker, a)
-                  text = text[:a] + '\n' + '\n'.join(cards) + '\n    ' + text[b:]
-                  page.write_text(text, encoding='utf-8')
-                  changed_pages.append(filename)
-
-          # Write out which page files actually changed, so the shell step
-          # below can "git add" them without hardcoding filenames. This means
-          # adding a new room only requires editing the "pages" dict above --
-          # nothing in the commit step needs to change.
-          Path('.changed_pages.txt').write_text(
-              '\n'.join(changed_pages), encoding='utf-8'
-          )
+          print('Wrote gallery-data.json')
+          print(json.dumps({k: {c: len(v) for c, v in cats.items()} for k, cats in galleries.items()}, ensure_ascii=False, indent=2))
 
       - name: Commit generated assets and data
         run: |
@@ -168,13 +97,6 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
 
           git add images gallery-data.json
-
-          if [ -f .changed_pages.txt ]; then
-            while IFS= read -r f; do
-              [ -n "$f" ] && git add "$f"
-            done < .changed_pages.txt
-            rm -f .changed_pages.txt
-          fi
 
           if git diff --cached --quiet; then
             echo 'No generated changes'
