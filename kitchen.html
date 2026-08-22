@@ -1470,41 +1470,14 @@ a.space-back { text-decoration: none; color: var(--teak); }
     </div>
     <p class="space-view-subhead">เปลี่ยนพื้นที่ทำอาหาร ให้เป็น “<strong>หัวใจหลักของบ้าน</strong>”</p>
     <p class="space-view-desc">เปลี่ยนการทำอาหารให้เป็นช่วงเวลาที่คุณรักที่สุด ให้ <strong>Living Kitchen</strong> ช่วยคุณเนรมิตครัวในฝัน เพราะครัวที่ดีไม่ใช่แค่<strong>ห้องทำงานบ้าน</strong> แต่คือการลงทุนเพื่อคุณภาพชีวิตและความสุขในระยะยาว</p>
-    <div class="filters space-filters" data-space-filters="kitchen">
-      <button type="button" class="filter-btn active" data-filter="all">ทั้งหมด</button>
-      <button type="button" class="filter-btn" data-filter="base">ตู้ล่าง</button>
-      <button type="button" class="filter-btn" data-filter="wall">ตู้ลอย</button>
-      <button type="button" class="filter-btn" data-filter="sink">ตู้ซิงค์</button>
-      <button type="button" class="filter-btn" data-filter="island">เคาน์เตอร์เกาะกลาง</button>
+        <div class="filters space-filters" data-gallery-filters data-room="kitchen">
+      <button type="button" class="filter-btn active" data-filter="all" data-label="ทั้งหมด">ทั้งหมด</button>
+      <button type="button" class="filter-btn" data-filter="base" data-label="ตู้ล่าง">ตู้ล่าง</button>
+      <button type="button" class="filter-btn" data-filter="wall" data-label="ตู้ลอย">ตู้ลอย</button>
+      <button type="button" class="filter-btn" data-filter="sink" data-label="ตู้ซิงค์">ตู้ซิงค์</button>
+      <button type="button" class="filter-btn" data-filter="island" data-label="เคาน์เตอร์เกาะกลาง">เคาน์เตอร์เกาะกลาง</button>
     </div>
-    <div class="gallery space-gallery" style="margin-top:28px;">
-    <!-- GALLERY_AUTO_START -->
-      <div class="project" data-cat="sink">
-        <img src="images/kitchen/sink/sink_01_thumb.jpg" data-full="images/kitchen/sink/sink_01_full.jpg" alt="ตู้ซิงค์ — sink_01">
-        <div class="project-overlay">
-          <div class="project-meta">ตู้ซิงค์</div>
-        </div>
-      </div>
-      <div class="project" data-cat="sink">
-        <img src="images/kitchen/sink/sink_04_thumb.jpg" data-full="images/kitchen/sink/sink_04_full.jpg" alt="ตู้ซิงค์ — sink_04">
-        <div class="project-overlay">
-          <div class="project-meta">ตู้ซิงค์</div>
-        </div>
-      </div>
-      <div class="project" data-cat="island">
-        <img src="images/kitchen/island/island_01_thumb.jpg" data-full="images/kitchen/island/island_01_full.jpg" alt="เคาน์เตอร์เกาะกลาง — island_01">
-        <div class="project-overlay">
-          <div class="project-meta">เคาน์เตอร์เกาะกลาง</div>
-        </div>
-      </div>
-      <div class="project" data-cat="island">
-        <img src="images/kitchen/island/island_02_thumb.jpg" data-full="images/kitchen/island/island_02_full.jpg" alt="เคาน์เตอร์เกาะกลาง — island_02">
-        <div class="project-overlay">
-          <div class="project-meta">เคาน์เตอร์เกาะกลาง</div>
-        </div>
-      </div>
-    <!-- GALLERY_AUTO_END -->
-</div>
+    <div class="gallery space-gallery" style="margin-top:28px;" data-gallery-root data-room="kitchen" data-skip-categories="hero"></div>
   </div>
 </section>
 <section class="contact" id="contact">
@@ -1756,69 +1729,8 @@ a.space-back { text-decoration: none; color: var(--teak); }
 
 
 
-  const view = document.getElementById('view-kitchen');
-  const group = document.querySelector('[data-space-filters]');
-  const projects = view.querySelectorAll('.project');
-  function updateCounts() {
-    const counts = { all: projects.length };
-    projects.forEach(p => { counts[p.dataset.cat] = (counts[p.dataset.cat]||0)+1; });
-    group.querySelectorAll('.filter-btn').forEach(btn => {
-      if (!btn.dataset.label) btn.dataset.label = btn.textContent.replace(/\s*\(\d+\)\s*$/,'').trim();
-      const n = counts[btn.dataset.filter] != null ? counts[btn.dataset.filter] : 0;
-      btn.textContent = btn.dataset.label + ' (' + n + ')';
-    });
-  }
-  updateCounts();
-  group.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const f = btn.dataset.filter;
-      projects.forEach(p => p.classList.toggle('hidden', !(f==='all' || p.dataset.cat===f)));
-    });
-  });
-  // Show category label only while finger is pressing the card
-  document.querySelectorAll('.space-gallery .project').forEach(card => {
-    const on = () => card.classList.add('is-pressed');
-    const off = () => card.classList.remove('is-pressed');
-    card.addEventListener('touchstart', on, {passive: true});
-    card.addEventListener('touchend', off);
-    card.addEventListener('touchcancel', off);
-    card.addEventListener('mousedown', on);
-    card.addEventListener('mouseup', off);
-    card.addEventListener('mouseleave', off);
-  });
+  </script>
 
-  (function(){
-    const lb = document.getElementById('lightbox');
-    const imgEl = document.getElementById('lightboxImg');
-    const countEl = document.getElementById('lightboxCount');
-    const nameEl = document.getElementById('lightboxName');
-    let items=[], index=0;
-    function vis(){ return [...document.querySelectorAll('.space-gallery .project')].filter(p=>!p.classList.contains('hidden')); }
-    function render(){
-      const p=items[index], img=p.querySelector('img');
-      imgEl.src = img.getAttribute('data-full')||img.src;
-      countEl.textContent = (index+1)+' / '+items.length;
-      nameEl.textContent = (p.querySelector('.project-meta')?.textContent||'').trim();
-    }
-    document.querySelector('.space-gallery').addEventListener('click', e => {
-      const p=e.target.closest('.project'); if(!p) return;
-      items=vis(); index=items.indexOf(p); if(index<0)return;
-      render(); lb.hidden=false; requestAnimationFrame(()=>lb.classList.add('is-open')); document.body.style.overflow='hidden';
-    });
-    const close=()=>{ lb.classList.remove('is-open'); document.body.style.overflow=''; setTimeout(()=>{if(!lb.classList.contains('is-open'))lb.hidden=true;},300); };
-    document.getElementById('lightboxClose').onclick=close;
-    document.getElementById('lightboxPrev').onclick=()=>{ index=(index-1+items.length)%items.length; render(); };
-    document.getElementById('lightboxNext').onclick=()=>{ index=(index+1)%items.length; render(); };
-    lb.addEventListener('click', e => { if(e.target===lb) close(); });
-    document.addEventListener('keydown', e => {
-      if(!lb.classList.contains('is-open')) return;
-      if(e.key==='Escape') close();
-      if(e.key==='ArrowLeft'){ index=(index-1+items.length)%items.length; render(); }
-      if(e.key==='ArrowRight'){ index=(index+1)%items.length; render(); }
-    });
-  })();
-</script>
+<script src="gallery.js" defer></script>
 </body>
 </html>
