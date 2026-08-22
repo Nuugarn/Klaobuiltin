@@ -841,7 +841,7 @@
 
   /* ---------- Contact ---------- */
   .contact {
-    background: var(--plaster);
+    background: #F3F3F1;
     padding: clamp(56px, 8vw, 96px) 0 clamp(48px, 7vw, 80px);
   }
 
@@ -943,7 +943,7 @@
   }
 
   footer {
-    background: transparent;
+    background: #F3F3F1;
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -1098,15 +1098,17 @@
     position: fixed;
     inset: 0;
     z-index: 500;
-    background: rgba(28, 26, 23, 0.92);
+    background: rgba(10, 10, 9, 0.92);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     opacity: 0;
+    pointer-events: none;
     transition: opacity 0.3s ease;
+    padding: 16px;
   }
-  .lightbox.is-open { opacity: 1; }
+  .lightbox.is-open { opacity: 1; pointer-events: auto; }
   .lightbox-close {
     position: absolute;
     top: 20px;
@@ -1355,6 +1357,12 @@
     </div>
   </section>
 
+  <!-- ============================================================
+       FOOTER ZONE (contact info + site footer)
+       Reusable block — same markup/content on every room page.
+       Kept as two separate tags (section.contact + footer) so the
+       "#contact" anchor link from index.html keeps working.
+       ============================================================ -->
   <!-- ===== CONTACT ===== -->
   <section class="contact" id="contact">
     <div class="wrap">
@@ -1451,6 +1459,7 @@
       </a>
     </div>
   </footer>
+  <!-- (end of FOOTER ZONE) -->
 
 </div><!-- /page-shell -->
 
