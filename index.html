@@ -555,7 +555,7 @@
 
   .hero-content {
     position: absolute;
-    top: var(--hero-content-top, 34%);
+    top: var(--hero-content-top, 44%);
     left: 10%;
     width: 80%;
     max-width: 1200px;
@@ -1612,11 +1612,11 @@
 <div id="home-view">
 <section class="hero" aria-label="ภาพงานตกแต่งภายใน" tabindex="-1">
   <div class="hero-viewport" id="hero-images">
-    <img class="hero-slide is-active" src="images/hero/brewed-for-comfort.jpg" width="1679" height="937" data-copy-top="0.44" fetchpriority="high" alt="เคาน์เตอร์ร้านกาแฟและที่นั่งไม้ พร้อมข้อความ Brewed For Comfort, Where Great Coffee Meets Great Design, SEE MORE และโลโก้ KLAO" aria-hidden="false">
-    <img class="hero-slide" data-src="images/hero/bedroom.jpg" width="1080" height="720" data-copy-top="0.38" alt="ห้องนอนโทนไม้ พร้อมข้อความ Bedroom Solutions และตอบโจทย์ความต้องการ ห้องนอนในฝัน" aria-hidden="true">
-    <img class="hero-slide" data-src="images/hero/kitchen.jpg" width="1080" height="720" data-copy-top="0.08" alt="ครัวไม้สีอ่อนพร้อมไอส์แลนด์หิน และข้อความ Living Kitchen กับตอบโจทย์ความต้องการ การใช้งานสะดวกสบาย" aria-hidden="true">
-    <img class="hero-slide" data-src="images/hero/living.png" width="1080" height="720" data-copy-top="0.38" alt="ผนังโทรทัศน์ลายหินอ่อนและตู้บิลต์อิน พร้อมข้อความ Living Space และตอบโจทย์ความต้องการ พื้นที่ในฝัน" aria-hidden="true">
-    <img class="hero-slide" data-src="images/hero/bathroom.png" width="1080" height="720" data-copy-top="0.08" alt="ห้องน้ำสว่างพร้อมอ่างอาบน้ำและเคาน์เตอร์อ่างล้างหน้า พร้อมข้อความ Bath Space กับตอบโจทย์ความต้องการ จินตนาการอย่างไม่สิ้นสุด" aria-hidden="true">
+    <img class="hero-slide is-active" src="images/hero/brewed-for-comfort.jpg" width="1679" height="937" fetchpriority="high" alt="เคาน์เตอร์ร้านกาแฟและที่นั่งไม้ พร้อมข้อความ Brewed For Comfort, Where Great Coffee Meets Great Design, SEE MORE และโลโก้ KLAO" aria-hidden="false">
+    <img class="hero-slide" data-src="images/hero/bedroom.jpg" width="1080" height="720" alt="ห้องนอนโทนไม้ พร้อมข้อความ Bedroom Solutions และตอบโจทย์ความต้องการ ห้องนอนในฝัน" aria-hidden="true">
+    <img class="hero-slide" data-src="images/hero/kitchen.jpg" width="1080" height="720" alt="ครัวไม้สีอ่อนพร้อมไอส์แลนด์หิน และข้อความ Living Kitchen กับตอบโจทย์ความต้องการ การใช้งานสะดวกสบาย" aria-hidden="true">
+    <img class="hero-slide" data-src="images/hero/living.png" width="1080" height="720" alt="ผนังโทรทัศน์ลายหินอ่อนและตู้บิลต์อิน พร้อมข้อความ Living Space และตอบโจทย์ความต้องการ พื้นที่ในฝัน" aria-hidden="true">
+    <img class="hero-slide" data-src="images/hero/bathroom.png" width="1080" height="720" alt="ห้องน้ำสว่างพร้อมอ่างอาบน้ำและเคาน์เตอร์อ่างล้างหน้า พร้อมข้อความ Bath Space กับตอบโจทย์ความต้องการ จินตนาการอย่างไม่สิ้นสุด" aria-hidden="true">
   </div>
   <div class="hero-content">
     <div class="hero-copy">
@@ -1661,12 +1661,8 @@
           const contentHeight = content.getBoundingClientRect().height;
           const desktop = window.matchMedia('(min-width: 1024px)').matches;
           // Mobile copy stays inside Hero, in the margin above the uncropped image.
-          // Desktop placement avoids each image's baked-in titles and logos.
-          const active = hero.querySelector('.hero-slide.is-active');
-          const paintedHeight = Math.min(imageHeight, image.clientWidth
-            * Number(active.getAttribute('height')) / Number(active.getAttribute('width')));
-          const copyTop = desktop ? Math.max(97, (imageHeight - paintedHeight) / 2
-            + paintedHeight * Number(active.dataset.copyTop)) : 40;
+          // Desktop uses one shared anchor, independent of the active image.
+          const copyTop = desktop ? imageHeight * 0.44 : 40;
           hero.style.setProperty('--hero-content-top', copyTop + 'px');
           const expanded = !desktop;
           const height = desktop ? '0px' : Math.ceil(imageHeight + contentHeight + 80) + 'px';
