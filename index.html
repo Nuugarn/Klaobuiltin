@@ -600,7 +600,7 @@
   }
 
   .hero-copy.is-floating {
-    animation: hero-float 5600ms cubic-bezier(.45, 0, .55, 1) infinite;
+    animation: hero-float 5600ms cubic-bezier(.18, 0, .82, 1) infinite;
   }
 
   .hero-copy, .hero-consultation-label {
@@ -709,8 +709,8 @@
       left: 50%;
       transform: translate(-50%, -50%);
       width: calc(100% - 24px);
-      align-items: center;
-      text-align: center;
+      align-items: flex-start;
+      text-align: left;
       gap: 20px;
     }
     .hero-copy { gap: 8px; --hero-float-offset: -5px; }
