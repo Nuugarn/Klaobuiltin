@@ -23,6 +23,52 @@
   if(event.target===drawer && event.propertyName==='transform' && document.body.classList.contains('menu-open') && !drawer.contains(document.activeElement)) closeButton.focus();
  });
  drawer.querySelectorAll('a[href]').forEach(link=>link.addEventListener('click',close));
+ // Touch presses have no persistent hover state; restore the current-page color on release.
+ let touchPressedLink=null;
+ function clearTouchPress() {
+  if(touchPressedLink) touchPressedLink.classList.remove('is-touch-pressed');
+  touchPressedLink=null;
+ }
+ document.querySelectorAll('.desktop-navigation a,.nav-drawer-links a').forEach(link=>{
+  link.addEventListener('pointerdown',event=>{
+   if(event.pointerType!=='touch') return;
+   clearTouchPress();
+   touchPressedLink=link;
+   link.classList.add('is-touch-pressed');
+  });
+  link.addEventListener('lostpointercapture',clearTouchPress);
+ });
+ document.addEventListener('pointerup',clearTouchPress);
+ document.addEventListener('pointercancel',clearTouchPress);
+ window.addEventListener('blur',clearTouchPress);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden) clearTouchPress();});
+ // Only the homepage maps its current location to in-page sections.
+ const homeView=document.getElementById('home-view');
+ if(homeView) {
+  const sections=['home-view','about','work','contact'].map(id=>document.getElementById(id));
+  const sectionLinks=Array.from(document.querySelectorAll('.desktop-navigation a,.nav-drawer-links a'))
+   .filter(link=>sections.some(section=>link.getAttribute('href')==='index.html#'+section.id));
+  let sectionFrame=0;
+  function updateCurrentSection() {
+   sectionFrame=0;
+   const boundary=document.querySelector('.site-header').getBoundingClientRect().bottom+21;
+   let current=sections[0];
+   sections.forEach(section=>{if(section.getBoundingClientRect().top<=boundary) current=section;});
+   // A short final section may not reach the header before the document ends.
+   if(window.scrollY>0 && window.scrollY+window.innerHeight>=document.documentElement.scrollHeight-2) current=sections[3];
+   sectionLinks.forEach(link=>{
+    if(link.getAttribute('href')==='index.html#'+current.id) link.setAttribute('aria-current','location');
+    else link.removeAttribute('aria-current');
+   });
+  }
+  function scheduleCurrentSection() { if(!sectionFrame) sectionFrame=requestAnimationFrame(updateCurrentSection); }
+  window.addEventListener('scroll',scheduleCurrentSection,{passive:true});
+  window.addEventListener('resize',scheduleCurrentSection);
+  const sectionResize=new ResizeObserver(scheduleCurrentSection);
+  sectionResize.observe(homeView);
+  sectionResize.observe(sections[3]);
+  updateCurrentSection();
+ }
  document.addEventListener('keydown',event=>{
   if(!document.body.classList.contains('menu-open')) return;
   if(event.key==='Escape') { event.preventDefault(); close(); }
@@ -34,7 +80,7 @@
  });
  window.matchMedia('(min-width:1024px)').addEventListener('change',event=>{if(event.matches) close();});
 })();
-if(document.body.hasAttribute('data-destination')) {
+if(document.getElementById('langThemeWidget')) {
   /* Language + Theme widget (vanilla port of LanguageThemeWidget) */
   (function(){
     const LANGS = [
@@ -48,7 +94,8 @@ if(document.body.hasAttribute('data-destination')) {
     const lightBtn = document.getElementById('ltwLightBtn');
     const darkBtn = document.getElementById('ltwDarkBtn');
     const toastEl = document.getElementById('ltwToast');
-    if (!wrap || !langBtn || !drop) return;
+    if (!wrap || !langBtn || !drop || wrap.dataset.widgetBound) return;
+    wrap.dataset.widgetBound = 'true';
 
     let activeLang = localStorage.getItem('klao-lang') || 'TH';
     let theme = localStorage.getItem('klao-theme') || 'light';
@@ -56,10 +103,11 @@ if(document.body.hasAttribute('data-destination')) {
 
     function showToast(msg) {
       if (!toastEl) return;
-      toastEl.textContent = '🛠️  ' + msg;
+      toastEl.dataset.language = activeLang;
+      toastEl.textContent = msg;
       toastEl.classList.add('is-show');
       if (toastTimer) clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toastEl.classList.remove('is-show'), 2400);
+      toastTimer = setTimeout(() => toastEl.classList.remove('is-show'), 5600);
     }
 
     function setTheme(mode) {
@@ -80,7 +128,10 @@ if(document.body.hasAttribute('data-destination')) {
         opt.classList.toggle('is-active', on);
         opt.setAttribute('aria-selected', on ? 'true' : 'false');
       });
-      showToast('ภาษา ' + (label || code) + ' อยู่ระหว่างช่วงพัฒนา');
+      const languageName = code === 'EN' ? 'English (EN)' : 'ลาว / ລາວ (LA)';
+      showToast(code === 'EN' ? 'English version is in development — content remains in Thai.' :
+        code === 'TH' ? 'กำลังแสดงเนื้อหาภาษาไทย' :
+        'เวอร์ชันภาษา ' + languageName + ' กำลังพัฒนา / เร็ว ๆ นี้ — เนื้อหายังคงเป็นภาษาไทย');
       // TODO: connect real i18n
     }
 

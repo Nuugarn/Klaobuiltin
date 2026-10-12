@@ -284,6 +284,24 @@
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
+  .ltw-toast {
+    width: max-content;
+    max-width: min(90vw, 560px);
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.6;
+    border-radius: 14px;
+    border: 1px solid #C9C2B5;
+    border-left: 6px solid #C6A15B;
+    background: #FAF8F5;
+    color: #1C1A17;
+  }
+  .ltw-toast[data-language="EN"] { border-left-color: #1267A8; background: #EDF5FC; }
+  .ltw-toast[data-language="LA"] { border-left-color: #3A4A3F; background: #E8F0EA; }
+  .ltw button:focus-visible { outline: 3px solid #3A4A3F; outline-offset: 3px; }
+  @media (forced-colors: active) {
+    .ltw-toast { background: Canvas; color: CanvasText; border-color: CanvasText; }
+  }
 
   
 /* Shared fixed navigation and independent right drawer. */
@@ -295,12 +313,18 @@ html { scroll-padding-top:calc(var(--header-height) + 20px); }
 .header-zone--right { min-width:0; padding-right:0; }
 .desktop-navigation { display:flex; align-items:center; gap:clamp(12px,1.5vw,24px); font:400 14px 'Kanit',sans-serif; white-space:nowrap; }
 .desktop-navigation a { padding:10px 0; border-bottom:1px solid transparent; }
+.desktop-navigation a[aria-current], .nav-drawer-links a[aria-current] { color:#C6A15B; }
+.desktop-navigation a:active, .nav-drawer-links a:active { color:#000000; }
+.desktop-navigation a.is-touch-pressed, .nav-drawer-links a.is-touch-pressed { color:#000000; }
 @media(min-width:1024px) {
  .desktop-navigation a { transition:transform .2s ease; }
  .desktop-navigation a:focus-visible { transform:scale(1.05); }
 }
 @media(min-width:1024px) and (hover:hover) and (pointer:fine) {
- .desktop-navigation a:hover { transform:scale(1.05); color:var(--teak); }
+ .desktop-navigation a:hover { transform:scale(1.05); color:#000000; }
+}
+@media(hover:hover) and (pointer:fine) {
+ .nav-drawer-links a:hover { color:#000000; }
 }
 .nav-cta { display:inline-flex; align-items:center; justify-content:center; padding:10px 18px; background:var(--pine); color:var(--white); font:500 14px 'Kanit',sans-serif; white-space:nowrap; border-radius:2px; }
 .nav-cta:hover { background:var(--ink); }
@@ -317,12 +341,10 @@ body.menu-open .navigation-drawer { transform:translateX(0); visibility:visible;
 .nav-drawer-links a { padding:12px 4px; font-size:18px; }
 .navigation-drawer > .nav-cta { margin-top:auto; min-height:48px; }
 .navigation-drawer a:focus-visible, .navigation-drawer button:focus-visible, .desktop-navigation a:focus-visible, .nav-cta:focus-visible { outline:2px solid var(--teak); outline-offset:4px; box-shadow:none; }
-.destination-content, .services-content { padding:64px clamp(24px,6vw,80px); max-width:1300px; margin:auto; }
+.destination-content { padding:64px clamp(24px,6vw,80px); max-width:1300px; margin:auto; }
 .destination-content { padding-top:calc(var(--header-height) + 64px); }
-.destination-content h1, .services-content h2 { font:500 clamp(30px,4vw,48px) 'Kanit',sans-serif; margin-bottom:28px; }
-.destination-content p, .services-content li { font-family:'Kanit',sans-serif; }
-.services-content ul { list-style:none; display:grid; grid-template-columns:repeat(2,1fr); gap:24px; }
-.services-content li { padding:24px 0; border-top:1px solid var(--line); font-size:22px; }
+.destination-content h1 { font:500 clamp(30px,4vw,48px) 'Kanit',sans-serif; margin-bottom:28px; }
+.destination-content p { font-family:'Kanit',sans-serif; }
 .room-entrances { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
 .room-entrances a { border:1px solid var(--line); padding:32px; font:400 24px 'Kanit',sans-serif; background:var(--white); }
 .room-entrances a:hover { border-color:var(--teak); }
@@ -332,7 +354,7 @@ body.menu-open .navigation-drawer { transform:translateX(0); visibility:visible;
  .header-zone--right { margin-left:auto; padding-right:52px; }
  .hamburger-btn { display:flex; position:absolute; right:16px; top:calc((var(--header-height) - 44px)/2); width:44px; height:44px; }
 }
-@media(max-width:1179px) { .room-entrances, .services-content ul { grid-template-columns:1fr; } }
+@media(max-width:1179px) { .room-entrances { grid-template-columns:1fr; } }
 @media(max-width:380px) { .site-logo img { height:28px; } .ltw-btn { width:28px; } .ltw-capsule { gap:2px; } }
 @media(min-width:1024px) { .navigation-drawer, .page-overlay { display:none; } }
 @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .navigation-drawer, .page-overlay { transition:none; } }
