@@ -129,7 +129,8 @@ if(document.getElementById('langThemeWidget')) {
         opt.setAttribute('aria-selected', on ? 'true' : 'false');
       });
       const languageName = code === 'EN' ? 'English (EN)' : 'ลาว / ລາວ (LA)';
-      showToast(code === 'TH' ? 'กำลังแสดงเนื้อหาภาษาไทย' :
+      showToast(code === 'EN' ? 'English version is in development — content remains in Thai.' :
+        code === 'TH' ? 'กำลังแสดงเนื้อหาภาษาไทย' :
         'เวอร์ชันภาษา ' + languageName + ' กำลังพัฒนา / เร็ว ๆ นี้ — เนื้อหายังคงเป็นภาษาไทย');
       // TODO: connect real i18n
     }

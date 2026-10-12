@@ -506,7 +506,7 @@
     position: relative;
     margin-top: var(--header-height);
     width: 100%;
-    background: #EDE8E0;
+    background: #FFFFFF;
     display: flex;
     align-items: center;
     min-height: var(--hero-required-height, 0px);
@@ -514,7 +514,7 @@
   }
 
   .hero.is-expanded {
-    background: #EDE8E0;
+    background: #FFFFFF;
   }
 
   .hero.is-expanded .hero-content {
@@ -542,7 +542,7 @@
   .hero-slide.is-active { transform: translateX(0); }
   .hero-slide[hidden] { display: none; }
 
-  .hero:not(.hero-ready) { flex-direction: column; background: #EDE8E0; }
+  .hero:not(.hero-ready) { flex-direction: column; background: #FFFFFF; }
   .hero:not(.hero-ready) .hero-viewport { order: 2; }
   .hero:not(.hero-ready) .hero-content {
     position: relative;
@@ -950,35 +950,35 @@
     gap: clamp(32px, 5vw, 72px);
     text-align: left;
   }
-  .about h2 {
-    font-family: 'Fraunces', serif;
-    font-weight: 600;
+  #about-title {
+    position: relative;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
     font-size: clamp(36px, 4.8vw, 72px);
     line-height: 1.2;
+    letter-spacing: -.035em;
+    text-transform: uppercase;
     color: #173B28;
     margin-bottom: clamp(24px, 4vw, 40px);
   }
-  @supports ((background-clip: text) or (-webkit-background-clip: text)) {
-    .about h2 {
-      background: linear-gradient(118deg, transparent 45%, #42684C 48%, #4B7254 49%, #42684C 50%, transparent 53%),
-        linear-gradient(180deg, #234C35 0%, #173B28 55%, #102E1D 100%);
-      background-size: 250% 100%, 100% 100%;
-      background-repeat: no-repeat;
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      animation: about-letter-sheen 1.5s ease-in-out 1 both;
-    }
+  #about-title .about-glass {
+    position: absolute;
+    inset: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
   }
-  @keyframes about-letter-sheen {
-    from { background-position: 100% 50%, 0% 0%; }
-    to { background-position: 0% 50%, 0% 0%; }
-  }
+  #about-title.glass-ready { color: transparent; }
+  #about-title.glass-ready .about-glass { display: block; }
+  #about-title::selection { color: #173B28; background: #C6A15B; }
   @media (prefers-reduced-motion: reduce) {
-    .about h2 { animation: none !important; background: none; color: #173B28; }
+    #about-title.glass-ready { color: #173B28; }
+    #about-title .about-glass { display: none !important; }
   }
   @media (forced-colors: active) {
-    .about h2 { animation: none !important; background: none; color: CanvasText; }
+    #about-title, #about-title.glass-ready { color: CanvasText; }
+    #about-title .about-glass { display: none !important; }
   }
   .about p {
     max-width: 32ch;
@@ -988,7 +988,26 @@
     line-height: 1.8;
     text-wrap: balance;
   }
-  .about-image { display: block; width: 100%; height: auto; }
+  .about-collage {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    aspect-ratio: 9 / 10;
+    margin: 0;
+  }
+  /* Adjust each photo's --x, --y, --width, --angle and --layer in its style attribute. */
+  .about-collage .about-image {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--width);
+    height: auto;
+    display: block;
+    transform: rotate(var(--angle));
+    z-index: var(--layer);
+    border: clamp(2px, .35vw, 5px) solid #FFFFFF;
+    box-shadow: 0 8px 20px rgba(23,59,40,.15);
+  }
   @media (max-width: 860px) {
     .about .about-content { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-inline: 24px; }
     .about p { max-width: 48ch; }
@@ -1849,7 +1868,11 @@
       <h2 id="about-title">From space to built</h2>
       <p>รับออกแบบ ผลิต และติดตั้งเฟอร์นิเจอร์บิลต์อิน โดยคำนึงถึงพื้นที่จริง สัดส่วนการใช้งาน วัสดุ งานประกอบ และรายละเอียดหน้างาน มองพื้นที่และเฟอร์นิเจอร์ไปด้วยกัน ทั้งตู้โชว์และชุดวางทีวีสำหรับห้องนั่งเล่น รวมถึงตู้เสื้อผ้าและชุดเตียงสำหรับห้องนอนที่ออกแบบให้เข้ากับสไตล์และการใช้งานจริง โดยให้พื้นที่ สัดส่วน วัสดุ งานประกอบ และรายละเอียดหน้างานเป็นจุดพิจารณาของงานบิลต์อิน</p>
     </div>
-    <img class="about-image" src="images/kitchen/island/island_01_full.jpg" width="1108" height="1477" loading="lazy" decoding="async" alt="เคาน์เตอร์ครัวหน้าบานไม้และท็อปสีอ่อน">
+    <figure class="about-collage" aria-label="ภาพรายละเอียดงานครัวและตู้ทีวี">
+      <img class="about-image" src="images/kitchen/island/island_01_full.jpg" width="1108" height="1477" loading="lazy" decoding="async" alt="เคาน์เตอร์ครัวหน้าบานไม้และท็อปสีอ่อน" style="--x: 26%; --y: 3%; --width: 65%; --angle: 4deg; --layer: 1;">
+      <img class="about-image" src="images/living-room/tv/tv_01_full.jpg" width="1108" height="1477" loading="lazy" decoding="async" alt="ตู้ทีวีสีอ่อนพร้อมชั้นเก็บของและผนังตกแต่ง" style="--x: 3%; --y: 42%; --width: 40%; --angle: -7deg; --layer: 2;">
+      <img class="about-image" src="images/kitchen/sink/sink_01_full.jpg" width="1477" height="1108" loading="lazy" decoding="async" alt="เคาน์เตอร์ครัวสีเข้มพร้อมเตาและอ่างล้างจาน" style="--x: 47%; --y: 62%; --width: 49%; --angle: 6deg; --layer: 3;">
+    </figure>
   </div>
 </section>
 
@@ -2035,6 +2058,143 @@
   window.addEventListener('scroll', () => document.body.classList.toggle('sticky-header', (window.scrollY||0)>8), {passive:true});
 
 
+</script>
+<script>
+/* Forest glass adapted from the approved Live UI prototype; About heading only. */
+(()=>{
+const heading=document.getElementById('about-title'),section=document.getElementById('about');
+const motion=matchMedia('(prefers-reduced-motion: reduce)'),forced=matchMedia('(forced-colors: active)');
+const canvas=document.createElement('canvas');canvas.className='about-glass';canvas.setAttribute('aria-hidden','true');
+heading.appendChild(canvas);
+const gl=canvas.getContext('webgl',{alpha:true,antialias:false,preserveDrawingBuffer:true});
+if(!gl)return;
+const vs=`attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
+const fs=`precision highp float;
+uniform vec2 resolution;uniform sampler2D glyph;uniform vec4 box;
+uniform vec2 maskSize;uniform float scroll;uniform float refractOn;uniform float reduced;
+vec3 surface(vec2 uv){
+ vec2 p=vec2((uv.x-.5)*2.8,(uv.y-.5)*.6+scroll);
+ float wash=.5+.5*sin(p.y*3.0+sin(p.x*1.8)*.75);
+ vec3 c=mix(vec3(.006,.014,.009),vec3(.012,.025,.013),smoothstep(.2,.95,wash)*.55);
+ // Deep forest-green liquid-glass surfaces. World coordinates advance with scroll.
+ for(int i=0;i<7;i++){
+  float k=float(i);vec2 center=vec2(sin(k*2.3)*.38,k*.79-1.3);
+  vec2 q=(p-center)/vec2(.75+.12*sin(k*1.8),.52);
+  q.x+=.23*sin(q.y*2.4+k);
+  float r=dot(q,q);
+  if(r<1.){
+   float z=sqrt(max(0.,1.-r));vec3 n=normalize(vec3(q.x*.85,q.y*1.05,z));
+   vec3 l=normalize(vec3(-.6,.8,1.));float diffuse=max(dot(n,l),0.);
+   float shine=pow(max(dot(reflect(-l,n),vec3(0.,0.,1.)),0.),28.);
+   float rim=pow(1.-z,3.);
+   float ribbon=exp(-pow((q.x*.7+q.y*.8-.12*sin(q.y*5.+k))/.1,2.));
+   vec3 green=mix(vec3(.006,.018,.008),vec3(.075,.145,.075),diffuse*diffuse);
+   green+=vec3(.78,.88,.73)*shine+vec3(.07,.12,.055)*rim;
+   green+=vec3(.045,.085,.04)*ribbon*z;
+   c=mix(c,green,1.-smoothstep(.985,1.,r));
+  }
+ }
+ return c;
+}
+void main(){
+ vec2 pixel=vec2(gl_FragCoord.x,resolution.y-gl_FragCoord.y);
+ vec2 uv=pixel/resolution;vec3 color=vec3(0.);float alpha=0.;
+ vec2 t=(pixel-box.xy)/box.zw;
+ if(t.x>=0.&&t.x<=1.&&t.y>=0.&&t.y<=1.&&reduced<.5){
+  vec4 m=texture2D(glyph,t);float d=m.r*24.;
+  if(m.a>.001){
+   vec2 e=1./maskSize;
+   vec2 g=vec2(texture2D(glyph,t+vec2(e.x,0.)).r-texture2D(glyph,t-vec2(e.x,0.)).r,texture2D(glyph,t+vec2(0.,e.y)).r-texture2D(glyph,t-vec2(0.,e.y)).r);
+   vec2 normal=g/max(length(g),.0001);
+   float profile=sin(clamp(d/12.,0.,1.)*1.5707963);
+   float bend=34.*sqrt(max(0.,1.-profile*profile));
+   vec2 displaced=uv-normal*bend/resolution*refractOn;
+   vec3 glass=surface(displaced);
+   // Modest dispersion: each channel samples the same moving surface at a different offset.
+   glass.r=surface(displaced-normal*1.2/resolution*refractOn).r;
+   glass.b=surface(displaced+normal*1.2/resolution*refractOn).b;
+   float edge=exp(-d*.68);
+   float light=max(dot(normal,normalize(vec2(-.65,-1.))),0.);
+   glass=mix(vec3(.01,.022,.014),glass,.9);
+   glass=mix(glass,vec3(.94,.97,.9),.04+.08*edge);
+   glass+=vec3(.86,.92,.82)*edge*(.12+.72*light);
+   glass+=vec3(.15,.19,.12)*exp(-pow((d-1.4)/.8,2.));
+   color=glass;alpha=m.a;
+  }
+ }
+ // Soft vignette, applied equally to background and refracted samples.
+ float vignette=1.-.22*pow(length((uv-.5)*vec2(.8,1.)),2.);
+ gl_FragColor=vec4(color*vignette,alpha);
+}`;
+function shader(type,code){const s=gl.createShader(type);gl.shaderSource(s,code);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));return s;}
+let program;
+try{program=gl.createProgram();gl.attachShader(program,shader(gl.VERTEX_SHADER,vs));gl.attachShader(program,shader(gl.FRAGMENT_SHADER,fs));gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(program));}
+catch(_){return;}
+gl.useProgram(program);const buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);const a=gl.getAttribLocation(program,'p');gl.enableVertexAttribArray(a);gl.vertexAttribPointer(a,2,gl.FLOAT,false,0,0);
+const uniforms={};for(const name of ['resolution','glyph','box','maskSize','scroll','refractOn','reduced'])uniforms[name]=gl.getUniformLocation(program,name);
+const texture=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,texture);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+
+let maskSize=[0,0],queued=false,dirty=true,visible=false,lost=false;
+function rebuild(){
+ const rect=heading.getBoundingClientRect(),style=getComputedStyle(heading);
+ const w=Math.ceil(rect.width),h=Math.ceil(rect.height),dpr=Math.min(devicePixelRatio||1,1.5);
+ if(!w||!h)return;
+ canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);gl.viewport(0,0,canvas.width,canvas.height);
+ const mask=document.createElement('canvas');mask.width=w;mask.height=h;
+ const ctx=mask.getContext('2d',{willReadFrequently:true});
+ ctx.font=style.fontWeight+' '+style.fontSize+' '+style.fontFamily;
+ ctx.textBaseline='alphabetic';ctx.fillStyle='white';
+ const node=heading.firstChild,range=document.createRange(),lines=[];
+ // Match the real semantic heading's uppercase wrapping instead of a fixed full-page label.
+ for(let i=0;i<node.length;i++){
+  range.setStart(node,i);range.setEnd(node,i+1);const box=range.getBoundingClientRect();
+  if(!box.width)continue;
+  let line=lines.find(line=>Math.abs(line.top-box.top)<2);
+  if(!line){line={top:box.top,left:box.left,height:box.height,text:''};lines.push(line);}
+  line.text+=node.textContent[i].toUpperCase();
+ }
+ ctx.letterSpacing=style.letterSpacing;
+ for(const line of lines){
+  const metrics=ctx.measureText(line.text);
+  const ascent=metrics.fontBoundingBoxAscent||parseFloat(style.fontSize)*.8;
+  const descent=metrics.fontBoundingBoxDescent||parseFloat(style.fontSize)*.2;
+  ctx.fillText(line.text,line.left-rect.left,line.top-rect.top+(line.height-ascent-descent)/2+ascent);
+ }
+ const pixels=ctx.getImageData(0,0,w,h).data,dist=new Float32Array(w*h);
+ for(let i=0;i<dist.length;i++)dist[i]=pixels[i*4+3]>127?1e4:0;
+ for(let y=1;y<h;y++)for(let x=1;x<w-1;x++){
+  const i=y*w+x;if(dist[i])dist[i]=Math.min(dist[i],dist[i-1]+1,dist[i-w]+1,dist[i-w-1]+1.414,dist[i-w+1]+1.414);
+ }
+ for(let y=h-2;y>=0;y--)for(let x=w-2;x>0;x--){
+  const i=y*w+x;if(dist[i])dist[i]=Math.min(dist[i],dist[i+1]+1,dist[i+w]+1,dist[i+w-1]+1.414,dist[i+w+1]+1.414);
+ }
+ const packed=new Uint8Array(w*h*4);
+ for(let i=0;i<dist.length;i++){packed[i*4]=Math.round(Math.min(dist[i],24)/24*255);packed[i*4+3]=pixels[i*4+3];}
+ gl.bindTexture(gl.TEXTURE_2D,texture);gl.pixelStorei(gl.UNPACK_ALIGNMENT,1);
+ gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,w,h,0,gl.RGBA,gl.UNSIGNED_BYTE,packed);
+ maskSize=[w,h];dirty=false;
+}
+function draw(){
+ queued=false;const enabled=!lost&&!motion.matches&&!forced.matches;
+ heading.classList.toggle('glass-ready',enabled&&visible);
+ if(!enabled||!visible)return;
+ if(dirty)rebuild();if(!maskSize[0]||!maskSize[1])return;
+ const rect=section.getBoundingClientRect();
+ const progress=Math.max(0,Math.min(1,(innerHeight-rect.top)/(innerHeight+rect.height)));
+ gl.useProgram(program);gl.uniform2f(uniforms.resolution,canvas.width,canvas.height);
+ gl.uniform4f(uniforms.box,0,0,canvas.width,canvas.height);gl.uniform2fv(uniforms.maskSize,maskSize);
+ gl.uniform1f(uniforms.scroll,progress*3);gl.uniform1f(uniforms.refractOn,1);gl.uniform1f(uniforms.reduced,0);
+ gl.drawArrays(gl.TRIANGLES,0,6);
+}
+function schedule(){if(!queued){queued=true;requestAnimationFrame(draw);}}
+new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;schedule();}).observe(heading);
+new ResizeObserver(()=>{dirty=true;schedule();}).observe(heading);
+addEventListener('scroll',()=>{if(visible)schedule();},{passive:true});
+addEventListener('resize',()=>{dirty=true;schedule();});
+motion.addEventListener('change',schedule);forced.addEventListener('change',schedule);
+document.fonts.ready.then(()=>{dirty=true;schedule();});
+canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();lost=true;heading.classList.remove('glass-ready');});
+})();
 </script>
 </body>
 </html>
