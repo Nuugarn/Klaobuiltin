@@ -996,7 +996,7 @@
     margin: 0;
   }
   /* Adjust each photo's --x, --y, --width, --angle and --layer in its style attribute. */
-  .about-collage .about-image {
+  .about-collage .about-card {
     position: absolute;
     left: var(--x);
     top: var(--y);
@@ -1005,8 +1005,48 @@
     display: block;
     transform: rotate(var(--angle));
     z-index: var(--layer);
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+  .about-card.is-dragging { cursor: grabbing; }
+  .about-card:focus-visible { outline: 3px solid #173B28; outline-offset: 6px; }
+  .about-collage .about-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    -webkit-user-drag: none;
     border: clamp(2px, .35vw, 5px) solid #FFFFFF;
     box-shadow: 0 8px 20px rgba(23,59,40,.15);
+  }
+  .about-rotate {
+    position: absolute;
+    top: -16px;
+    right: -16px;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 2px solid #FFFFFF;
+    border-radius: 50%;
+    background: #173B28;
+    color: #FFFFFF;
+    font-size: 24px;
+    line-height: 1;
+    cursor: grab;
+    touch-action: none;
+    box-shadow: 0 2px 8px rgba(23,59,40,.25);
+  }
+  .about-rotate:focus-visible { outline: 3px solid #0B9F58; outline-offset: 3px; }
+  .about-collage-help {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
   @media (max-width: 860px) {
     .about .about-content { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-inline: 24px; }
@@ -1869,11 +1909,86 @@
       <p>รับออกแบบ ผลิต และติดตั้งเฟอร์นิเจอร์บิลต์อิน โดยคำนึงถึงพื้นที่จริง สัดส่วนการใช้งาน วัสดุ งานประกอบ และรายละเอียดหน้างาน มองพื้นที่และเฟอร์นิเจอร์ไปด้วยกัน ทั้งตู้โชว์และชุดวางทีวีสำหรับห้องนั่งเล่น รวมถึงตู้เสื้อผ้าและชุดเตียงสำหรับห้องนอนที่ออกแบบให้เข้ากับสไตล์และการใช้งานจริง โดยให้พื้นที่ สัดส่วน วัสดุ งานประกอบ และรายละเอียดหน้างานเป็นจุดพิจารณาของงานบิลต์อิน</p>
     </div>
     <figure class="about-collage" aria-label="ภาพรายละเอียดงานครัวและตู้ทีวี">
-      <img class="about-image" src="images/kitchen/island/island_01_full.jpg" width="1108" height="1477" loading="lazy" decoding="async" alt="เคาน์เตอร์ครัวหน้าบานไม้และท็อปสีอ่อน" style="--x: 26%; --y: 3%; --width: 65%; --angle: 4deg; --layer: 1;">
-      <img class="about-image" src="images/living-room/tv/tv_01_full.jpg" width="1108" height="1477" loading="lazy" decoding="async" alt="ตู้ทีวีสีอ่อนพร้อมชั้นเก็บของและผนังตกแต่ง" style="--x: 3%; --y: 42%; --width: 40%; --angle: -7deg; --layer: 2;">
-      <img class="about-image" src="images/kitchen/sink/sink_01_full.jpg" width="1477" height="1108" loading="lazy" decoding="async" alt="เคาน์เตอร์ครัวสีเข้มพร้อมเตาและอ่างล้างจาน" style="--x: 47%; --y: 62%; --width: 49%; --angle: 6deg; --layer: 3;">
+      <figcaption class="about-collage-help" id="about-collage-help">ลากรูปเพื่อย้ายตำแหน่ง ลากปุ่มลูกศรโค้งเพื่อหมุน หรือใช้ปุ่มลูกศรบนแป้นพิมพ์เมื่อเลือกรูปหรือปุ่มหมุน กด Shift เพื่อปรับครั้งละมากขึ้น</figcaption>
+      <div class="about-card" tabindex="0" role="group" aria-label="เคาน์เตอร์ครัวหน้าบานไม้" aria-describedby="about-collage-help" style="--x: 26%; --y: 3%; --width: 65%; --angle: 4deg; --layer: 1;">
+        <img class="about-image" src="images/kitchen/island/island_01_full.jpg" width="1108" height="1477" loading="lazy" decoding="async" draggable="false" alt="เคาน์เตอร์ครัวหน้าบานไม้และท็อปสีอ่อน">
+        <button class="about-rotate" type="button" aria-label="หมุนรูปเคาน์เตอร์ครัวหน้าบานไม้" aria-describedby="about-collage-help" title="ลากเพื่อหมุนรูป"><span aria-hidden="true">↻</span></button>
+      </div>
+      <div class="about-card" tabindex="0" role="group" aria-label="ตู้ทีวี" aria-describedby="about-collage-help" style="--x: 3%; --y: 42%; --width: 40%; --angle: -7deg; --layer: 2;">
+        <img class="about-image" src="images/living-room/tv/tv_01_full.jpg" width="1108" height="1477" loading="lazy" decoding="async" draggable="false" alt="ตู้ทีวีสีอ่อนพร้อมชั้นเก็บของและผนังตกแต่ง">
+        <button class="about-rotate" type="button" aria-label="หมุนรูปตู้ทีวี" aria-describedby="about-collage-help" title="ลากเพื่อหมุนรูป"><span aria-hidden="true">↻</span></button>
+      </div>
+      <div class="about-card" tabindex="0" role="group" aria-label="เคาน์เตอร์ครัวสีเข้ม" aria-describedby="about-collage-help" style="--x: 47%; --y: 62%; --width: 49%; --angle: 6deg; --layer: 3;">
+        <img class="about-image" src="images/kitchen/sink/sink_01_full.jpg" width="1477" height="1108" loading="lazy" decoding="async" draggable="false" alt="เคาน์เตอร์ครัวสีเข้มพร้อมเตาและอ่างล้างจาน">
+        <button class="about-rotate" type="button" aria-label="หมุนรูปเคาน์เตอร์ครัวสีเข้ม" aria-describedby="about-collage-help" title="ลากเพื่อหมุนรูป"><span aria-hidden="true">↻</span></button>
+      </div>
     </figure>
   </div>
+  <script>
+    (function () {
+      const collage = document.querySelector('.about-collage');
+      let layer = 3;
+      collage.querySelectorAll('.about-card').forEach(function (card) {
+        const handle = card.querySelector('.about-rotate');
+        let angle = parseFloat(card.style.getPropertyValue('--angle'));
+        let gesture = null;
+        function raise() { card.style.setProperty('--layer', ++layer); }
+        function move(x, y) {
+          // Keep the card's center inside the collage, including on narrow screens.
+          x = Math.max(-card.offsetWidth / 2 + 24, Math.min(collage.clientWidth - card.offsetWidth / 2 - 24, x));
+          y = Math.max(-card.offsetHeight / 2 + 24, Math.min(collage.clientHeight - card.offsetHeight / 2 - 24, y));
+          card.style.setProperty('--x', x / collage.clientWidth * 100 + '%');
+          card.style.setProperty('--y', y / collage.clientHeight * 100 + '%');
+        }
+        function rotate(value) {
+          angle = value;
+          card.style.setProperty('--angle', angle + 'deg');
+        }
+        card.addEventListener('focusin', raise);
+        card.addEventListener('pointerdown', function (event) {
+          if (!event.isPrimary || event.button !== 0) return;
+          const rotating = !!event.target.closest('.about-rotate');
+          const rect = card.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          gesture = { id: event.pointerId, rotating: rotating, x: event.clientX, y: event.clientY,
+            left: card.offsetLeft, top: card.offsetTop, centerX: centerX, centerY: centerY,
+            bearing: Math.atan2(event.clientY - centerY, event.clientX - centerX) };
+          event.preventDefault();
+          (rotating ? handle : card).focus({ preventScroll: true });
+          raise();
+          card.setPointerCapture(event.pointerId);
+          card.classList.add('is-dragging');
+        });
+        card.addEventListener('pointermove', function (event) {
+          if (!gesture || event.pointerId !== gesture.id) return;
+          if (gesture.rotating) {
+            const bearing = Math.atan2(event.clientY - gesture.centerY, event.clientX - gesture.centerX);
+            const delta = Math.atan2(Math.sin(bearing - gesture.bearing), Math.cos(bearing - gesture.bearing));
+            rotate(angle + delta * 180 / Math.PI);
+            gesture.bearing = bearing;
+          } else {
+            move(gesture.left + event.clientX - gesture.x, gesture.top + event.clientY - gesture.y);
+          }
+        });
+        function finish() { gesture = null; card.classList.remove('is-dragging'); }
+        card.addEventListener('pointerup', finish);
+        card.addEventListener('pointercancel', finish);
+        card.addEventListener('lostpointercapture', finish);
+        card.addEventListener('keydown', function (event) {
+          const direction = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[event.key];
+          if (!direction) return;
+          event.preventDefault();
+          if (event.target === handle) rotate(angle + (direction[0] || direction[1]) * (event.shiftKey ? 15 : 5));
+          else move(card.offsetLeft + direction[0] * (event.shiftKey ? 30 : 10), card.offsetTop + direction[1] * (event.shiftKey ? 30 : 10));
+        });
+        handle.addEventListener('click', function (event) {
+          // Keyboard and assistive-technology activation rotates one step.
+          if (event.detail === 0) rotate(angle + 5);
+        });
+      });
+    }());
+  </script>
 </section>
 
 <div class="section-bleed-white" id="portfolio">
