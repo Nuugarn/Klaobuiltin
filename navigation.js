@@ -45,6 +45,13 @@
  // Only the homepage maps its current location to in-page sections.
  const homeView=document.getElementById('home-view');
  if(homeView) {
+  const logo=document.querySelector('.site-logo');
+  logo.addEventListener('click',event=>{
+   if(event.button!==0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+   event.preventDefault();
+   history.replaceState(null,'',location.pathname+location.search+'#home-view');
+   window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+  });
   const sections=['home-view','about','work','contact'].map(id=>document.getElementById(id));
   const sectionLinks=Array.from(document.querySelectorAll('.desktop-navigation a,.nav-drawer-links a'))
    .filter(link=>sections.some(section=>link.getAttribute('href')==='index.html#'+section.id));

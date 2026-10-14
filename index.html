@@ -519,7 +519,7 @@
 
   .hero.is-expanded .hero-content {
     top: var(--hero-content-top, 40px);
-    transform: none;
+    transform: translateY(-50%);
   }
 
   .hero-viewport {
@@ -580,10 +580,10 @@
   .hero-line-glow {
     position: absolute;
     border-radius: 50%;
-    background: radial-gradient(ellipse, rgba(255, 255, 255, 0.72) 0%,
-      rgba(255, 255, 255, 0.5) 35%, rgba(255, 255, 255, 0) 75%);
-    box-shadow: 0 0 100px 36px rgba(255, 255, 255, 0.48);
-    filter: blur(18px);
+    background: radial-gradient(ellipse, rgba(255, 255, 255, 0.94) 0%,
+      rgba(255, 255, 255, 0.8) 35%, rgba(255, 255, 255, 0) 78%);
+    box-shadow: 0 0 120px 52px rgba(255, 255, 255, 0.74);
+    filter: blur(20px);
   }
 
   .hero-copy {
@@ -742,21 +742,22 @@
   }
 
   @media (max-width: 1023px) {
-    .hero { align-items: flex-end; }
+    .hero { align-items: center; }
     .hero-content {
-      top: 40px;
-      left: 12px;
+      top: 50%;
+      left: 0;
       transform: none;
-      width: calc(100% - 24px);
-      align-items: flex-start;
-      text-align: left;
+      width: 100%;
+      padding: 0 12px;
+      align-items: center;
+      text-align: center;
       gap: 20px;
     }
     .hero-copy { gap: 8px; --hero-float-offset: -5px; }
     .hero-controls { left: 8px; right: 8px; }
     .hero-heading { font-size: 24px; line-height: 1.45; }
     .hero-support { font-size: 32px; line-height: 1.2; }
-    .hero-line-glow { box-shadow: 0 0 60px 22px rgba(255, 255, 255, 0.48); filter: blur(12px); }
+    .hero-line-glow { box-shadow: 0 0 90px 38px rgba(255, 255, 255, 0.78); filter: blur(16px); }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -960,6 +961,8 @@
     text-transform: uppercase;
     color: #173B28;
     margin-bottom: clamp(24px, 4vw, 40px);
+    -webkit-user-select: none;
+    user-select: none;
   }
   #about-title .about-glass {
     position: absolute;
@@ -971,7 +974,6 @@
   }
   #about-title.glass-ready { color: transparent; }
   #about-title.glass-ready .about-glass { display: block; }
-  #about-title::selection { color: #173B28; background: #C6A15B; }
   @media (prefers-reduced-motion: reduce) {
     #about-title.glass-ready { color: #173B28; }
     #about-title .about-glass { display: none !important; }
@@ -987,6 +989,13 @@
     font-size: clamp(18px, 1.7vw, 24px);
     line-height: 1.8;
     text-wrap: balance;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .about-keyword {
+    color: #0B9F58;
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(74, 255, 147, 0.34);
   }
   .about-collage {
     position: relative;
@@ -1057,27 +1066,6 @@
   /* ---------- Space portfolio cards (Home) ---------- */
   .space-section {
     padding: clamp(48px, 7vw, 80px) 0 clamp(56px, 8vw, 96px);
-  }
-  .space-section-title {
-    font-family: 'Kanit', sans-serif;
-    font-size: clamp(1.6rem, 3vw, 2.2rem);
-    font-weight: 600;
-    line-height: 1.25;
-    color: #0B4C8A;
-    margin-bottom: clamp(28px, 4vw, 40px);
-  }
-  @supports ((background-clip: text) or (-webkit-background-clip: text)) {
-    .space-section-title {
-      background: linear-gradient(180deg, transparent 20%, #548FC4 30%, #548FC4 43%, transparent 52%),
-        linear-gradient(180deg, #08427C 0%, #1267A8 35%, #0B4C8A 56%, #06315A 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      filter: drop-shadow(0 1px 0 #06315A) drop-shadow(0 1px 0 #356C99);
-    }
-  }
-  @media (forced-colors: active) {
-    .space-section-title { background: none; color: CanvasText; filter: none; }
   }
   .space-grid {
     display: grid;
@@ -1610,7 +1598,7 @@
 <a href="articles.html">บทความ</a>
 <a href="faq.html">FAQ</a>
 <a href="index.html#contact">ติดต่อเรา</a></div>
-<a class="nav-cta" href="index.html#contact">ปรึกษาเรา</a>
+<a class="nav-cta" href="https://line.me/R/ti/p/@380tjpje" target="_blank" rel="noopener">ปรึกษาเรา</a>
 </nav>
 
 <!-- Sits outside the drawer, hugging the left edge of the pushed home
@@ -1634,7 +1622,7 @@
 <a href="index.html#work">เยี่ยมชมผลงาน</a>
 <a href="articles.html">บทความ</a>
 <a href="faq.html">FAQ</a>
-<a href="index.html#contact">ติดต่อเรา</a></nav><a class="nav-cta desktop-cta" href="index.html#contact">ปรึกษาเรา</a></div>
+<a href="index.html#contact">ติดต่อเรา</a></nav><a class="nav-cta desktop-cta" href="https://line.me/R/ti/p/@380tjpje" target="_blank" rel="noopener">ปรึกษาเรา</a></div>
   <div class="header-zone--right">
     <div class="ltw" id="langThemeWidget">
       <div class="ltw-capsule">
@@ -1703,14 +1691,12 @@
           geometryFrame = 0;
           const imageHeight = image.getBoundingClientRect().height;
           if (!imageHeight) return;
-          const contentHeight = content.getBoundingClientRect().height;
           const desktop = window.matchMedia('(min-width: 1024px)').matches;
-          // Mobile copy stays inside Hero, in the margin above the uncropped image.
-          // Desktop uses one shared anchor, independent of the active image.
-          const copyTop = desktop ? imageHeight * 0.44 : 40;
+          // Mobile copy overlays the image center; desktop keeps its shared anchor.
+          const copyTop = desktop ? imageHeight * 0.44 : imageHeight * 0.5;
           hero.style.setProperty('--hero-content-top', copyTop + 'px');
           const expanded = !desktop;
-          const height = desktop ? '0px' : Math.ceil(imageHeight + contentHeight + 80) + 'px';
+          const height = desktop ? '0px' : Math.ceil(imageHeight) + 'px';
           if (hero.style.getPropertyValue('--hero-required-height') !== height) {
             hero.style.setProperty('--hero-required-height', height);
           }
@@ -1906,7 +1892,7 @@
   <div class="wrap about-content">
     <div class="about-copy">
       <h2 id="about-title">From space to built</h2>
-      <p>รับออกแบบ ผลิต และติดตั้งเฟอร์นิเจอร์บิลต์อิน โดยคำนึงถึงพื้นที่จริง สัดส่วนการใช้งาน วัสดุ งานประกอบ และรายละเอียดหน้างาน มองพื้นที่และเฟอร์นิเจอร์ไปด้วยกัน ทั้งตู้โชว์และชุดวางทีวีสำหรับห้องนั่งเล่น รวมถึงตู้เสื้อผ้าและชุดเตียงสำหรับห้องนอนที่ออกแบบให้เข้ากับสไตล์และการใช้งานจริง โดยให้พื้นที่ สัดส่วน วัสดุ งานประกอบ และรายละเอียดหน้างานเป็นจุดพิจารณาของงานบิลต์อิน</p>
+      <p>รับออกแบบ ผลิต และติดตั้งเฟอร์นิเจอร์บิลต์อิน โดยคำนึงถึง<span class="about-keyword">พื้นที่จริง</span> <span class="about-keyword">สัดส่วนการใช้งาน</span> <span class="about-keyword">วัสดุ</span> <span class="about-keyword">งานประกอบ</span> และ<span class="about-keyword">รายละเอียดหน้างาน</span> มองพื้นที่และเฟอร์นิเจอร์ไปด้วยกัน ทั้ง<span class="about-keyword">ตู้โชว์และชุดวางทีวี</span>สำหรับห้องนั่งเล่น รวมถึง<span class="about-keyword">ตู้เสื้อผ้าและชุดเตียง</span>สำหรับห้องนอนที่ออกแบบให้เข้ากับสไตล์และการใช้งานจริง โดยให้พื้นที่ สัดส่วน วัสดุ งานประกอบ และรายละเอียดหน้างานเป็นจุดพิจารณาของงานบิลต์อิน</p>
     </div>
     <figure class="about-collage" aria-label="ภาพรายละเอียดงานครัวและตู้ทีวี">
       <figcaption class="about-collage-help" id="about-collage-help">ลากรูปเพื่อย้ายตำแหน่ง ลากปุ่มลูกศรโค้งเพื่อหมุน หรือใช้ปุ่มลูกศรบนแป้นพิมพ์เมื่อเลือกรูปหรือปุ่มหมุน กด Shift เพื่อปรับครั้งละมากขึ้น</figcaption>
@@ -1994,7 +1980,6 @@
 <div class="section-bleed-white" id="portfolio">
 <div class="wrap">
   <section class="space-section" id="work">
-    <h2 class="space-section-title">ผลงานที่ผ่านมา</h2>
     <div class="space-grid">
       <a class="space-card" href="bedroom.html">
         <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=900&q=80" alt="Bedroom">
@@ -2133,7 +2118,7 @@
     function update() {
       frame = 0;
       const focused = document.activeElement === button;
-      const show = focused || (window.scrollY > 160 && !document.body.classList.contains('menu-open'));
+      const show = focused || (window.scrollY > 320 && !document.body.classList.contains('menu-open'));
       button.disabled = !show;
       button.tabIndex = show ? 0 : -1;
       button.setAttribute('aria-hidden', show ? 'false' : 'true');
