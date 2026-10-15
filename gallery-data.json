@@ -27,32 +27,32 @@
     "hero": [
       {
         "name": "kitchen-hero",
-        "thumb": "images/kitchen/hero/kitchen-hero_thumb.jpg",
-        "full": "images/kitchen/hero/kitchen-hero_full.jpg"
+        "thumb": "https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_600/f_auto/q_auto/v1792047559/kitchen-hero.png",
+        "full": "https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_1200/f_auto/q_auto/v1792047559/kitchen-hero.png"
       }
     ],
     "island": [
       {
         "name": "island_01",
-        "thumb": "images/kitchen/island/island_01_thumb.jpg",
-        "full": "images/kitchen/island/island_01_full.jpg"
+        "thumb": "https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_600/f_auto/q_auto/v1792047558/island_01_full.jpg",
+        "full": "https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_1200/f_auto/q_auto/v1792047558/island_01_full.jpg"
       },
       {
         "name": "island_02",
-        "thumb": "images/kitchen/island/island_02_thumb.jpg",
-        "full": "images/kitchen/island/island_02_full.jpg"
+        "thumb": "https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_600/f_auto/q_auto/v1792047558/island_02_full.jpg",
+        "full": "https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_1200/f_auto/q_auto/v1792047558/island_02_full.jpg"
       }
     ],
     "sink": [
       {
         "name": "sink_01",
-        "thumb": "images/kitchen/sink/sink_01_thumb.jpg",
-        "full": "images/kitchen/sink/sink_01_full.jpg"
+        "thumb": "https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_600/f_auto/q_auto/v1792047559/sink_01_full.jpg",
+        "full": "https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_1200/f_auto/q_auto/v1792047559/sink_01_full.jpg"
       },
       {
         "name": "sink_04",
-        "thumb": "images/kitchen/sink/sink_04_thumb.jpg",
-        "full": "images/kitchen/sink/sink_04_full.jpg"
+        "thumb": "https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_600/f_auto/q_auto/v1792047560/sink_04_full.jpg",
+        "full": "https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_1200/f_auto/q_auto/v1792047560/sink_04_full.jpg"
       }
     ],
     "wall": []
