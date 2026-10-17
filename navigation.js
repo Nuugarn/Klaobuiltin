@@ -211,16 +211,19 @@ if(document.getElementById('langThemeWidget')) {
     facebook: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h2.5V5.5H14c-1.9 0-3.5 1.6-3.5 3.5v2H8v3h2.5V20h3v-6h2.3l.5-3h-2.8V9c0-.6.4-1 1-1z"/></svg>',
     line: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 5.82 2 10.5c0 4.2 3.73 7.72 8.75 8.4.34.07.8.22.92.5.1.26.07.66.03.92l-.15 1.02c-.05.3-.22 1.18 1.03.64C16.32 20.14 22 15.9 22 10.5 22 5.82 17.52 2 12 2zm-5.1 6.2h1.2v4.4H6.9V8.2zm2 0h1.2v4.4H8.9V8.2zm2 0h1.1l1.7 2.4V8.2h1.2v4.4h-1.1L12.1 10v2.6h-1.2V8.2zm4.7 0h3.1v1h-1.9v.7h1.8v1h-1.8v.7h1.9v1h-3.1V8.2z"/></svg>',
     instagram: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M7.5 3.5h9A4 4 0 0 1 20.5 7.5v9a4 4 0 0 1-4 4h-9a4 4 0 0 1-4-4v-9a4 4 0 0 1 4-4Z"/><circle cx="12" cy="12" r="3.4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.2" cy="6.9" r="1"/></svg>',
-    tiktok: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.4 3.2h2.7c.2 1.8 1.3 3.1 3.1 3.6v2.7a7.4 7.4 0 0 1-3.1-1v6.2a5.5 5.5 0 1 1-5.5-5.5c.4 0 .8 0 1.2.1V12a3 3 0 1 0 1.6 2.7V3.2z"/></svg>'
+    tiktok: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.4 3.2h2.7c.2 1.8 1.3 3.1 3.1 3.6v2.7a7.4 7.4 0 0 1-3.1-1v6.2a5.5 5.5 0 1 1-5.5-5.5c.4 0 .8 0 1.2.1V12a3 3 0 1 0 1.6 2.7V3.2z"/></svg>',
+    whatsapp: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.1L3.2 20.8l4.7-1.2A8.7 8.7 0 1 0 12 3.2Zm0 15.8a7.1 7.1 0 0 1-3.6-1l-.3-.2-2.8.7.7-2.7-.2-.3A7.1 7.1 0 1 1 12 19Zm3.9-5.3c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.7.9-.3.2-.5.1a5.8 5.8 0 0 1-1.7-1.1 6.2 6.2 0 0 1-1.2-1.5c-.1-.2 0-.4.1-.5l.4-.4c.1-.1.1-.2.2-.4 0-.1 0-.3 0-.4l-.8-1.8c-.2-.4-.4-.3-.5-.3h-.5c-.2 0-.4.1-.6.3s-.8.8-.8 1.9.8 2.1.9 2.3a8.7 8.7 0 0 0 3.4 3c.5.2.9.4 1.2.5.5.2 1 .2 1.3.1.4-.1 1.4-.6 1.6-1.2s.2-1.1.1-1.2-.2-.2-.4-.3Z"/></svg>'
   };
 
-  function socialItems(className) {
-    return [
+  function socialItems(className, includeWhatsApp) {
+    const items = [
       '<a class="social-icon social-icon--facebook ' + className + '" href="' + facebookUrl + '" target="_blank" rel="noopener" aria-label="Facebook">' + icons.facebook + '</a>',
       '<a class="social-icon social-icon--line ' + className + '" href="' + lineUrl + '" target="_blank" rel="noopener" aria-label="LINE">' + icons.line + '</a>',
       '<button class="social-icon social-icon--instagram ' + className + '" type="button" aria-label="Instagram — ยังไม่เปิดใช้งาน" disabled>' + icons.instagram + '</button>',
       '<button class="social-icon social-icon--tiktok ' + className + '" type="button" aria-label="TikTok — ยังไม่เปิดใช้งาน" disabled>' + icons.tiktok + '</button>'
-    ].join('');
+    ];
+    if (includeWhatsApp) items.push('<button class="social-icon social-icon--whatsapp ' + className + '" type="button" aria-label="WhatsApp — ยังไม่เปิดใช้งาน" disabled>' + icons.whatsapp + '</button>');
+    return items.join('');
   }
 
   const drawer = document.getElementById('drawer');
@@ -234,7 +237,7 @@ if(document.getElementById('langThemeWidget')) {
   if (document.querySelector('.homepage-back-top') && !document.querySelector('.social-fab')) {
     const fab = document.createElement('div');
     fab.className = 'social-fab';
-    fab.innerHTML = '<div class="social-fab-actions" id="socialFabActions">' + socialItems('social-fab-item') + '</div><button class="social-fab-toggle" type="button" aria-label="เปิดช่องทาง Social media" aria-controls="socialFabActions" aria-expanded="false"></button>';
+    fab.innerHTML = '<div class="social-fab-actions" id="socialFabActions">' + socialItems('social-fab-item', true) + '</div><button class="social-fab-toggle" type="button" aria-label="เปิดช่องทาง Social media" aria-controls="socialFabActions" aria-expanded="false"></button>';
     document.body.appendChild(fab);
     const toggle = fab.querySelector('.social-fab-toggle');
     function setOpen(open) {
