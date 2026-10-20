@@ -517,7 +517,7 @@ img,svg { -webkit-user-drag:none; user-drag:none; }
 .room-entrances { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
 .room-entrances a { border:1px solid var(--line); padding:32px; font:400 24px 'Kanit',sans-serif; background:var(--white); }
 .room-entrances a:hover { border-color:var(--teak); }
-@media(width < 1024px) {
+@media(width < 840px) {
  .site-header { gap:12px; padding:0 20px; }
  .header-zone--center { display:none; }
  .header-zone--right { margin-left:auto; padding-right:52px; }
@@ -525,7 +525,7 @@ img,svg { -webkit-user-drag:none; user-drag:none; }
 }
 @media(max-width:1179px) { .room-entrances { grid-template-columns:1fr; } }
 @media(max-width:380px) { .site-logo img { height:28px; } .ltw-btn { width:28px; } .ltw-capsule { gap:2px; } }
-@media(min-width:1024px) { .navigation-drawer, .page-overlay { display:none; } }
+@media(min-width:840px) { .navigation-drawer, .page-overlay { display:none; } }
 @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .navigation-drawer, .page-overlay { transition:none; } .page-overlay::before { animation:none; } }
 @media(prefers-reduced-motion:reduce) {
  .desktop-navigation a,.social-icon,.social-fab-toggle { transform:none !important; transition:none !important; }

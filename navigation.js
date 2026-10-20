@@ -42,7 +42,7 @@
  document.addEventListener('pointercancel',clearTouchPress);
  window.addEventListener('blur',clearTouchPress);
  document.addEventListener('visibilitychange',()=>{if(document.hidden) clearTouchPress();});
- // Only the homepage maps its current location to in-page sections.
+ // The homepage keeps "หน้าแรก" current; section links will become page links later.
  const homeView=document.getElementById('home-view');
  if(homeView) {
   const logo=document.querySelector('.site-logo');
@@ -52,29 +52,6 @@
    history.replaceState(null,'',location.pathname+location.search+'#home-view');
    window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
   });
-  const sections=['home-view','about','work','contact'].map(id=>document.getElementById(id));
-  const sectionLinks=Array.from(document.querySelectorAll('.desktop-navigation a,.nav-drawer-links a'))
-   .filter(link=>sections.some(section=>link.getAttribute('href')==='index.html#'+section.id));
-  let sectionFrame=0;
-  function updateCurrentSection() {
-   sectionFrame=0;
-   const boundary=document.querySelector('.site-header').getBoundingClientRect().bottom+21;
-   let current=sections[0];
-   sections.forEach(section=>{if(section.getBoundingClientRect().top<=boundary) current=section;});
-   // A short final section may not reach the header before the document ends.
-   if(window.scrollY>0 && window.scrollY+window.innerHeight>=document.documentElement.scrollHeight-2) current=sections[3];
-   sectionLinks.forEach(link=>{
-    if(link.getAttribute('href')==='index.html#'+current.id) link.setAttribute('aria-current','location');
-    else link.removeAttribute('aria-current');
-   });
-  }
-  function scheduleCurrentSection() { if(!sectionFrame) sectionFrame=requestAnimationFrame(updateCurrentSection); }
-  window.addEventListener('scroll',scheduleCurrentSection,{passive:true});
-  window.addEventListener('resize',scheduleCurrentSection);
-  const sectionResize=new ResizeObserver(scheduleCurrentSection);
-  sectionResize.observe(homeView);
-  sectionResize.observe(sections[3]);
-  updateCurrentSection();
  }
  document.addEventListener('keydown',event=>{
   if(!document.body.classList.contains('menu-open')) return;
