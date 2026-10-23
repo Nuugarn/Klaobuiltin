@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg" sizes="any">
+<title>KLAO — ตกแต่งผนัง</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Mitr:wght@500;600;700&family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="navigation.css">
+<link rel="stylesheet" href="destination-pages.css">
+<script src="navigation.js" defer></script>
+</head>
+<body data-destination>
+<nav class="drawer navigation-drawer" id="drawer" role="dialog" aria-modal="true" aria-label="เมนูหลัก" tabindex="-1">
+<div class="nav-drawer-heading"><span>เมนู</span><button class="nav-close" type="button" aria-label="ปิดเมนู">×</button></div>
+<div class="nav-drawer-links"><a href="index.html#home-view">หน้าแรก</a>
+<a href="about.html">เกี่ยวกับเรา</a>
+<a href="portfolio.html" aria-current="location">เยี่ยมชมผลงาน</a>
+<a href="articles.html">บทความ</a>
+<a href="faq.html">FAQ</a>
+<a href="contact.html">ติดต่อเรา</a></div>
+<a class="nav-cta" href="https://line.me/R/ti/p/@380tjpje" target="_blank" rel="noopener">ปรึกษาเรา</a>
+</nav>
+<div class="page-shell">
+<header class="site-header">
+  <div class="header-zone--left">
+    <button class="hamburger-btn" type="button" aria-label="เปิดเมนู" aria-controls="drawer" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+    <a class="site-logo" href="index.html#home-view" aria-label="KLAO — หน้าแรก"><img src="data:image/png;base64,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" alt="KLAO BUILT-IN CUSTOM"></a>
+  </div>
+  <div class="header-zone--center"><nav class="desktop-navigation" aria-label="เมนูหลัก"><a href="index.html#home-view">หน้าแรก</a>
+<a href="about.html">เกี่ยวกับเรา</a>
+<a href="portfolio.html" aria-current="location">เยี่ยมชมผลงาน</a>
+<a href="articles.html">บทความ</a>
+<a href="faq.html">FAQ</a>
+<a href="contact.html">ติดต่อเรา</a></nav><a class="nav-cta desktop-cta" href="https://line.me/R/ti/p/@380tjpje" target="_blank" rel="noopener">ปรึกษาเรา</a></div>
+  <div class="header-zone--right">
+    <div class="ltw" id="langThemeWidget">
+      <div class="ltw-capsule">
+        <button type="button" class="ltw-btn" id="ltwLangBtn" aria-haspopup="listbox" aria-expanded="false" title="สลับภาษา">TH</button>
+        <span class="ltw-divider" aria-hidden="true"></span>
+        <button type="button" class="ltw-btn ltw-theme" id="ltwLightBtn" aria-pressed="true" title="Light mode">☀️</button>
+        <button type="button" class="ltw-btn ltw-theme" id="ltwDarkBtn" aria-pressed="false" title="Dark mode">🌙</button>
+      </div>
+      <div class="ltw-drop" id="ltwDrop" role="listbox" hidden>
+        <button type="button" class="ltw-opt is-active" role="option" data-lang="TH" data-label="ไทย" aria-selected="true"><span class="ltw-flag">🇹🇭</span><span>ไทย</span></button>
+        <button type="button" class="ltw-opt" role="option" data-lang="EN" data-label="English" aria-selected="false"><span class="ltw-flag">🇬🇧</span><span>English</span></button>
+        <button type="button" class="ltw-opt" role="option" data-lang="LA" data-label="ລາວ" aria-selected="false"><span class="ltw-flag">🇱🇦</span><span>ລາວ</span></button>
+      </div>
+    </div>
+  </div>
+  <div class="ltw-toast" id="ltwToast" role="status" aria-live="polite"></div>
+</header>
+<main class="destination-content" id="main-content">
+<a class="page-back" href="portfolio.html">← ดูทุกหมวดงาน</a>
+<header class="page-intro"><h1>ตกแต่งผนัง</h1><p class="page-lead">เพิ่มมิติให้ผนังโดยคำนึงถึงวัสดุ รอยต่อ และสิ่งที่ต้องติดตั้งร่วมกัน</p></header>
+<section class="page-block page-split" aria-labelledby="focus-title"><div><h2 id="focus-title">แนวทางสำหรับพื้นที่นี้</h2><p class="page-copy">งานแต่ละพื้นที่ต้องดูขนาดจริง วิธีใช้ และรายละเอียดที่อยากเก็บไว้ในห้องก่อนกำหนดแบบ</p></div><ul class="page-list"><li>รูปแบบการกรุและสัดส่วนของผนัง</li><li>ตำแหน่งไฟ ปลั๊ก และอุปกรณ์บนผนัง</li><li>การเลือกผิววัสดุให้เข้ากับห้อง</li></ul></section>
+<section class="page-block" aria-labelledby="gallery-title"><h2 id="gallery-title">ภาพในหมวดนี้</h2><div class="page-empty"><p>ยังไม่มีรูปในหมวดนี้</p></div></section>
+<section class="page-block page-split" aria-labelledby="prepare-title"><div><h2 id="prepare-title">เตรียมข้อมูลก่อนปรึกษา</h2><p>ขนาดผนัง รูปหน้างาน และตำแหน่งปลั๊กหรืออุปกรณ์</p></div><div><h2>คุยเรื่องพื้นที่ของคุณ</h2><p>ส่งข้อมูลเบื้องต้นมาให้เราพูดคุยแนวทางที่เหมาะกับพื้นที่ได้</p><a class="page-action" href="contact.html">ดูช่องทางติดต่อ</a></div></section>
+<section class="page-block" aria-labelledby="related-title"><h2 id="related-title">หมวดงานที่เกี่ยวข้อง</h2><div class="page-links"><a href="living.html">ห้องนั่งเล่น</a><a href="bedroom.html">ห้องนอน</a><a href="tv-unit.html">ชั้นวางทีวี</a></div></section>
+</main>
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="contact-inner">
+
+      <div class="contact-brand">
+        <img class="contact-brand-logo" src="data:image/png;base64,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" alt="KLAO Built-in Custom" width="113" height="43">
+      </div>
+
+      <ul class="contact-list">
+
+        <li class="contact-item">
+          <span class="contact-item-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 7v5l3 2"/>
+            </svg>
+          </span>
+          <div class="contact-item-body">
+            <span class="contact-line">เวลาทำการ วันจันทร์ - อาทิตย์</span>
+            <span class="contact-line">เวลา 8:00 - 17:00 น.</span>
+            <span class="contact-line contact-line--sub">(เว้นวันหยุดนักขัตฤกษ์)</span>
+          </div>
+        </li>
+
+        <li class="contact-item">
+          <span class="contact-item-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3.2c-5.1 0-9.2 3.45-9.2 7.7 0 2.45 1.35 4.62 3.45 6.05-.12.9-.55 2.35-1.95 3.55 1.85-.35 3.45-1.05 4.65-1.85.95.22 1.95.35 3.05.35 5.1 0 9.2-3.45 9.2-7.7S17.1 3.2 12 3.2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <text x="12" y="12.2" text-anchor="middle" dominant-baseline="middle" font-family="Arial, Helvetica, sans-serif" font-size="5.2" font-weight="700" fill="currentColor" letter-spacing="0.3">LINE</text>
+            </svg>
+          </span>
+          <div class="contact-item-body">
+            <div class="contact-line-row">
+              <span class="contact-line">ช่างเกล้า บิ้วอิน</span>
+              <a class="line-add-btn" href="https://line.me/ti/p/~0918768157" target="_blank" rel="noopener" aria-label="เพิ่มเพื่อน LINE">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2C6.48 2 2 5.82 2 10.5c0 4.2 3.73 7.72 8.75 8.4.34.07.8.22.92.5.1.26.07.66.03.92l-.15 1.02c-.05.3-.22 1.18 1.03.64C16.32 20.14 22 15.9 22 10.5 22 5.82 17.52 2 12 2z"/>
+                </svg>
+                Add friend
+              </a>
+            </div>
+          </div>
+        </li>
+
+        <li class="contact-item">
+          <span class="contact-item-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+          </span>
+          <div class="contact-item-body">
+            <a class="contact-line contact-link" href="tel:0918768157">0918768157</a>
+          </div>
+        </li>
+
+        <li class="contact-item">
+          <span class="contact-item-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </span>
+          <div class="contact-item-body">
+            <a class="contact-line contact-link" href="mailto:klaobuiltin.th@gmail.com">klaobuiltin.th@gmail.com</a>
+          </div>
+        </li>
+
+      </ul>
+      <div class="footer-contact-social">
+        <a class="footer-social" href="https://www.facebook.com/share/1EQR822dQ8/" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">
+            <path d="M14 8h2.5V5.5H14c-1.9 0-3.5 1.6-3.5 3.5v2H8v3h2.5V20h3v-6h2.3l.5-3h-2.8V9c0-.6.4-1 1-1z"/>
+          </svg>
+        </a>
+        <a class="footer-social" href="https://line.me/R/ti/p/@380tjpje" target="_blank" rel="noopener" aria-label="LINE">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">
+            <path d="M12 3.5c-4.7 0-8.5 3.15-8.5 7 0 2.2 1.2 4.15 3.1 5.45-.1.8-.5 2.15-1.75 3.25 1.7-.3 3.15-.95 4.25-1.7.85.2 1.75.3 2.9.3 4.7 0 8.5-3.15 8.5-7s-3.8-7-8.5-7z"/>
+            <text x="12" y="11.3" text-anchor="middle" dominant-baseline="middle" font-family="Arial,sans-serif" font-size="4.5" font-weight="700" fill="currentColor" stroke="none">LINE</text>
+          </svg>
+        </a>
+        <a class="footer-social" href="mailto:klaobuiltin.th@gmail.com" aria-label="Gmail">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="#4285F4" d="M2 7v12h4V10z"/>
+            <path fill="#34A853" d="M18 10v9h4V7z"/>
+            <path fill="#FBBC04" d="M18 10l4-3V5a2 2 0 0 0-3.2-1.6L18 4.3z"/>
+            <path fill="#EA4335" d="M6 4.3L12 9l6-4.7V10l-6 4.7L6 10z"/>
+            <path fill="#C5221F" d="M2 5v2l4 3V4.3l-.8-.9A2 2 0 0 0 2 5z"/>
+          </svg>
+        </a>
+        <button type="button" class="footer-social footer-social--instagram" aria-label="Instagram — ยังไม่เปิดใช้งาน" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="none" stroke="currentColor" stroke-width="1.8" d="M7.5 3.5h9a4 4 0 0 1 4 4v9a4 4 0 0 1-4 4h-9a4 4 0 0 1-4-4v-9a4 4 0 0 1 4-4Z"/>
+            <circle cx="12" cy="12" r="3.4" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="17.2" cy="6.9" r="1"/>
+          </svg>
+        </button>
+        <button type="button" class="footer-social footer-social--tiktok" aria-label="TikTok — ยังไม่เปิดใช้งาน" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M14.4 3.2h2.7c.2 1.8 1.3 3.1 3.1 3.6v2.7a7.4 7.4 0 0 1-3.1-1v6.2a5.5 5.5 0 1 1-5.5-5.5c.4 0 .8 0 1.2.1V12a3 3 0 1 0 1.6 2.7V3.2z"/>
+          </svg>
+        </button>
+        <button type="button" class="footer-social footer-social--whatsapp" aria-label="WhatsApp — ยังไม่เปิดใช้งาน" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2a8.7 8.7 0 0 0-7.5 13.1L3.2 20.8l4.7-1.2A8.7 8.7 0 1 0 12 3.2Zm0 15.8a7.1 7.1 0 0 1-3.6-1l-.3-.2-2.8.7.7-2.7-.2-.3A7.1 7.1 0 1 1 12 19Zm3.9-5.3c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.7.9-.3.2-.5.1a5.8 5.8 0 0 1-1.7-1.1 6.2 6.2 0 0 1-1.2-1.5c-.1-.2 0-.4.1-.5l.4-.4c.1-.1.1-.2.2-.4 0-.1 0-.3 0-.4l-.8-1.8c-.2-.4-.4-.3-.5-.3h-.5c-.2 0-.4.1-.6.3s-.8.8-.8 1.9.8 2.1.9 2.3a8.7 8.7 0 0 0 3.4 3c.5.2.9.4 1.2.5.5.2 1 .2 1.3.1.4-.1 1.4-.6 1.6-1.2s.2-1.1.1-1.2-.2-.2-.4-.3Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <div class="footer-top">© 2026 KLAO BUILT IN All RIGHT RESERVED</div>
+</footer>
+<button type="button" class="page-overlay" id="pageOverlay" tabindex="-1" aria-label="ปิดเมนู"></button>
+</div>
+</body>
+</html>

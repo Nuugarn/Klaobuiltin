@@ -1656,17 +1656,34 @@
 
 </style>
 <link rel="stylesheet" href="navigation.css?v=20261020b">
+<style>
+  /* Homepage navigation preview: keep shared navigation unchanged. */
+  :root { --header-height: 72px; }
+  .site-header {
+    transition: transform .28s ease, background .28s ease, box-shadow .28s ease;
+    will-change: transform;
+  }
+  .site-header.header-glass {
+    background: rgba(250, 248, 245, .78);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    backdrop-filter: blur(16px) saturate(1.2);
+  }
+  .site-header.header-hidden {
+    transform: translateY(-100%);
+    pointer-events: none;
+  }
+</style>
 <script src="navigation.js?v=20261020" defer></script>
 </head>
 <body>
 <nav class="drawer navigation-drawer" id="drawer" role="dialog" aria-modal="true" aria-label="เมนูหลัก" tabindex="-1">
 <div class="nav-drawer-heading"><span>เมนู</span><button class="nav-close" type="button" aria-label="ปิดเมนู">×</button></div>
 <div class="nav-drawer-links"><a href="index.html#home-view" aria-current="page">หน้าแรก</a>
-<a href="index.html#about">เกี่ยวกับเรา</a>
-<a href="index.html#work">เยี่ยมชมผลงาน</a>
+<a href="about.html">เกี่ยวกับเรา</a>
+<a href="portfolio.html">เยี่ยมชมผลงาน</a>
 <a href="articles.html">บทความ</a>
 <a href="faq.html">FAQ</a>
-<a href="index.html#contact">ติดต่อเรา</a></div>
+<a href="contact.html">ติดต่อเรา</a></div>
 <a class="nav-cta" href="https://line.me/R/ti/p/@380tjpje" target="_blank" rel="noopener">ปรึกษาเรา</a>
 </nav>
 
@@ -1687,11 +1704,11 @@
     <a class="site-logo" href="index.html#home-view" aria-label="KLAO — หน้าแรก"><img src="data:image/png;base64,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" alt="KLAO BUILT-IN CUSTOM"></a>
   </div>
   <div class="header-zone--center"><nav class="desktop-navigation" aria-label="เมนูหลัก"><a href="index.html#home-view" aria-current="page">หน้าแรก</a>
-<a href="index.html#about">เกี่ยวกับเรา</a>
-<a href="index.html#work">เยี่ยมชมผลงาน</a>
+<a href="about.html">เกี่ยวกับเรา</a>
+<a href="portfolio.html">เยี่ยมชมผลงาน</a>
 <a href="articles.html">บทความ</a>
 <a href="faq.html">FAQ</a>
-<a href="index.html#contact">ติดต่อเรา</a></nav><a class="nav-cta desktop-cta" href="https://line.me/R/ti/p/@380tjpje" target="_blank" rel="noopener">ปรึกษาเรา</a></div>
+<a href="contact.html">ติดต่อเรา</a></nav><a class="nav-cta desktop-cta" href="https://line.me/R/ti/p/@380tjpje" target="_blank" rel="noopener">ปรึกษาเรา</a></div>
   <div class="header-zone--right">
     <div class="ltw" id="langThemeWidget">
       <div class="ltw-capsule">
@@ -1711,7 +1728,7 @@
 </header>
 
 
-<div id="home-view">
+<main id="home-view">
 <section class="hero" aria-label="ภาพงานตกแต่งภายใน" tabindex="-1">
   <div class="hero-viewport" id="hero-images">
     <img class="hero-slide is-active" src="https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_1800/f_auto/q_auto/brewed-for-comfort.jpg" width="1679" height="937" fetchpriority="high" alt="เคาน์เตอร์ร้านกาแฟและที่นั่งไม้ พร้อมข้อความ Brewed For Comfort, Where Great Coffee Meets Great Design, SEE MORE และโลโก้ KLAO" aria-hidden="false">
@@ -1848,14 +1865,13 @@
         let current = 0;
         let timer = 0;
         let persistentPause = reducedMotion.matches;
-        let hovered = false;
         let visible = false;
         let ready = false;
         let transition = null;
         function clearDwell() { clearTimeout(timer); timer = 0; }
         function scheduleDwell() {
           clearDwell();
-          if (ready && !persistentPause && !hovered && visible
+          if (ready && !persistentPause && visible
               && !document.hidden && !reducedMotion.matches && !transition) {
             timer = setTimeout(function () { showSlide(1, false); }, 3500);
           }
@@ -1880,8 +1896,8 @@
           scheduleDwell();
         }
         function showSlide(direction, manual) {
-          // Manual navigation starts a fresh dwell, even while the mouse stays here.
-          if (manual) { clearDwell(); finishSlide(); hovered = false; }
+          // Manual navigation starts a fresh dwell.
+          if (manual) { clearDwell(); finishSlide(); }
           if (!ready || transition) return;
           clearDwell();
           const target = (current + direction + slides.length) % slides.length;
@@ -1905,10 +1921,6 @@
         function suspendHiddenMotion() {
           heroCopy.style.animationPlayState = !visible || document.hidden ? 'paused' : 'running';
         }
-        hero.addEventListener('pointerenter', function (event) {
-          if (event.pointerType === 'mouse') { hovered = true; clearDwell(); }
-        });
-        hero.addEventListener('pointerleave', function () { hovered = false; scheduleDwell(); });
         document.addEventListener('visibilitychange', function () {
           clearDwell();
           if (document.hidden) finishSlide();
@@ -2133,7 +2145,7 @@
           <span>ห้องนั่งเล่น</span>
         </span>
       </a>
-      <div class="space-card space-card--static">
+      <a class="space-card" href="spa.html">
         <!-- Placeholder stock image; replace with an owner-approved KLAO project image. -->
         <img src="https://images.unsplash.com/photo-1745327883290-1e9c6447b938?w=900&q=80&auto=format&fit=crop" alt="บรรยากาศห้องสปา">
         <span class="space-card-label">
@@ -2142,9 +2154,9 @@
           </svg>
           <span>ร้านสปา</span>
         </span>
-      </div>
+      </a>
       <!-- Free stock reference photos for local layout review; not verified KLAO project work. -->
-      <div class="space-card space-card--static" data-image-status="temporary-stock-reference" data-image-source="https://unsplash.com/photos/walk-in-closet-with-wooden-shelves-eS5kmDAIhbw" data-image-license="Unsplash License">
+      <a class="space-card" href="dressing-room.html" data-image-status="temporary-stock-reference" data-image-source="https://unsplash.com/photos/walk-in-closet-with-wooden-shelves-eS5kmDAIhbw" data-image-license="Unsplash License">
         <img src="https://images.unsplash.com/photo-1791140842017-ff731195de5c?w=900&q=80&auto=format&fit=crop" alt="ภาพอ้างอิงห้องแต่งตัวแบบวอล์กอิน">
         <span class="space-card-label">
           <svg class="space-card-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -2152,8 +2164,8 @@
           </svg>
           <span>ห้องแต่งตัว</span>
         </span>
-      </div>
-      <div class="space-card space-card--static" data-image-status="temporary-stock-reference" data-image-source="https://unsplash.com/photos/a-dining-room-with-a-table-and-chairs-aYjdg6wZrOU" data-image-license="Unsplash License">
+      </a>
+      <a class="space-card" href="dining-room.html" data-image-status="temporary-stock-reference" data-image-source="https://unsplash.com/photos/a-dining-room-with-a-table-and-chairs-aYjdg6wZrOU" data-image-license="Unsplash License">
         <img src="https://images.unsplash.com/photo-1723750290151-164cb19ebab7?w=900&q=80&auto=format&fit=crop" alt="ภาพอ้างอิงห้องรับประทานอาหารพร้อมโต๊ะและเก้าอี้">
         <span class="space-card-label">
           <svg class="space-card-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -2161,8 +2173,8 @@
           </svg>
           <span>ห้องรับประทานอาหาร</span>
         </span>
-      </div>
-      <div class="space-card space-card--static" data-image-status="temporary-stock-reference" data-image-source="https://unsplash.com/photos/a-modern-home-office-desk-setup-with-a-computer-and-chair-xk8dimKIAaY" data-image-license="Unsplash License">
+      </a>
+      <a class="space-card" href="home-office.html" data-image-status="temporary-stock-reference" data-image-source="https://unsplash.com/photos/a-modern-home-office-desk-setup-with-a-computer-and-chair-xk8dimKIAaY" data-image-license="Unsplash License">
         <img src="https://images.unsplash.com/photo-1755436612165-56c6bfa5218b?w=900&q=80&auto=format&fit=crop" alt="ภาพอ้างอิงห้องทำงานภายในบ้านพร้อมโต๊ะคอมพิวเตอร์">
         <span class="space-card-label">
           <svg class="space-card-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -2170,9 +2182,9 @@
           </svg>
           <span>ห้องทำงาน</span>
         </span>
-      </div>
+      </a>
       <!-- Owner-provided image; KLAO project attribution has not been verified. -->
-      <div class="space-card space-card--static" data-image-status="owner-provided-reference">
+      <a class="space-card" href="prayer-room.html" data-image-status="owner-provided-reference">
         <img src="images/prayer-room-card.png" alt="ห้องพระโทนขาวทอง มีแท่นพระพุทธรูปและผนังลายหินอ่อน">
         <span class="space-card-label">
           <svg class="space-card-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -2180,8 +2192,8 @@
           </svg>
           <span>ห้องพระ</span>
         </span>
-      </div>
-      <div class="space-card space-card--static" data-image-status="temporary-stock-reference" data-image-source="https://unsplash.com/photos/black-flat-screen-tv-on-white-wooden-tv-rack-Y6HuHkhrKYU" data-image-license="Unsplash License">
+      </a>
+      <a class="space-card" href="tv-unit.html" data-image-status="temporary-stock-reference" data-image-source="https://unsplash.com/photos/black-flat-screen-tv-on-white-wooden-tv-rack-Y6HuHkhrKYU" data-image-license="Unsplash License">
         <img src="https://images.unsplash.com/photo-1584280795027-321f4d68e77b?w=900&q=80&auto=format&fit=crop" alt="ภาพอ้างอิงชั้นวางทีวีในห้องนั่งเล่น">
         <span class="space-card-label">
           <svg class="space-card-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -2189,8 +2201,8 @@
           </svg>
           <span>ชั้นวางทีวี</span>
         </span>
-      </div>
-      <div class="space-card space-card--static" data-image-status="temporary-stock-reference" data-image-source="https://unsplash.com/photos/a-living-room-with-a-couch-and-a-lamp-ZJ8HljaDeE0" data-image-license="Unsplash License">
+      </a>
+      <a class="space-card" href="wall-decoration.html" data-image-status="temporary-stock-reference" data-image-source="https://unsplash.com/photos/a-living-room-with-a-couch-and-a-lamp-ZJ8HljaDeE0" data-image-license="Unsplash License">
         <img src="https://images.unsplash.com/photo-1701421052598-1e7ed40f668e?w=900&q=80&auto=format&fit=crop" alt="ภาพอ้างอิงงานกรุและตกแต่งผนังภายใน">
         <span class="space-card-label">
           <svg class="space-card-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -2198,9 +2210,9 @@
           </svg>
           <span>ตกแต่งผนัง</span>
         </span>
-      </div>
+      </a>
       <!-- Owner-provided image; KLAO project attribution has not been verified. -->
-      <div class="space-card space-card--static" data-image-status="owner-provided-reference">
+      <a class="space-card" href="display-cabinet.html" data-image-status="owner-provided-reference">
         <img src="images/display-cabinet-card.png" alt="ตู้โชว์กระจกสีขาวขอบทองพร้อมไฟส่องสว่างภายใน">
         <span class="space-card-label">
           <svg class="space-card-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -2208,8 +2220,8 @@
           </svg>
           <span>ตู้โชว์</span>
         </span>
-      </div>
-      <div class="space-card space-card--static" data-image-status="temporary-stock-reference" data-image-source="https://unsplash.com/photos/inside-condominium-unit-cHjAxnJk_wQ" data-image-license="Unsplash License">
+      </a>
+      <a class="space-card" href="condo.html" data-image-status="temporary-stock-reference" data-image-source="https://unsplash.com/photos/inside-condominium-unit-cHjAxnJk_wQ" data-image-license="Unsplash License">
         <img src="https://images.unsplash.com/photo-1565623833408-d77e39b88af6?w=900&q=80&auto=format&fit=crop" alt="ภาพอ้างอิงการตกแต่งภายในคอนโด">
         <span class="space-card-label">
           <svg class="space-card-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -2217,13 +2229,13 @@
           </svg>
           <span>คอนโด</span>
         </span>
-      </div>
+      </a>
     </div>
   </section>
 </div>
 </div>
 
-</div><!-- /#home-view -->
+</main><!-- /#home-view -->
 <section class="contact" id="contact">
   <div class="wrap">
     <div class="contact-inner">
@@ -2391,7 +2403,36 @@
     const io = new IntersectionObserver((entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold: 0.15 });
     revealEls.forEach(el => io.observe(el));
   }
-  window.addEventListener('scroll', () => document.body.classList.toggle('sticky-header', (window.scrollY||0)>8), {passive:true});
+  const homeHeader = document.querySelector('.site-header');
+  let lastHeaderScrollY = Math.max(0, window.scrollY || 0);
+  let headerDirection = 0;
+  let headerTravel = 0;
+  function updateHomeHeader() {
+    const y = Math.max(0, window.scrollY || 0);
+    const delta = y - lastHeaderScrollY;
+    lastHeaderScrollY = y;
+    document.body.classList.toggle('sticky-header', y > 8);
+    homeHeader.classList.toggle('header-glass', y > 24);
+    if (y < 160 || document.body.classList.contains('menu-open') || homeHeader.contains(document.activeElement)) {
+      homeHeader.classList.remove('header-hidden');
+      headerTravel = 0;
+      headerDirection = 0;
+      return;
+    }
+    const nextDirection = Math.sign(delta);
+    if (!nextDirection) return;
+    if (nextDirection !== headerDirection) {
+      headerDirection = nextDirection;
+      headerTravel = 0;
+    }
+    headerTravel += Math.abs(delta);
+    if (headerTravel < 14) return;
+    homeHeader.classList.toggle('header-hidden', headerDirection > 0);
+    headerTravel = 0;
+  }
+  window.addEventListener('scroll', updateHomeHeader, { passive: true });
+  homeHeader.addEventListener('focusin', () => homeHeader.classList.remove('header-hidden'));
+  updateHomeHeader();
 
 
 </script>
