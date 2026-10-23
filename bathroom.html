@@ -13,13 +13,13 @@
 <style>
 
   :root {
-    --plaster: #EDE8E0;
-    --plaster-deep: #E2DCD1;
+    --plaster: #FFFFFF;
+    --plaster-deep: #FFFFFF;
     --ink: #1C1A17;
     --teak: #8B7355;
     --pine: #3A4A3F;
     --line: #C9C2B5;
-    --white: #FAF8F5;
+    --white: #FFFFFF;
     --gold: #C6A15B;
     --gold-dim: #8A7040;
     --header-height: 70px;
@@ -570,16 +570,23 @@
   .gallery {
     padding: clamp(32px, 5vw, 56px) 0 clamp(64px, 8vw, 120px);
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: clamp(14px, 2vw, 24px);
+  }
+
+  @media (max-width: 860px) {
+    .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 480px) {
+    .gallery { grid-template-columns: minmax(0, 1fr); }
   }
 
   .project {
     position: relative;
     overflow: hidden;
+    border-radius: 18px;
     background: var(--plaster-deep);
     cursor: pointer;
-    grid-column: span 3;
     aspect-ratio: 4/3;
     opacity: 1;
     transform: scale(1);
@@ -589,13 +596,6 @@
   .project.hidden {
     display: none;
   }
-
-  .project:nth-child(6n+1) { grid-column: span 4; aspect-ratio: 5/4; }
-  .project:nth-child(6n+2) { grid-column: span 2; aspect-ratio: 3/4; }
-  .project:nth-child(6n+3) { grid-column: span 2; aspect-ratio: 3/4; }
-  .project:nth-child(6n+4) { grid-column: span 4; aspect-ratio: 16/9; }
-  .project:nth-child(6n+5) { grid-column: span 3; aspect-ratio: 4/5; }
-  .project:nth-child(6n+6) { grid-column: span 3; aspect-ratio: 4/5; }
 
   .project img {
     width: 100%;
@@ -695,7 +695,7 @@
     max-width: 220px;
     aspect-ratio: 4 / 3;
     border-radius: 12px;
-    background: #F5F5F3;
+    background: #FFFFFF;
     border: 1px solid rgba(74, 74, 72, 0.1);
     display: block;
     overflow: hidden;
@@ -796,7 +796,7 @@
     overflow: hidden;
     border-radius: 4px;
     margin: 28px 0 12px;
-    background: #EDE8E0;
+    background: #FFFFFF;
   }
 
   .space-view-hero-wrap img,
@@ -842,7 +842,7 @@
 
   /* ---------- Contact ---------- */
   .contact {
-    background: #F3F3F1;
+    background: #FFFFFF;
     padding: clamp(56px, 8vw, 96px) 0 clamp(48px, 7vw, 80px);
   }
 
@@ -944,7 +944,7 @@
   }
 
   footer {
-    background: #F3F3F1;
+    background: #FFFFFF;
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -1113,13 +1113,6 @@
   /* ---------- Mobile ---------- */
   @media (max-width: 720px) {
     .hero-foot { flex-direction: column; align-items: flex-start; }
-    .gallery { grid-template-columns: 1fr 1fr; }
-    .project, .project:nth-child(6n+1), .project:nth-child(6n+2),
-    .project:nth-child(6n+3), .project:nth-child(6n+4),
-    .project:nth-child(6n+5), .project:nth-child(6n+6) {
-      grid-column: span 1;
-      aspect-ratio: 4/5;
-    }
     .stats { flex-wrap: wrap; row-gap: 20px; }
   }
 
@@ -1248,8 +1241,8 @@
   .project { cursor: pointer; }
 
 </style>
-<link rel="stylesheet" href="navigation.css">
-<script src="navigation.js" defer></script>
+<link rel="stylesheet" href="navigation.css?v=20261023-white">
+<script src="navigation.js?v=20261023" defer></script>
 </head>
 <body>
 
@@ -1463,7 +1456,6 @@
     );
     revealEls.forEach(el => io.observe(el));
   }
-  window.addEventListener('scroll', () => document.body.classList.toggle('sticky-header', (window.scrollY || 0) > 8), { passive: true });
 
 
 </script>

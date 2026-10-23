@@ -2,6 +2,27 @@
 (function () {
  const trigger=document.querySelector('.hamburger-btn'), drawer=document.getElementById('drawer'), overlay=document.getElementById('pageOverlay'), closeButton=drawer.querySelector('.nav-close');
  let returnFocus=null;
+ const header=document.querySelector('.site-header');
+ let lastHeaderScrollY=Math.max(0,window.scrollY || 0), headerDirection=0, headerTravel=0;
+ function updateHeader() {
+  const y=Math.max(0,window.scrollY || 0), delta=y-lastHeaderScrollY;
+  lastHeaderScrollY=y;
+  document.body.classList.toggle('sticky-header',y>8);
+  header.classList.toggle('header-glass',y>24);
+  if(y<160 || document.body.classList.contains('menu-open') || header.contains(document.activeElement)) {
+   header.classList.remove('header-hidden'); headerTravel=0; headerDirection=0; return;
+  }
+  const direction=Math.sign(delta);
+  if(!direction) return;
+  if(direction!==headerDirection) { headerDirection=direction; headerTravel=0; }
+  headerTravel+=Math.abs(delta);
+  if(headerTravel<14) return;
+  header.classList.toggle('header-hidden',headerDirection>0);
+  headerTravel=0;
+ }
+ window.addEventListener('scroll',updateHeader,{passive:true});
+ header.addEventListener('focusin',()=>header.classList.remove('header-hidden'));
+ updateHeader();
  const focusable=()=>Array.from(drawer.querySelectorAll('a[href],button:not([disabled])'));
  function close() {
   if(!document.body.classList.contains('menu-open')) return;
@@ -13,6 +34,7 @@
   returnFocus=document.activeElement;
   document.body.classList.add('menu-open'); document.documentElement.classList.add('menu-open');
   trigger.setAttribute('aria-expanded','true');
+  updateHeader();
   // Apply visible styles before moving keyboard focus into the drawer.
   drawer.getBoundingClientRect();
   closeButton.focus();
@@ -62,7 +84,7 @@
    else if(!event.shiftKey && (document.activeElement===last || !drawer.contains(document.activeElement))) { event.preventDefault(); first.focus(); }
   }
  });
- window.matchMedia('(min-width:1024px)').addEventListener('change',event=>{if(event.matches) close();});
+ window.matchMedia('(min-width:840px)').addEventListener('change',event=>{if(event.matches) close();});
 })();
 if(document.getElementById('langThemeWidget')) {
   /* Language + Theme widget (vanilla port of LanguageThemeWidget) */

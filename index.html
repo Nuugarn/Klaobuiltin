@@ -12,13 +12,13 @@
 <style>
 
   :root {
-    --plaster: #EDE8E0;
-    --plaster-deep: #E2DCD1;
+    --plaster: #FFFFFF;
+    --plaster-deep: #FFFFFF;
     --ink: #1C1A17;
     --teak: #8B7355;
     --pine: #3A4A3F;
     --line: #C9C2B5;
-    --white: #FAF8F5;
+    --white: #FFFFFF;
     --gold: #C6A15B;
     --gold-dim: #8A7040;
     --header-height: 70px;
@@ -718,7 +718,7 @@
     height: 24px;
     border: 1px solid #8B7355;
     border-radius: 50%;
-    background: #FAF8F5;
+    background: #FFFFFF;
   }
   .hero-control svg {
     position: relative;
@@ -732,7 +732,7 @@
   .hero-control:focus-visible {
     outline: 3px solid #3A4A3F;
     outline-offset: 3px;
-    box-shadow: 0 0 0 7px #FAF8F5;
+    box-shadow: 0 0 0 7px #FFFFFF;
   }
   .hero-status {
     position: absolute;
@@ -804,7 +804,7 @@
     border: 1px solid rgba(139, 115, 85, 0.6);
     border-radius: 50%;
     background: radial-gradient(ellipse at 30% 18%, #FFFFFF,
-      rgba(255, 255, 255, 0.6) 27%, rgba(255, 255, 255, 0) 65%), #EDE8E0;
+      rgba(255, 255, 255, 0.6) 27%, rgba(255, 255, 255, 0) 65%), #FFFFFF;
     box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.95),
       inset 0 -3px 5px rgba(139, 115, 85, 0.24), 0 4px 12px rgba(28, 26, 23, 0.18);
     cursor: pointer;
@@ -1106,7 +1106,7 @@
     position: relative;
     display: block;
     height: 218px;
-    border-radius: 8px;
+    border-radius: 18px;
     overflow: hidden;
     background: var(--ink);
     cursor: pointer;
@@ -1298,7 +1298,7 @@
 
   /* ---------- Contact ---------- */
   .contact {
-    background: #F3F3F1;
+    background: #FFFFFF;
     padding: clamp(48px, 8vw, 100px) 0;
     color: #4A4A48;
   }
@@ -1655,25 +1655,8 @@
   }
 
 </style>
-<link rel="stylesheet" href="navigation.css?v=20261020b">
-<style>
-  /* Homepage navigation preview: keep shared navigation unchanged. */
-  :root { --header-height: 72px; }
-  .site-header {
-    transition: transform .28s ease, background .28s ease, box-shadow .28s ease;
-    will-change: transform;
-  }
-  .site-header.header-glass {
-    background: rgba(250, 248, 245, .78);
-    -webkit-backdrop-filter: blur(16px) saturate(1.2);
-    backdrop-filter: blur(16px) saturate(1.2);
-  }
-  .site-header.header-hidden {
-    transform: translateY(-100%);
-    pointer-events: none;
-  }
-</style>
-<script src="navigation.js?v=20261020" defer></script>
+<link rel="stylesheet" href="navigation.css?v=20261023-white">
+<script src="navigation.js?v=20261023" defer></script>
 </head>
 <body>
 <nav class="drawer navigation-drawer" id="drawer" role="dialog" aria-modal="true" aria-label="เมนูหลัก" tabindex="-1">
@@ -2403,36 +2386,6 @@
     const io = new IntersectionObserver((entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold: 0.15 });
     revealEls.forEach(el => io.observe(el));
   }
-  const homeHeader = document.querySelector('.site-header');
-  let lastHeaderScrollY = Math.max(0, window.scrollY || 0);
-  let headerDirection = 0;
-  let headerTravel = 0;
-  function updateHomeHeader() {
-    const y = Math.max(0, window.scrollY || 0);
-    const delta = y - lastHeaderScrollY;
-    lastHeaderScrollY = y;
-    document.body.classList.toggle('sticky-header', y > 8);
-    homeHeader.classList.toggle('header-glass', y > 24);
-    if (y < 160 || document.body.classList.contains('menu-open') || homeHeader.contains(document.activeElement)) {
-      homeHeader.classList.remove('header-hidden');
-      headerTravel = 0;
-      headerDirection = 0;
-      return;
-    }
-    const nextDirection = Math.sign(delta);
-    if (!nextDirection) return;
-    if (nextDirection !== headerDirection) {
-      headerDirection = nextDirection;
-      headerTravel = 0;
-    }
-    headerTravel += Math.abs(delta);
-    if (headerTravel < 14) return;
-    homeHeader.classList.toggle('header-hidden', headerDirection > 0);
-    headerTravel = 0;
-  }
-  window.addEventListener('scroll', updateHomeHeader, { passive: true });
-  homeHeader.addEventListener('focusin', () => homeHeader.classList.remove('header-hidden'));
-  updateHomeHeader();
 
 
 </script>

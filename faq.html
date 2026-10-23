@@ -3,13 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="คำถามที่พบบ่อยเกี่ยวกับการเตรียมพื้นที่ วัสดุ การประเมินราคา และระยะเวลางานบิลต์อิน">
 <link rel="icon" type="image/svg+xml" href="favicon.svg" sizes="any">
 <title>KLAO — FAQ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Mitr:wght@500;600;700&family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="navigation.css">
-<link rel="stylesheet" href="destination-pages.css">
-<script src="navigation.js" defer></script>
+<link rel="stylesheet" href="navigation.css?v=20261023-white">
+<link rel="stylesheet" href="destination-pages.css?v=20261023-white">
+<link rel="stylesheet" href="page-refinements.css?v=20261023-r3">
+<script src="navigation.js?v=20261023" defer></script>
 </head>
 <body data-destination>
 <nav class="drawer navigation-drawer" id="drawer" role="dialog" aria-modal="true" aria-label="เมนูหลัก" tabindex="-1">
@@ -57,8 +59,19 @@
   </div>
   <div class="ltw-toast" id="ltwToast" role="status" aria-live="polite"></div>
 </header>
-<main class="destination-content" id="main-content">
-<header class="page-intro"><h1>FAQ</h1><p class="page-lead">คำถามเบื้องต้นก่อนเริ่มวางแผนงานบิลต์อิน</p></header><section class="page-block page-faq"><details><summary>ควรเตรียมอะไรเพื่อเริ่มคุยเรื่องงาน</summary><p>แปลนหรือขนาดพื้นที่ รูปหน้างาน รายการของที่ต้องเก็บ และภาพแนวทางที่ชอบช่วยให้เริ่มคุยได้ชัดขึ้น</p></details><details><summary>ยังไม่มีขนาดพื้นที่แน่นอน ปรึกษาได้ไหม</summary><p>ได้ คุณสามารถเล่าลักษณะพื้นที่และความต้องการก่อน แล้วค่อยเติมขนาดจริงเมื่อมีข้อมูล</p></details><details><summary>เลือกวัสดุอย่างไร</summary><p>พิจารณาตำแหน่งใช้งาน ความชื้น การดูแลรักษา และงบประมาณร่วมกัน วัสดุที่เหมาะขึ้นอยู่กับพื้นที่จริง</p></details><details><summary>ใช้เวลาทำงานเท่าไร</summary><p>ระยะเวลาขึ้นอยู่กับแบบ ขนาดพื้นที่ วัสดุ และคิวงาน ควรสรุปขอบเขตก่อนจึงจะประเมินได้</p></details><details><summary>ประเมินราคาได้จากอะไร</summary><p>ข้อมูลขนาดพื้นที่ รูปแบบตู้ วัสดุ อุปกรณ์ และความซับซ้อนของการติดตั้งเป็นส่วนสำคัญในการประเมิน</p></details><details><summary>มีภาพทุกหมวดงานหรือไม่</summary><p>บางหมวดยังไม่มีภาพบนเว็บไซต์ หน้าเหล่านั้นจะแสดงข้อความ “ยังไม่มีรูปในหมวดนี้” จนกว่าจะมีภาพที่พร้อมเผยแพร่</p></details></section><section class="page-block"><h2>มีเรื่องที่อยากถามเพิ่ม</h2><p>ส่งรายละเอียดพื้นที่และสิ่งที่ต้องการมาพูดคุยได้</p><a class="page-action" href="contact.html">ดูช่องทางติดต่อ</a></section>
+<main class="destination-content destination-designed faq-page" id="main-content">
+<header class="faq-hero" data-image-status="temporary-stock-reference" data-image-source="https://images.unsplash.com/photo-1565623833408-d77e39b88af6">
+  <div class="faq-hero-copy"><span class="faq-hero-label" lang="en">FAQ</span><h1>คำถามที่พบบ่อย</h1><p>รู้รายละเอียดให้ชัด ก่อนเริ่มงานบิลต์อินของคุณ<br>เลือกอ่านคำตอบ หรือคุยกับเราเรื่องพื้นที่ที่คุณกำลังวางแผน</p><a class="page-action" href="contact.html">ติดต่อเรา<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a></div>
+</header>
+<div class="faq-content">
+<div class="faq-layout"><nav class="faq-index" aria-label="หมวดคำถาม"><a href="#getting-started">เริ่มต้นและเตรียมพื้นที่</a><a href="#materials">วัสดุและการใช้งาน</a><a href="#budget">ราคาและระยะเวลา</a></nav><div><section class="faq-group" id="getting-started" aria-labelledby="getting-started-title"><h2 id="getting-started-title">เริ่มต้นและเตรียมพื้นที่</h2><div class="page-faq"><details><summary>ควรเตรียมอะไรเพื่อเริ่มคุยเรื่องงาน</summary><p>แปลนหรือขนาดพื้นที่ รูปหน้างาน รายการของที่ต้องเก็บ และภาพแนวทางที่ชอบช่วยให้เริ่มคุยได้ชัดขึ้น หากมีเครื่องใช้ไฟฟ้าที่ต้องติดตั้งร่วมกัน ควรเตรียมรุ่นและขนาดมาด้วย</p></details>
+<details><summary>ยังไม่มีขนาดพื้นที่แน่นอน ปรึกษาได้ไหม</summary><p>ได้ คุณสามารถเล่าลักษณะพื้นที่และความต้องการก่อน แล้วค่อยเติมขนาดจริงเมื่อมีข้อมูล ขนาดและสภาพหน้างานต้องตรวจให้ชัดก่อนสรุปแบบผลิต</p></details>
+<details><summary>มีภาพทุกหมวดงานหรือไม่</summary><p>บางหมวดยังไม่มีภาพผลงานเพิ่มเติม หน้าเหล่านั้นจะแสดงสถานะไว้ บางหมวดใช้ภาพอ้างอิงเพื่อสื่อแนวทางของงาน</p></details></div></section><section class="faq-group" id="materials" aria-labelledby="materials-title"><h2 id="materials-title">วัสดุและการใช้งาน</h2><div class="page-faq"><details><summary>เลือกวัสดุอย่างไร</summary><p>พิจารณาตำแหน่งใช้งาน ความชื้น ความร้อน การดูแลรักษา และงบประมาณร่วมกัน วัสดุที่เหมาะขึ้นอยู่กับพื้นที่จริง จึงควรคุยเรื่องการใช้งานควบคู่กับสีและผิวที่ชอบ</p></details>
+<details><summary>ควรวางแผนช่องเก็บของจากอะไร</summary><p>เริ่มจากขนาดของที่ต้องเก็บ ความถี่ในการหยิบใช้ และระยะเปิดหน้าบานหรือลิ้นชัก รวมถึงช่องระบายอากาศและทางเดินสายของอุปกรณ์ที่จะติดตั้งร่วมกัน</p></details></div></section><section class="faq-group" id="budget" aria-labelledby="budget-title"><h2 id="budget-title">ราคาและระยะเวลา</h2><div class="page-faq"><details><summary>ประเมินราคาได้จากอะไร</summary><p>ข้อมูลขนาดพื้นที่ รูปแบบตู้ วัสดุ อุปกรณ์ และความซับซ้อนของการติดตั้งเป็นส่วนสำคัญในการประเมิน ส่งข้อมูลที่มีมาเริ่มคุยได้ แล้วจึงสรุปรายละเอียดและราคาตามขอบเขตงาน</p></details>
+<details><summary>ใช้เวลาทำงานเท่าไร</summary><p>ระยะเวลาขึ้นอยู่กับแบบ ขนาดพื้นที่ วัสดุ และคิวงาน ควรสรุปขอบเขตก่อนจึงจะประเมินได้ และยืนยันกำหนดการของแต่ละงานก่อนเริ่มดำเนินการ</p></details>
+<details><summary>ควรคุยเรื่องอะไรให้ชัดก่อนเริ่มงาน</summary><p>ควรสรุปแบบ วัสดุ อุปกรณ์ ขอบเขตการติดตั้ง ค่าใช้จ่าย กำหนดการ และเงื่อนไขดูแลหลังส่งมอบร่วมกัน โดยยึดรายละเอียดในข้อตกลงของงานนั้น</p></details></div></section></div></div>
+<section class="destination-callout"><div><h2>ยังมีเรื่องที่อยากถาม?</h2><p>เล่าลักษณะพื้นที่และสิ่งที่กังวลให้เราฟัง เพื่อคุยรายละเอียดของงานคุณโดยตรง</p></div><a class="page-action" href="contact.html">ดูช่องทางติดต่อ<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a></section>
+</div>
 </main>
 <section class="contact" id="contact">
   <div class="wrap">
