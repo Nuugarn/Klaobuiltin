@@ -1,0 +1,246 @@
+.consult-story {
+  overflow: hidden;
+  background: #eef1ea;
+  color: #1c2921;
+}
+.consult-story__inner {
+  min-height: 690px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, .85fr);
+  align-items: center;
+  gap: clamp(48px, 8vw, 130px);
+  padding-top: clamp(80px, 9vw, 130px);
+  padding-bottom: clamp(80px, 9vw, 130px);
+}
+.consult-story__copy { position: relative; isolation: isolate; max-width: 570px; }
+.consult-story__copy::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  width: clamp(230px, 32vw, 420px);
+  aspect-ratio: 1;
+  top: 50%;
+  left: -12%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(151, 186, 150, .25), rgba(151, 186, 150, 0) 68%);
+  transform: translateY(-50%);
+  animation: consult-glow 7s ease-in-out infinite;
+  pointer-events: none;
+}
+.consult-story__eyebrow {
+  color: #536b5a;
+  font: 500 12px/1.5 'JetBrains Mono', monospace;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.consult-story__eyebrow::before {
+  content: '';
+  width: 38px;
+  height: 2px;
+  background: #789a79;
+  transform-origin: left;
+  animation: consult-line 3.5s ease-in-out infinite;
+}
+.consult-story h2 {
+  margin: 24px 0 20px;
+  font: 500 clamp(36px, 4.1vw, 60px)/1.27 'Kanit', sans-serif;
+  letter-spacing: -.035em;
+}
+.consult-story h2 span {
+  color: #467052;
+  background: linear-gradient(105deg, #274b34 10%, #6a9870 48%, #274b34 80%);
+  background-size: 220% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: consult-title 7s ease-in-out infinite;
+}
+.consult-story__copy > p:not(.consult-story__eyebrow) {
+  max-width: 38ch;
+  color: #526057;
+  font: 400 clamp(16px, 1.2vw, 18px)/1.85 'Kanit', sans-serif;
+}
+.consult-story__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 32px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  background: #233e2d;
+  color: #fff;
+  font: 500 15px/1.5 'Kanit', sans-serif;
+  transition: background .2s, transform .2s;
+}
+.consult-story__link:hover { background: #365d43; transform: translateY(-2px); }
+.consult-story__link span { font-size: 20px; line-height: 1; animation: consult-arrow 2.4s ease-in-out infinite; }
+.consult-story__copy.is-reveal-ready > * {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .65s ease, transform .65s ease;
+}
+.consult-story__copy.is-revealed > * { opacity: 1; transform: none; }
+.consult-story__copy.is-reveal-ready > :nth-child(2) { transition-delay: .1s; }
+.consult-story__copy.is-reveal-ready > :nth-child(3) { transition-delay: .2s; }
+.consult-story__copy.is-reveal-ready > :nth-child(4) { transition-delay: .3s; }
+.consult-story__visual { display: flex; justify-content: center; animation: consult-float 6s ease-in-out infinite; }
+.consult-phone {
+  position: relative;
+  width: min(100%, 305px);
+  padding: 8px;
+  border: 1px solid #808780;
+  border-radius: 45px;
+  background: #2a302c;
+  box-shadow: 0 30px 65px rgba(30, 46, 34, .2), inset 0 0 0 2px #4b554d;
+  transform: rotate(3deg);
+  pointer-events: none;
+}
+.consult-phone__screen {
+  overflow: hidden;
+  display: flex;
+  height: 586px;
+  flex-direction: column;
+  border-radius: 37px;
+  background: #8aaad4;
+  font-family: 'Kanit', sans-serif;
+}
+.consult-phone__status {
+  display: flex;
+  justify-content: space-between;
+  flex: none;
+  padding: 15px 23px 10px;
+  background: #e7e7e7;
+  color: #252525;
+  font: 600 10px/1 'Inter', sans-serif;
+}
+.consult-phone__notch {
+  position: absolute;
+  z-index: 1;
+  top: 14px;
+  left: 50%;
+  width: 81px;
+  height: 21px;
+  transform: translateX(-50%);
+  border-radius: 20px;
+  background: #222824;
+}
+.consult-phone__header {
+  display: flex;
+  align-items: center;
+  flex: none;
+  gap: 9px;
+  min-height: 60px;
+  padding: 9px 15px;
+  background: #fff;
+  color: #111;
+}
+.consult-phone__back { font: 300 31px/1 Arial, sans-serif; }
+.consult-phone__name { flex: 1; font-size: 14px; font-weight: 600; line-height: 1.25; }
+.consult-phone__badge { display: block; margin-top: 3px; color: #6d8ebf; font-size: 9px; font-weight: 400; }
+.consult-phone__header-icon { flex: 0 0 20px; width: 20px; height: 20px; color: #090909; }
+.consult-phone__chat {
+  overflow: hidden;
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  flex-direction: column;
+  gap: 11px;
+  padding: 15px 10px;
+  background: #8baad4;
+}
+.consult-phone__chat::before { content: ''; flex: 1 0 270px; }
+.consult-phone__date {
+  align-self: center;
+  flex: none;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(61, 86, 121, .28);
+  color: white;
+  font-size: 10px;
+}
+.consult-phone__row { display: flex; flex: none; align-items: flex-end; gap: 4px; }
+.consult-phone__row[hidden] { display: none; }
+.consult-phone__row--customer { justify-content: flex-end; }
+.consult-phone__avatar {
+  align-self: flex-start;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  padding: 3px;
+  border-radius: 50%;
+  background: white;
+  object-fit: contain;
+}
+.consult-phone__bubble {
+  max-width: 76%;
+  padding: 9px 11px;
+  border-radius: 13px 13px 13px 3px;
+  background: #fff;
+  color: #151515;
+  font-size: 11px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.consult-phone__row--customer .consult-phone__bubble {
+  border-radius: 13px 13px 3px 13px;
+  background: #a4e993;
+}
+.consult-phone__time { flex: none; color: #4b6788; font-size: 8px; line-height: 1.25; white-space: nowrap; }
+.consult-phone__input {
+  display: flex;
+  align-items: center;
+  flex: none;
+  gap: 7px;
+  height: 55px;
+  padding: 0 10px;
+  background: #fff;
+  color: #171717;
+}
+.consult-phone__input-icon { flex: 0 0 20px; width: 20px; height: 20px; color: #090909; }
+.consult-phone__field {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  padding: 5px 6px 5px 10px;
+  border-radius: 20px;
+  background: #f3f3f3;
+  color: #333;
+  font-size: 10px;
+}
+.consult-phone__draft { overflow: hidden; flex: 1; min-width: 0; white-space: nowrap; }
+.consult-phone__smile { flex: 0 0 21px; width: 21px; height: 21px; color: #777; }
+.consult-phone__draft::after { content: ''; display: inline-block; height: 1em; border-right: 1px solid #777; vertical-align: -.12em; opacity: 0; }
+.consult-phone__field.is-typing .consult-phone__draft::after { opacity: 1; animation: consult-caret .8s step-end infinite; }
+.consult-phone__typing .consult-phone__bubble { display: flex; gap: 4px; padding: 12px; }
+.consult-phone__typing i { width: 5px; height: 5px; border-radius: 50%; background: #8292a4; animation: consult-dot 1s ease-in-out infinite; }
+.consult-phone__typing i:nth-child(2) { animation-delay: .15s; }
+.consult-phone__typing i:nth-child(3) { animation-delay: .3s; }
+.consult-phone__row.is-new { animation: consult-message .3s ease both; }
+@keyframes consult-glow {
+  0%, 100% { transform: translateY(-50%) scale(.92); opacity: .7; }
+  50% { transform: translateY(-53%) scale(1.12); opacity: 1; }
+}
+@keyframes consult-line { 0%, 100% { transform: scaleX(.55); opacity: .55; } 50% { transform: scaleX(1); opacity: 1; } }
+@keyframes consult-title { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+@keyframes consult-arrow { 0%, 65%, 100% { transform: translate(0, 0); } 80% { transform: translate(4px, -4px); } }
+@keyframes consult-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes consult-caret { 50% { opacity: 0; } }
+@keyframes consult-dot { 50% { transform: translateY(-3px); opacity: .45; } }
+@keyframes consult-message { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (max-width: 720px) {
+  .consult-story__inner { min-height: 0; grid-template-columns: minmax(0, 1fr); gap: 55px; }
+  .consult-story__visual { padding: 0 10px 8px; }
+  .consult-phone { transform: rotate(2deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .consult-story__copy.is-reveal-ready > * { opacity: 1; transform: none; transition: none; }
+  .consult-story__link:hover { transform: none; }
+  .consult-story__copy::before, .consult-story__eyebrow::before,
+  .consult-story h2 span, .consult-story__link span, .consult-story__visual { animation: none; }
+}
