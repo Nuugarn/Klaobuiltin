@@ -53,6 +53,16 @@
         "name": "sink_04",
         "thumb": "https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_600/f_auto/q_auto/v1792047560/sink_04_full.jpg",
         "full": "https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_1200/f_auto/q_auto/v1792047560/sink_04_full.jpg"
+      },
+      {
+        "name": "image_watermarked_1",
+        "thumb": "https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_600/f_auto/q_auto/v1794058273/image_watermarked_1.jpg",
+        "full": "https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_1200/f_auto/q_auto/v1794058273/image_watermarked_1.jpg"
+      },
+      {
+        "name": "image_watermarked",
+        "thumb": "https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_600/f_auto/q_auto/v1794058283/image_watermarked.jpg",
+        "full": "https://res.cloudinary.com/xl2symcw/image/upload/c_limit,w_1200/f_auto/q_auto/v1794058283/image_watermarked.jpg"
       }
     ],
     "wall": []

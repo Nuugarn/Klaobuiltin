@@ -68,7 +68,9 @@
       return;
     }
     const row = rows[index];
-    if (row.dataset.speaker === 'customer') {
+    if (row.hasAttribute('data-photo')) {
+      showRow(row);
+    } else if (row.dataset.speaker === 'customer') {
       typeCustomer(row);
     } else {
       typing.hidden = false;

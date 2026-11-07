@@ -13,20 +13,6 @@
   padding-bottom: clamp(80px, 9vw, 130px);
 }
 .consult-story__copy { position: relative; isolation: isolate; max-width: 570px; }
-.consult-story__copy::before {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  width: clamp(230px, 32vw, 420px);
-  aspect-ratio: 1;
-  top: 50%;
-  left: -12%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(151, 186, 150, .25), rgba(151, 186, 150, 0) 68%);
-  transform: translateY(-50%);
-  animation: consult-glow 7s ease-in-out infinite;
-  pointer-events: none;
-}
 .consult-story__eyebrow {
   color: #536b5a;
   font: 500 12px/1.5 'JetBrains Mono', monospace;
@@ -41,8 +27,6 @@
   width: 38px;
   height: 2px;
   background: #789a79;
-  transform-origin: left;
-  animation: consult-line 3.5s ease-in-out infinite;
 }
 .consult-story h2 {
   margin: 24px 0 20px;
@@ -51,12 +35,6 @@
 }
 .consult-story h2 span {
   color: #467052;
-  background: linear-gradient(105deg, #274b34 10%, #6a9870 48%, #274b34 80%);
-  background-size: 220% auto;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: consult-title 7s ease-in-out infinite;
 }
 .consult-story__copy > p:not(.consult-story__eyebrow) {
   max-width: 38ch;
@@ -76,17 +54,18 @@
   transition: background .2s, transform .2s;
 }
 .consult-story__link:hover { background: #365d43; transform: translateY(-2px); }
-.consult-story__link span { font-size: 20px; line-height: 1; animation: consult-arrow 2.4s ease-in-out infinite; }
+.consult-story__link span { font-size: 20px; line-height: 1; transition: transform .2s ease; }
+.consult-story__link:hover span, .consult-story__link:focus-visible span { transform: translate(4px, -4px); }
 .consult-story__copy.is-reveal-ready > * {
   opacity: 0;
   transform: translateY(22px);
-  transition: opacity .65s ease, transform .65s ease;
+  transition: opacity .65s ease, transform .65s ease, background .2s;
 }
 .consult-story__copy.is-revealed > * { opacity: 1; transform: none; }
 .consult-story__copy.is-reveal-ready > :nth-child(2) { transition-delay: .1s; }
 .consult-story__copy.is-reveal-ready > :nth-child(3) { transition-delay: .2s; }
 .consult-story__copy.is-reveal-ready > :nth-child(4) { transition-delay: .3s; }
-.consult-story__visual { display: flex; justify-content: center; animation: consult-float 6s ease-in-out infinite; }
+.consult-story__visual { display: flex; justify-content: center; }
 .consult-phone {
   position: relative;
   width: min(100%, 305px);
@@ -188,6 +167,8 @@
   border-radius: 13px 13px 3px 13px;
   background: #a4e993;
 }
+.consult-phone__row--customer .consult-phone__photo { padding: 0; overflow: hidden; background: transparent; }
+.consult-phone__photo img { display: block; width: 105px; height: 75px; object-fit: cover; }
 .consult-phone__time { flex: none; color: #4b6788; font-size: 8px; line-height: 1.25; white-space: nowrap; }
 .consult-phone__input {
   display: flex;
@@ -222,14 +203,6 @@
 .consult-phone__typing i:nth-child(2) { animation-delay: .15s; }
 .consult-phone__typing i:nth-child(3) { animation-delay: .3s; }
 .consult-phone__row.is-new { animation: consult-message .3s ease both; }
-@keyframes consult-glow {
-  0%, 100% { transform: translateY(-50%) scale(.92); opacity: .7; }
-  50% { transform: translateY(-53%) scale(1.12); opacity: 1; }
-}
-@keyframes consult-line { 0%, 100% { transform: scaleX(.55); opacity: .55; } 50% { transform: scaleX(1); opacity: 1; } }
-@keyframes consult-title { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-@keyframes consult-arrow { 0%, 65%, 100% { transform: translate(0, 0); } 80% { transform: translate(4px, -4px); } }
-@keyframes consult-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 @keyframes consult-caret { 50% { opacity: 0; } }
 @keyframes consult-dot { 50% { transform: translateY(-3px); opacity: .45; } }
 @keyframes consult-message { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
@@ -241,6 +214,6 @@
 @media (prefers-reduced-motion: reduce) {
   .consult-story__copy.is-reveal-ready > * { opacity: 1; transform: none; transition: none; }
   .consult-story__link:hover { transform: none; }
-  .consult-story__copy::before, .consult-story__eyebrow::before,
-  .consult-story h2 span, .consult-story__link span, .consult-story__visual { animation: none; }
+  .consult-story__link span { transition: none; }
+  .consult-story__link:hover span, .consult-story__link:focus-visible span { transform: none; }
 }
