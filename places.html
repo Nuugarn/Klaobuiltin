@@ -3,20 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="แวะชมร้าน บ้าน และพื้นที่แต่ละแห่งผ่านภาพรวมและรายละเอียดของแต่ละสถานที่">
 <link rel="icon" type="image/svg+xml" href="favicon.svg" sizes="any">
-<title>KLAO — ร้านสปา</title>
+<title>KLAO — แวะชมแต่ละที่</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Mitr:wght@500;600;700&family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="navigation.css?v=20261023-white">
 <link rel="stylesheet" href="destination-pages.css?v=20261023-white">
+<link rel="stylesheet" href="page-refinements.css?v=20261023-r3">
 <script src="navigation.js?v=20261023" defer></script>
+<script src="destination-pages.js?v=20261023-slider2" defer></script>
+<link rel="stylesheet" href="places.css?v=20261110-outline-badge">
 </head>
-<body data-destination>
+<body class="places-index" data-destination>
 <nav class="drawer navigation-drawer" id="drawer" role="dialog" aria-modal="true" aria-label="เมนูหลัก" tabindex="-1">
 <div class="nav-drawer-heading"><span>เมนู</span><button class="nav-close" type="button" aria-label="ปิดเมนู">×</button></div>
 <div class="nav-drawer-links"><a href="index.html#home-view">หน้าแรก</a>
 <a href="about.html">เกี่ยวกับเรา</a>
-<a href="portfolio.html" aria-current="location">เยี่ยมชมผลงาน</a>
+<a href="portfolio.html" aria-current="page">เยี่ยมชมผลงาน</a>
 <a href="articles.html">บทความ</a>
 <a href="faq.html">FAQ</a>
 <a href="contact.html">ติดต่อเรา</a></div>
@@ -36,7 +40,7 @@
   </div>
   <div class="header-zone--center"><nav class="desktop-navigation" aria-label="เมนูหลัก"><a href="index.html#home-view">หน้าแรก</a>
 <a href="about.html">เกี่ยวกับเรา</a>
-<a href="portfolio.html" aria-current="location">เยี่ยมชมผลงาน</a>
+<a href="portfolio.html" aria-current="page">เยี่ยมชมผลงาน</a>
 <a href="articles.html">บทความ</a>
 <a href="faq.html">FAQ</a>
 <a href="contact.html">ติดต่อเรา</a></nav><a class="nav-cta desktop-cta" href="https://line.me/R/ti/p/@380tjpje" target="_blank" rel="noopener">ปรึกษาเรา</a></div>
@@ -57,14 +61,14 @@
   </div>
   <div class="ltw-toast" id="ltwToast" role="status" aria-live="polite"></div>
 </header>
-<main class="destination-content" id="main-content">
-<a class="page-back" href="portfolio.html">← ดูทุกหมวดงาน</a>
-<header class="page-intro"><h1>ร้านสปา</h1><p class="page-lead">พื้นที่ต้อนรับและบริการที่ให้บรรยากาศสงบ พร้อมจุดจัดเก็บที่ใช้งานคล่องตัว</p></header>
-<section class="page-block page-split" aria-labelledby="focus-title"><div><h2 id="focus-title">แนวทางสำหรับพื้นที่นี้</h2><p class="page-copy">งานแต่ละพื้นที่ต้องดูขนาดจริง วิธีใช้ และรายละเอียดที่อยากเก็บไว้ในห้องก่อนกำหนดแบบ</p></div><ul class="page-list"><li>เคาน์เตอร์ต้อนรับและพื้นที่วางสินค้า</li><li>ตู้เก็บอุปกรณ์ที่เข้ากับขั้นตอนบริการ</li><li>วัสดุและแสงที่เหมาะกับการดูแลรักษา</li></ul></section>
-<section class="page-block" aria-labelledby="gallery-title"><h2 id="gallery-title">ภาพในหมวดนี้</h2><div class="page-empty"><p>ยังไม่มีรูปในหมวดนี้</p></div></section>
-<section class="page-block page-split" aria-labelledby="prepare-title"><div><h2 id="prepare-title">เตรียมข้อมูลก่อนปรึกษา</h2><p>ขนาดพื้นที่ รูปหน้างาน และรายการอุปกรณ์ที่ต้องจัดเก็บ</p></div><div><h2>คุยเรื่องพื้นที่ของคุณ</h2><p>ส่งข้อมูลเบื้องต้นมาให้เราพูดคุยแนวทางที่เหมาะกับพื้นที่ได้</p><a class="page-action" href="contact.html">ดูช่องทางติดต่อ</a></div></section>
-<section class="page-block" aria-labelledby="related-title"><h2 id="related-title">หมวดงานที่เกี่ยวข้อง</h2><div class="page-links"><a href="condo.html">คอนโด</a><a href="wall-decoration.html">ตกแต่งผนัง</a><a href="display-cabinet.html">ตู้โชว์</a></div></section>
-</main>
+<div class="places-scene">
+<main class="destination-content destination-designed places-page" id="main-content">
+<a class="places-back" href="index.html#work">← กลับไปเลือกชมงาน</a>
+<header class="places-heading"><h1>แวะชมแต่ละที่</h1><p>จากร้านที่คุ้นเคย ถึงมุมโปรดในบ้าน<br>ค่อย ๆ ดูแต่ละพื้นที่ และรายละเอียดที่อยู่ด้วยกัน</p></header>
+<div class="places-section-label"><h2>แต่ละที่ของเรา</h2></div>
+<a class="place-card" href="place-punthai.html?v=20261110-album11" aria-label="ชมกาแฟพันธุ์ไทย"><div class="place-card-images"><img src="https://res.cloudinary.com/xl2symcw/image/upload/v1794068501/3_4_N_hero_punthai_watermarked.jpg" alt="ภาพรวมของร้าน" fetchpriority="high"><img src="https://res.cloudinary.com/xl2symcw/image/upload/v1794068324/4_3_T_puntai_watermarked.jpg" alt="มุมที่นั่งและผนังตกแต่ง" loading="lazy"><img src="https://res.cloudinary.com/xl2symcw/image/upload/v1794068341/4_3_T_punthai_watermarked.jpg" alt="เคาน์เตอร์และพื้นที่นั่ง" loading="lazy"></div>
+<div class="place-card-info"><div><p class="places-eyebrow place-category-line"><span class="place-category-badge">ร้านกาแฟ</span><span class="place-location">ประจวบคีรีขันธ์</span></p><h2>กาแฟพันธุ์ไทย </h2><p class="place-tags">เคาน์เตอร์ <span>·</span> มุมที่นั่ง <span>·</span> ผนังตกแต่ง</p></div><span class="place-card-action">แวะชมที่นี่ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></span></div></a></main>
+</div>
 <section class="contact" id="contact">
   <div class="wrap">
     <div class="contact-inner">
